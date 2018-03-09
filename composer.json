@@ -1,0 +1,24 @@
+{
+    "name": "hostlink/r-p",
+    "description": "Raymond php html library",
+    "autoload": {
+        "psr-4": {
+            "P\\": "src/"
+        },
+        "files": [
+            "function\/function.php"
+        ]
+    },
+    "require": {
+        "php": ">=5.4"
+    },
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Raymond Chong"
+        }
+    ],
+    "minimum-stability": "stable",
+    "version": "1.0.4"
+}
