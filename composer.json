@@ -19,6 +19,7 @@
             "name": "Raymond Chong"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "version": "1.0.0"
    
 }
