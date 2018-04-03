@@ -53,11 +53,9 @@ class Query extends \ArrayObject
             }
         } elseif ($tag) {
             if ($tag[0] == "<") {
-                $e = new Element();
-                $e->innerHTML = (string )$tag;
 
-                foreach ($e->childNodes as $node) {
-                    $node->parentNode = null;
+                $parser=new DOMParser($tag);
+                foreach ($parser->nodes as $node) {
                     $this[] = $node;
                 }
             } else {
@@ -341,15 +339,16 @@ class Query extends \ArrayObject
         return $q;
     }
 
+    public function empty(){
+        foreach ($this as $node) {
+            $node->childNodes = [];
+        }
+        return $this;
+
+    }
+
     public function __call($method, $args)
     {
-        if ($method == "empty") {
-            foreach ($this as $node) {
-                $node->childNodes = array();
-            }
-            return $this;
-        }
-
         if ($this->$method instanceof \Closure) {
             return call_user_func_array($this->$method, $args);
         }
@@ -438,9 +437,13 @@ class Query extends \ArrayObject
 
     public function remove($selector)
     {
-        foreach ($this as $node) {
-            if ($parentNode = $node->parentNode) {
-                $parentNode->removeChild($node);
+        if(isset($selector)){
+            $this->find($selector)->remove();
+        }else{
+            foreach ($this as $node) {
+                if ($parentNode = $node->parentNode) {
+                    $parentNode->removeChild($node);
+                }
             }
         }
     }

@@ -4,18 +4,18 @@ namespace P;
 
 class Element extends Node implements ChildNode
 {
-    private static $_closed_tag = ['input', 'hr', 'br', 'img', 'link', 'meta', 'base'];
+    const ClosedTag = ['input', 'hr', 'br', 'img', 'link', 'meta', 'base'];
     public $attributes = [];
     public $style = [];
     public $classList;
     public $tagName;
-	public $dataset;
+    public $dataset;
 
     public function __construct($name)
     {
         $this->tagName = $name;
         $this->nodeType = Node::ELEMENT_NODE;
-		$this->dataset = new DOMStringMap($this);
+        $this->dataset = new DOMStringMap($this);
         $this->classList = new DOMTokenList;
     }
 
@@ -120,11 +120,44 @@ class Element extends Node implements ChildNode
 
         if ($name == "id") {
             return $this->attributes["id"];
-        } elseif ($name=="innerText") {
-            $html="";
+        } elseif ($name == "outerHTML") {
+            $tagName = strtolower($this->tagName);
+
+            foreach ($this->attributes as $n => $v) {
+                if ($v === false) {
+                    continue;
+                }
+                if ($v === true) {
+                    $attr .= " $n";
+                } elseif (is_array($v)) {
+                    $attr .= " $n=\"" . htmlspecialchars(json_encode($v, JSON_UNESCAPED_UNICODE)) . "\"";
+                } else {
+                    $attr .= " $n=\"" . htmlspecialchars($v) . "\"";
+                }
+            }
+
+            $css = "";
+            if (sizeof($this->style)) {
+                $css .= " style=\"";
+                foreach ($this->style as $n => $v) {
+                    $css .= "$n:" . htmlspecialchars($v) . ";";
+                }
+                $css .= "\"";
+            }
+
+            $class = "";
+            if ($this->classList->length) {
+                $class .= " class=\"";
+                $class .= implode(" ", $this->classList->values());
+                $class .= "\"";
+            }
+
+            return "<" . $tagName . $attr . $css . $class . ">" . $this->innerHTML . "</$tagName>";
+        } elseif ($name == "innerText") {
+            $html = "";
             foreach ($this->childNodes as $child) {
                 if ($child instanceof Text) {
-                    $html .= $child->textContent;
+                    $html .= $child->wholeText;
                 } else {
                     $html .= $child->innerText;
                 }
@@ -135,46 +168,9 @@ class Element extends Node implements ChildNode
                 if ($child instanceof Text) {
                     $html .= $child->wholeText;
                 } else {
-                    $attr = "";
-                    foreach ($child->attributes as $n => $v) {
-                        if ($v === false) {
-                            continue;
-                        }
-                        if ($v === true) {
-                            $attr .= " $n";
-                        } elseif (is_array($v)) {
-                            $attr .= " $n=\"" . htmlspecialchars(json_encode($v,JSON_UNESCAPED_UNICODE)) . "\"";
-                        } else {
-                            $attr .= " $n=\"" . htmlspecialchars($v) . "\"";
-                        }
-                    }
-
-                    $css = "";
-                    if (sizeof($child->style)) {
-                        $css .= " style=\"";
-                        foreach ($child->style as $n => $v) {
-                            $css .= "$n:" . htmlspecialchars($v) . ";";
-                        }
-                        $css .= "\"";
-                    }
-
-                    $class = "";
-                    if ($this->classList->length) {
-                        $class .= " class=\"";
-                        $class .= implode(" ", $child->classList->values());
-                        $class .= "\"";
-                    }
-
-                    $tagName = strtolower($child->tagName);
-
-                    if (in_array($tagName, self::$_closed_tag)) {
-                        $html .= "<" . $tagName . $attr . $css . $class . "/>\n";
-                    } else {
-                        $html .= "<" . $tagName . $attr . $css . $class . ">" . $child->innerHTML . "</" . $tagName . ">\n";
-                    }
+                    $html .= $child->outerHTML;
                 }
             }
-
             return $html;
         }
         return parent::__get($name);
@@ -206,9 +202,9 @@ class Element extends Node implements ChildNode
         foreach ($this->childNodes as $child) {
             if ($child instanceof Text) {
                 if ($tagName == "script" || $tagName == "style") {
-                    $html .= (string )$child->textContent;
+                    $html .= (string )$child->wholeText;
                 } else {
-                    $html .= htmlspecialchars($child->textContent, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
+                    $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
                 }
             } else {
                 $html .= $child;
@@ -223,8 +219,8 @@ class Element extends Node implements ChildNode
             if ($v === true || $v === null) {
                 $attr .= " $n";
             } elseif (is_array($v)) {
-                $attr .= " $n=\"" . htmlspecialchars(json_encode($v,JSON_UNESCAPED_UNICODE)) . "\"";
-            } elseif(!is_object($v)) {
+                $attr .= " $n=\"" . htmlspecialchars(json_encode($v, JSON_UNESCAPED_UNICODE)) . "\"";
+            } elseif (!is_object($v)) {
                 $attr .= " $n=\"" . htmlspecialchars($v) . "\"";
             }
 
@@ -247,7 +243,7 @@ class Element extends Node implements ChildNode
         }
 
         $tagName = strtolower($this->tagName);
-        if (in_array($tagName, self::$_closed_tag)) {
+        if (in_array($tagName, self::ClosedTag)) {
             return "<" . $tagName . $attr . $css . $class . "/>";
         }
 
