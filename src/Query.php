@@ -339,16 +339,17 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function empty(){
-        foreach ($this as $node) {
-            $node->childNodes = [];
-        }
-        return $this;
-
-    }
 
     public function __call($method, $args)
     {
+        //for php5.6, empty is reserved word
+        if($method=="empty"){
+            foreach ($this as $node) {
+                $node->childNodes = [];
+            }
+            return $this;
+        }
+
         if ($this->$method instanceof \Closure) {
             return call_user_func_array($this->$method, $args);
         }
