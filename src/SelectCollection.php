@@ -16,51 +16,7 @@ class SelectCollection extends Query {
 
 	public function options($options) {
 		foreach ($this as $select) {
-			if(is_array( $select->attributes["data-value"])){
-				$data_values= $select->attributes["data-value"];
-			}else{
-				$data_values = explode(",", $select->attributes["data-value"]);	
-            }
-			
-            $select->childNodes = array();
-            $options_value=[];
-			foreach ($options as $k => $o) {
-				if (is_array($o)) {
-					$og = p("optgroup")->attr("label", $k)->appendTo(p($select));
-					foreach ($o as $opt) {
-						$option = p("option")->appendTo($og);
-						$option->text($opt);
-                        $option->val($opt);
-
-                        if (in_array($opt, $data_values)) {
-                            $option->attr("selected", true);
-                        }
-
-                        $options_value[]=$opt;
-        
-                    }
-                    
-				} else {
-					$option = p("option")->appendTo(p($select));
-					$option->text($o);
-					$option->val($o);
-
-                    if (in_array($o, $data_values)) {
-                        $option->attr("selected", true);
-                    }
-
-                    $options_value[]=$o;
-                }
-			}
-			foreach (array_diff($data_values, $options_value) as $value) {
-				if (!$value)
-					continue;
-
-				$option = p("option")->appendTo(p($select));
-				$option->text($value);
-				$option->val($value);
-				$option->attr("selected", true);
-			}
+			$select->options($options);
 		}
 		return $this;
 	}

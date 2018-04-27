@@ -499,7 +499,8 @@ class Query extends \ArrayObject
     {
         $i = 0;
         foreach ($this as $node) {
-            $callback($i, $node);
+            $cl=$callback->bindTo($node);
+            $cl($i, $node);
             $i++;
         }
         return $this;
