@@ -12,5 +12,3 @@ class Comment extends Node {
         return "<!--{$this->textContent}-->";
     }
 }
-
-?>

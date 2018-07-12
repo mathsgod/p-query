@@ -105,8 +105,6 @@ class Node
 
     public function replaceChild(Node $newChild, Node $oldChild)
     {
-        if ($newChild->parentNode) $newChild->parentNode->removeChild($newChild);
-        $newChild->parentNode = $this;
         $this->insertBefore($newChild, $oldChild);
         return $this->removeChild($oldChild);
     }

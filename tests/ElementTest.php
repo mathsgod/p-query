@@ -42,16 +42,62 @@ HTML;
         $this->assertEquals("<span>abc</span>", $e->innerHTML);
     }
 
-    public function testInnerText(){
+    public function testInnerText()
+    {
         $e = new Element("div");
         $e->innerHTML = "<span>abc</span>";
         $this->assertEquals("abc", $e->innerText);
-        
+
     }
 
+    public function testBefore()
+    {
+        $parent = new Element("div");
+        $child = new Element("p");
+        $parent->appendChild($child);
+
+        $span = new Element("span");
+        $child->before($span);
+        $this->assertEquals("<div><span></span><p></p></div>", $parent->outerHTML);
+
+        //-----------------
+        $parent = new Element("div");
+        $child = new Element("p");
+        $parent->appendChild($child);
+
+        $child->before("Text");
+        $this->assertEquals("<div>Text<p></p></div>", $parent->outerHTML);
 
 
+    }
+    public function testAfter()
+    {
+        $parent = new Element("div");
+        $child = new Element("p");
+        $parent->appendChild($child);
 
+        $span = new Element("span");
+        $child->after($span);
+        $this->assertEquals("<div><p></p><span></span></div>", $parent->outerHTML);
 
+        //-----------------
+        $parent = new Element("div");
+        $child = new Element("p");
+        $parent->appendChild($child);
+
+        $child->after("Text");
+        $this->assertEquals("<div><p></p>Text</div>", $parent->outerHTML);
+    }
+
+    public function testReplaceWith(){
+        $parent = new Element("div");
+        $child = new Element("p");
+        $parent->appendChild($child);
+
+        $span = new Element("span");
+        $child->replaceWith($span);
+        $this->assertEquals("<div><span></span></div>", $parent->outerHTML);
+
+    }
 
 }

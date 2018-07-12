@@ -2,7 +2,7 @@
 
 namespace P;
 
-class Element extends Node implements ChildNode
+class Element extends Node implements ParentNode, ChildNode
 {
     const ClosedTag = ['input', 'hr', 'br', 'img', 'link', 'meta', 'base'];
     public $attributes = [];
@@ -48,11 +48,41 @@ class Element extends Node implements ChildNode
 
     //--
 
+    //Child Node
     public function removes()
     {
         if ($parentNode = $this->parentNode) {
             $parentNode->removeChild($this);
         }
+    }
+
+    public function before($nodes)
+    {
+        if (!$this->parentNode) return;
+        if ($nodes instanceof Node) {
+            $this->parentNode->insertBefore($nodes, $this);
+        } else {
+            $this->parentNode->insertBefore(new Text($nodes), $this);
+        }
+    }
+
+    public function after($nodes)
+    {
+        if (!$this->parentNode) return;
+        if ($nodes instanceof Node) {
+            $this->parentNode->insertBefore($nodes, $this->nextSibling);
+        } else {
+            $this->parentNode->insertBefore(new Text($nodes), $this->nextSibling);
+        }
+    }
+
+    public function replaceWith($nodes)
+    {
+        if (!$this->parentNode) return;
+        if(!$nodes instanceof Node){
+            $nodes=new Text($nodes);
+        }
+        $this->parentNode->replaceChild($nodes,$this);
     }
 
     public function setAttribute($name, $value)
@@ -251,6 +281,25 @@ class Element extends Node implements ChildNode
             return "<" . $tagName . $attr . $css . $class . ">";
         } else {
             return "<" . $tagName . $attr . $css . $class . ">" . $html . "</" . $tagName . ">";
+        }
+    }
+
+
+    public function append($nodes)
+    {
+        if ($nodes instanceof Node) {
+            $this->appendChild($nodes);
+        } else {
+            $this->appendChild(new Text($nodes));
+        }
+    }
+
+    public function prepend($nodes)
+    {
+        if ($nodes instanceof Node) {
+            $this->prependChild($nodes);
+        } else {
+            $this->prependChild(new Text($nodes));
         }
     }
 
