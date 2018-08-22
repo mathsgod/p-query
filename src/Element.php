@@ -79,10 +79,10 @@ class Element extends Node implements ParentNode, ChildNode
     public function replaceWith($nodes)
     {
         if (!$this->parentNode) return;
-        if(!$nodes instanceof Node){
-            $nodes=new Text($nodes);
+        if (!$nodes instanceof Node) {
+            $nodes = new Text($nodes);
         }
-        $this->parentNode->replaceChild($nodes,$this);
+        $this->parentNode->replaceChild($nodes, $this);
     }
 
     public function setAttribute($name, $value)
@@ -147,11 +147,44 @@ class Element extends Node implements ParentNode, ChildNode
 
     public function __get($name)
     {
+        switch ($name) {
+            case "children":
+                $collection = new HTMLCollection();
+                foreach ($this->childNodes as $node) {
+                    if ($node instanceof Element) {
+                        $collection[] = $node;
+                    }
+                }
+                return $collection;
+                break;
+            case 'firstElementChild':
+                $children = $this->children;
+                if ($children->length) {
+                    return $children[0];
+                }
+                return null;
+                break;
+            case 'lastElementChild':
+                $children = $this->children;
+                if ($l = $children->length) {
+                    return $children[$l - 1];
+                }
+                return null;
+                break;
+            case 'nextElementSibling':
+                $e = $this->nextSibling;
+                while ($e && $e->nodeType !== 1) {
+                    $e = $e->nextSibling;
+                }
+                return $e;
+                break;
+        }
 
         if ($name == "id") {
             return $this->attributes["id"];
         } elseif ($name == "outerHTML") {
             $tagName = strtolower($this->tagName);
+            $attr = "";
 
             foreach ($this->attributes as $n => $v) {
                 if ($v === false) {
@@ -194,6 +227,8 @@ class Element extends Node implements ParentNode, ChildNode
             }
             return $html;
         } elseif ($name == "innerHTML") {
+            $html = "";
+
             foreach ($this->childNodes as $child) {
                 if ($child instanceof Text) {
                     $html .= $child->wholeText;

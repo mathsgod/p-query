@@ -89,7 +89,8 @@ HTML;
         $this->assertEquals("<div><p></p>Text</div>", $parent->outerHTML);
     }
 
-    public function testReplaceWith(){
+    public function testReplaceWith()
+    {
         $parent = new Element("div");
         $child = new Element("p");
         $parent->appendChild($child);
@@ -97,6 +98,20 @@ HTML;
         $span = new Element("span");
         $child->replaceWith($span);
         $this->assertEquals("<div><span></span></div>", $parent->outerHTML);
+    }
+
+    public function test_children()
+    {
+        $div = new Element("div");
+
+        $p = new Element("p");
+        $div->appendChild($p);
+        //$div->append("test");
+
+
+        $this->assertEquals($div->children[0], $p);
+
+
 
     }
 
