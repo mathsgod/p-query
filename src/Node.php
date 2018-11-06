@@ -152,12 +152,6 @@ class Node
             } else {
                 return null;
             }
-        } elseif ($name == "nextElementSibling") {
-            $e = $this->nextSibling;
-            while ($e && $e->nodeType !== 1) {
-                $e = $e->nextSibling;
-            }
-            return $e;
-        }
+        } 
     }
 }
