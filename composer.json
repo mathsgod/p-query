@@ -22,6 +22,5 @@
             "name": "Raymond Chong"
         }
     ],
-    "minimum-stability": "stable",
-    "version": "1.1.8"
+    "minimum-stability": "stable"
 }
