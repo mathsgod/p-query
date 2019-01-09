@@ -1,5 +1,5 @@
 {
-    "name": "hostlink/r-p",
+    "name": "mathsgod/p-query",
     "description": "Raymond php html library",
     "autoload": {
         "psr-4": {
