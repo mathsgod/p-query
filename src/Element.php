@@ -183,39 +183,7 @@ class Element extends Node implements ParentNode, ChildNode
         if ($name == "id") {
             return $this->attributes["id"];
         } elseif ($name == "outerHTML") {
-            $tagName = strtolower($this->tagName);
-            $attr = "";
-
-            foreach ($this->attributes as $n => $v) {
-                if ($v === false) {
-                    continue;
-                }
-                if ($v === true) {
-                    $attr .= " $n";
-                } elseif (is_array($v)) {
-                    $attr .= " $n=\"" . htmlspecialchars(json_encode($v, JSON_UNESCAPED_UNICODE)) . "\"";
-                } else {
-                    $attr .= " $n=\"" . htmlspecialchars($v) . "\"";
-                }
-            }
-
-            $css = "";
-            if (sizeof($this->style)) {
-                $css .= " style=\"";
-                foreach ($this->style as $n => $v) {
-                    $css .= "$n:" . htmlspecialchars($v) . ";";
-                }
-                $css .= "\"";
-            }
-
-            $class = "";
-            if ($this->classList->length) {
-                $class .= " class=\"";
-                $class .= implode(" ", $this->classList->values());
-                $class .= "\"";
-            }
-
-            return "<" . $tagName . $attr . $css . $class . ">" . $this->innerHTML . "</$tagName>";
+            return $this->__toString();
         } elseif ($name == "innerText") {
             $html = "";
             foreach ($this->childNodes as $child) {
@@ -231,9 +199,13 @@ class Element extends Node implements ParentNode, ChildNode
 
             foreach ($this->childNodes as $child) {
                 if ($child instanceof Text) {
-                    $html .= $child->wholeText;
+                    if ($tagName == "script" || $tagName == "style") {
+                        $html .= (string )$child->wholeText;
+                    } else {
+                        $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
+                    }
                 } else {
-                    $html .= $child->outerHTML;
+                    $html .= $child;
                 }
             }
             return $html;
@@ -264,18 +236,6 @@ class Element extends Node implements ParentNode, ChildNode
     {
         $tagName = strtolower($this->tagName);
 
-        foreach ($this->childNodes as $child) {
-            if ($child instanceof Text) {
-                if ($tagName == "script" || $tagName == "style") {
-                    $html .= (string )$child->wholeText;
-                } else {
-                    $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
-                }
-            } else {
-                $html .= $child;
-            }
-        }
-
         $attr = "";
         foreach ($this->attributes as $n => $v) {
             if ($v === false) {
@@ -288,7 +248,6 @@ class Element extends Node implements ParentNode, ChildNode
             } elseif (!is_object($v)) {
                 $attr .= " $n=\"" . htmlspecialchars($v) . "\"";
             }
-
         }
 
         $css = "";
@@ -315,7 +274,7 @@ class Element extends Node implements ParentNode, ChildNode
         if ($tagName == "!doctype") {
             return "<" . $tagName . $attr . $css . $class . ">";
         } else {
-            return "<" . $tagName . $attr . $css . $class . ">" . $html . "</" . $tagName . ">";
+            return "<" . $tagName . $attr . $css . $class . ">" . $this->innerHTML . "</" . $tagName . ">";
         }
     }
 

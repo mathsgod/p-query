@@ -33,6 +33,11 @@ HTML;
         $e->innerHTML = "<span>abc</span>";
 
         $this->assertEquals('<div><span>abc</span></div>', $e->outerHTML);
+
+        $e = new Element("div");
+        $e->innerHTML .= "<br/>abc";
+        $e->innerHTML .= "<br/>xyz";
+        $this->assertEquals("<div><br/>abc<br/>xyz</div>", $e->outerHTML);
     }
 
     public function testInnerHTML()
@@ -40,6 +45,11 @@ HTML;
         $e = new Element("div");
         $e->innerHTML = "<span>abc</span>";
         $this->assertEquals("<span>abc</span>", $e->innerHTML);
+
+        $e = new Element("div");
+        $e->innerHTML .= "<br/>abc";
+        $e->innerHTML .= "<br/>xyz";
+        $this->assertEquals("<br/>abc<br/>xyz", $e->innerHTML);
     }
 
     public function testInnerText()
