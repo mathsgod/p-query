@@ -1,11 +1,12 @@
 <?
-
 namespace P;
-class SelectCollection extends Query {
+class SelectCollection extends Query
+{
 
-	public function optGroup($data, $getter) {
+	public function optGroup($data, $getter)
+	{
 		foreach ($this as $select) {
-			p($select)->attr("optgroup",$getter);
+			p($select)->attr("optgroup", $getter);
 			foreach ($data as $i => $k) {
 				p("optgroup")->attr("index", $i)->attr("label", $k)->appendTo($select);
 			}
@@ -14,14 +15,23 @@ class SelectCollection extends Query {
 		return $this;
 	}
 
-	public function options($options) {
+	public function options($options)
+	{
 		foreach ($this as $select) {
 			$select->options($options);
 		}
+
+		$data_value = $select->attributes["data-value"];
+		if ($data_value !== null) {
+			$select->value = $data_value;
+
+		}
+
 		return $this;
 	}
 
-	public function ds($datasource, $display_member = null, $value_member = null) {
+	public function ds($datasource, $display_member = null, $value_member = null)
+	{
 		foreach ($this as $select) {
 			if (!$value_member) {
 				$value_member = $select->attributes["data-field"];
@@ -38,20 +48,20 @@ class SelectCollection extends Query {
 					$option->val($key);
 				}
 
-				if(is_array($data_value)){
+				if (is_array($data_value)) {
 					if (in_array($option->val(), $data_value)) {
 						$option->attr("selected", true);
 					}
-				}else{
-                    if($option->val()==""){
-                        if($option->val()===$data_value){
-                            $option->attr("selected", true);
-                        }
-                    }else{
-                        if($option->val()==$data_value){
-                            $option->attr("selected", true);
-                        }
-                    }
+				} else {
+					if ($option->val() == "") {
+						if ($option->val() === $data_value) {
+							$option->attr("selected", true);
+						}
+					} else {
+						if ($option->val() == $data_value) {
+							$option->attr("selected", true);
+						}
+					}
 				}
 
 
@@ -75,6 +85,4 @@ class SelectCollection extends Query {
 
 		return $this;
 	}
-
-
 }
