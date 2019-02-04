@@ -11,7 +11,7 @@ class Element extends Node implements ParentNode, ChildNode
     public $tagName;
     public $dataset;
 
-    public function __construct($name)
+    public function __construct($name = null)
     {
         $this->tagName = $name;
         $this->nodeType = Node::ELEMENT_NODE;

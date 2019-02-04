@@ -4,11 +4,11 @@ namespace P;
 
 class Query extends \ArrayObject
 {
-    public static $match=[
-        "ID"=>"^#((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
-        "CLASS"=>"^\\.((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
-        "TAG"=>"^((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+|[*])",
-        "ATTR"=>"^\\[[\\x20\\t\\r\\n\\f]*((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)(?:[\\x20\\t\\r\\n\\f]*([*^$|!~]?=)[\\x20\\t\\r\\n\\f]*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+))|)[\\x20\\t\\r\\n\\f]*\\]"
+    public static $match = [
+        "ID" => "^#((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
+        "CLASS" => "^\\.((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
+        "TAG" => "^((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+|[*])",
+        "ATTR" => "^\\[[\\x20\\t\\r\\n\\f]*((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)(?:[\\x20\\t\\r\\n\\f]*([*^$|!~]?=)[\\x20\\t\\r\\n\\f]*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+))|)[\\x20\\t\\r\\n\\f]*\\]"
     ];
 
     public static function _($q)
@@ -34,7 +34,7 @@ class Query extends \ArrayObject
         return self::Parse(file_get_contents($file));
     }
 
-    public function __construct($tag)
+    public function __construct($tag = null)
     {
         if (is_object($tag)) {
             if ($tag instanceof Node) {
@@ -54,7 +54,7 @@ class Query extends \ArrayObject
         } elseif ($tag) {
             if ($tag[0] == "<") {
 
-                $parser=new DOMParser($tag);
+                $parser = new DOMParser($tag);
                 foreach ($parser->nodes as $node) {
                     $this[] = $node;
                 }
@@ -87,7 +87,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function html($html)
+    public function html($html = null)
     {
         if (!func_num_args()) {
             $html = "";
@@ -234,7 +234,7 @@ class Query extends \ArrayObject
     public function css($name, $value = null)
     {
         foreach ($this as $node) {
-            if ($value==="") {
+            if ($value === "") {
                 unset($node->style[$name]);
             } else {
                 $node->style[$name] = $value;
@@ -343,7 +343,7 @@ class Query extends \ArrayObject
     public function __call($method, $args)
     {
         //for php5.6, empty is reserved word
-        if($method=="empty"){
+        if ($method == "empty") {
             foreach ($this as $node) {
                 $node->childNodes = [];
             }
@@ -373,47 +373,47 @@ class Query extends \ArrayObject
             }
 
             foreach (explode(",", $selector) as $ss) {
-                $s=$ss;
+                $s = $ss;
                 //search tag
-                $matches=[];
-                if (preg_match("/".self::$match["TAG"]."/", $s, $matches)) {
-                    $tagName=$matches[0];
-                    $s=substr($s, strlen($tagName));
+                $matches = [];
+                if (preg_match("/" . self::$match["TAG"] . "/", $s, $matches)) {
+                    $tagName = $matches[0];
+                    $s = substr($s, strlen($tagName));
                 }
 
-                $matches=[];
-                if (preg_match("/".self::$match["CLASS"]."/", $s, $matches)) {
-                    $className=substr($matches[0], 1);
-                    $s=substr($s, strlen($matches[0]));
+                $matches = [];
+                if (preg_match("/" . self::$match["CLASS"] . "/", $s, $matches)) {
+                    $className = substr($matches[0], 1);
+                    $s = substr($s, strlen($matches[0]));
                 }
 
-                $matches=[];
-                $attributes=[];
-                while (preg_match("/".self::$match["ATTR"]."/", $s, $matches)) {
-                    $s=substr($s, strlen($matches[0]));
-                    $attributes[$matches[1]]=$matches[3];
+                $matches = [];
+                $attributes = [];
+                while (preg_match("/" . self::$match["ATTR"] . "/", $s, $matches)) {
+                    $s = substr($s, strlen($matches[0]));
+                    $attributes[$matches[1]] = $matches[3];
                 }
 
-                
+
                 foreach ($this->children() as $node) {
                     if ($ss == "*") {
                         $q[] = $node;
                     } elseif (($tagName == "" || $node->tagName == $tagName)
-                    && ($className == "" || in_array($className, $node->classList->values()))) {
-                        if($attributes){
-                            $result=true;
-                            foreach($attributes as $k=>$v){
-                                if($node->attributes[$k]!=$v){
-                                    $result=false;
+                        && ($className == "" || in_array($className, $node->classList->values()))) {
+                        if ($attributes) {
+                            $result = true;
+                            foreach ($attributes as $k => $v) {
+                                if ($node->attributes[$k] != $v) {
+                                    $result = false;
                                 }
                             }
-                            if($result){
-                                $q[]=$node;
+                            if ($result) {
+                                $q[] = $node;
                             }
-                        }else{
+                        } else {
                             $q[] = $node;
                         }
-                        
+
                     }
 
                     if (!$firstChild) {
@@ -436,11 +436,11 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function remove($selector)
+    public function remove($selector = null)
     {
-        if(isset($selector)){
+        if (isset($selector)) {
             $this->find($selector)->remove();
-        }else{
+        } else {
             foreach ($this as $node) {
                 if ($parentNode = $node->parentNode) {
                     $parentNode->removeChild($node);
@@ -499,14 +499,14 @@ class Query extends \ArrayObject
     {
         $i = 0;
         foreach ($this as $node) {
-            $cl=$callback->bindTo($node);
+            $cl = $callback->bindTo($node);
             $cl($i, $node);
             $i++;
         }
         return $this;
     }
 
-    public function val($value)
+    public function val($value = null)
     {
         if (!func_num_args()) {
             $node = $this[0];
