@@ -268,7 +268,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function data($key, $value)
+    public function data($key, $value = null)
     {
         if (func_num_args() == 1) {
             return $this[0]->dataset->$key;
