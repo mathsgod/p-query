@@ -43,10 +43,17 @@ HTML;
         $this->assertEquals('<div class="container"></div>', (string)$p[0]);
     }
 
-    public function testClosest(){
-        $p=p("<div id='1'><span>abc</span></div>");
+    public function testClosest()
+    {
+        $p = p("<div id='1'><span>abc</span></div>");
 
-        $this->assertEquals("1",$p->find("span")->closest("div")->attr("id"));
+        $this->assertEquals("1", $p->find("span")->closest("div")->attr("id"));
+    }
+
+    public function testVal()
+    {
+        $p = p("<input value='test'/>");
+        $this->assertEquals($p->val(), "test");
     }
 
 
