@@ -27,6 +27,11 @@ final class NodeTest extends TestCase
         $e = new Element("div");
         $e->innerHTML = "a<span>b</span>c";
         $this->assertEquals('abc', $e->textContent);
+
+
+        $e = new Element("div");
+        $e->textContent = "testing123";
+        $this->assertEquals('testing123', $e->textContent);
     }
 
     public function test_normalize()

@@ -199,7 +199,7 @@ class Element extends Node implements ParentNode, ChildNode
 
             foreach ($this->childNodes as $child) {
                 if ($child instanceof Text) {
-                    if ($tagName == "script" || $tagName == "style") {
+                    if ($this->tagName == "script" || $this->tagName == "style") {
                         $html .= (string )$child->wholeText;
                     } else {
                         $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);

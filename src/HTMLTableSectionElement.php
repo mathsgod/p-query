@@ -1,5 +1,4 @@
 <?
-
 namespace P;
 
 class HTMLTableSectionElement extends HTMLElement
@@ -14,13 +13,15 @@ class HTMLTableSectionElement extends HTMLElement
 
     public function __get($name)
     {
-        if ($name == "rows") {
-            $collection = new HTMLCollection();
-            foreach ($this->children as $child) {
-                $collection[] = $child;
-            }
-            return $collection;
+        switch ($name) {
+            case "rows":
+                $collection = new HTMLCollection();
+                foreach ($this->children as $child) {
+                    $collection[] = $child;
+                }
+                return $collection;
         }
         return parent::__get($name);
     }
 }
+

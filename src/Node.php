@@ -1,5 +1,5 @@
 <?php
-// create by Raymond Chong
+ // create by Raymond Chong
 namespace P;
 
 class Node
@@ -120,38 +120,51 @@ class Node
 
     public function __set($name, $value)
     {
-        $this->$name = $value;
+        switch ($name) {
+            case "textContent":
+                $this->childNodes = [];
+                $this->appendChild(new Text($value));
+                break;
+            default:
+                $this->$name = $value;
+        }
     }
 
     public function __get($name)
     {
-        if ($name == "textContent") {
-            if ($this->nodeType == self::TEXT_NODE) {
-                return $this->wholeText;
-            }
-            $content = "";
-            foreach ($this->childNodes as $node) {
-                $content .= $node->textContent;
-            }
-            return $content;
-        } elseif ($name == "firstChild") {
-            return count($this->childNodes) ? $this->childNodes[0] : null;
-        } elseif ($name == "lastChild") {
-            return end($this->childNodes);
-        } elseif ($name == "nextSibling") {
-            if ($parentNode = $this->parentNode) {
-                $index = array_search($this, $parentNode->childNodes, true);
-                return $parentNode->childNodes[$index + 1];
-            } else {
-                return null;
-            }
-        } elseif ($name == "previousSibling") {
-            if ($parentNode = $this->parentNode) {
-                $index = array_search($this, $parentNode->childNodes, true);
-                return $parentNode->childNodes[$index - 1];
-            } else {
-                return null;
-            }
-        } 
+        switch ($name) {
+            case "textContent":
+                if ($this->nodeType == self::TEXT_NODE) {
+                    return $this->wholeText;
+                }
+                $content = "";
+                foreach ($this->childNodes as $node) {
+                    $content .= $node->textContent;
+                }
+                return $content;
+                break;
+            case "firstChild":
+                return count($this->childNodes) ? $this->childNodes[0] : null;
+                break;
+            case "lastChild":
+                return end($this->childNodes);
+                break;
+            case "nextSibling":
+                if ($parentNode = $this->parentNode) {
+                    $index = array_search($this, $parentNode->childNodes, true);
+                    return $parentNode->childNodes[$index + 1];
+                } else {
+                    return null;
+                }
+                break;
+            case "previousSibling":
+                if ($parentNode = $this->parentNode) {
+                    $index = array_search($this, $parentNode->childNodes, true);
+                    return $parentNode->childNodes[$index - 1];
+                } else {
+                    return null;
+                }
+                break;
+        }
     }
 }

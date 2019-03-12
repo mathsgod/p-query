@@ -48,8 +48,8 @@ class DOMTokenList implements \ArrayAccess {
 		}
 	}
 
-	public function contains() {
-		return in_array($class, $this->token);
+	public function contains($token) {
+		return in_array($token, $this->token);
 	}
 
 	public function toggle($class) {

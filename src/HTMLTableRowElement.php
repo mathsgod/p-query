@@ -18,7 +18,7 @@ class HTMLTableRowElement extends HTMLElement
         }
 
         $cell = new HTMLTableCellElement();
-        if ($num_cells == $index || $index == -1) {
+        if ($num_cell == $index || $index == -1) {
             $this->appendChild($cell);
         } else {
             $this->insertBefore($cell, $children[$index]);

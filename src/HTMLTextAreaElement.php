@@ -1,23 +1,28 @@
 <?php
 
 namespace P;
-class HTMLTextAreaElement extends HTMLElement {
+
+class HTMLTextAreaElement extends HTMLElement
+{
     public $value;
     public $rows;
     public $cols;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct("textarea");
     }
-    public function __toString() {
-        if ($this->rows)$this->attributes["rows"] = $this->rows;
-        if ($this->cols)$this->attributes["cols"] = $this->cols;
+    public function __toString()
+    {
+        if ($this->rows) $this->attributes["rows"] = $this->rows;
+        if ($this->cols) $this->attributes["cols"] = $this->cols;
         $this->childNodes = array();
         $this->appendChild(new Text($this->value));
         return parent::__toString();
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         switch ($name) {
             case "autocomplete":
             case "autofocus":
@@ -42,7 +47,8 @@ class HTMLTextAreaElement extends HTMLElement {
         }
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         switch ($name) {
             case "autocomplete":
             case "autofocus":
@@ -68,4 +74,3 @@ class HTMLTextAreaElement extends HTMLElement {
     }
 }
 
-?>

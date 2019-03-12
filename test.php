@@ -1,10 +1,24 @@
 <?
-
 require_once(__DIR__ . "/vendor/autoload.php");
 use P\HTMLElement;
 use P\HTMLTableSectionElement;
 use P\HTMLTableElement;
 use P\Element;
+use P\HTMLTableRowElement;
+use P\HTMLDivElement;
+
+$div=new HTMLDivElement();
+$div->textContent="abc";
+
+echo (string)$div;
+return;
+
+
+$row = new HTMLTableRowElement();
+$cell = $row->insertCell();
+$cell->textContent = "cell content";
+echo (string)$cell;
+return;
 
 $t1 = new HTMLTableElement();
 
@@ -51,3 +65,4 @@ die();
 $p = p($html);
 $p->empty();
 print_r($p[0]->outerHTML);
+
