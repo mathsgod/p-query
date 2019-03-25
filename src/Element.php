@@ -192,11 +192,7 @@ class Element extends Node implements ParentNode, ChildNode
             $attributes[$matches[1]] = $matches[3];
         }
 
-        print_r($tagName);
-        print_r($className);
-        print_r($attributes);
-
-        die();
+ 
 
         //check class
         list($tag, $class) = explode(".", $s, 2);

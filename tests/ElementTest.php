@@ -17,7 +17,7 @@ HTML;
         $this->assertEquals('<div id="div1"> <span>abc</span></div>', (string)$d);
 
     }
-    public function test_querySelectorAll()
+    /*public function test_querySelectorAll()
     {
         $div = p(self::HTML)[0];
         $str = "";
@@ -33,7 +33,7 @@ HTML;
             $str .= (string)$a;
         }
         $this->assertEquals('<span>abc</span><span>xxx</span>', $str);
-    }
+    }*/
 
     public function testCreate()
     {
