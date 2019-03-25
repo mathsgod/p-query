@@ -1,4 +1,6 @@
 <?
+error_reporting(E_ALL & ~E_NOTICE);
+
 require_once(__DIR__ . "/vendor/autoload.php");
 use P\HTMLElement;
 use P\HTMLTableSectionElement;
@@ -7,8 +9,22 @@ use P\Element;
 use P\HTMLTableRowElement;
 use P\HTMLDivElement;
 
-$div=new HTMLDivElement();
-$div->textContent="abc";
+
+
+$div = p("<div><p><div> <span class='def abc'>abc</span><div>inner div</div></div> </p> <p> <div class='abc'>xxx</div></p></div>")[0];
+
+$div->querySelectorAll("span.abc.def[name='test'][name1='test2']");
+exit();
+
+foreach ($div->querySelectorAll("span.abc[name='test']") as $p) {
+    print_r((string)$p);
+    echo "\n";
+}
+
+
+return;
+$div = new HTMLDivElement();
+$div->textContent = "abc";
 
 echo (string)$div;
 return;
@@ -65,4 +81,3 @@ die();
 $p = p($html);
 $p->empty();
 print_r($p[0]->outerHTML);
-

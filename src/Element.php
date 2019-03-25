@@ -105,6 +105,19 @@ class Element extends Node implements ParentNode, ChildNode
         return isset($this->attributes[$attName]);
     }
 
+    public function getElementById($id)
+    {
+        foreach ($this->children as $child) {
+            if ($child->id == $id) {
+                return $child;
+            }
+            if ($e = $child->getElementById($id)) {
+                return $e;
+            }
+        }
+        return null;
+    }
+
     public function getElementsByTagName($tagName)
     {
         $tag = strtolower($tagName);
@@ -135,14 +148,92 @@ class Element extends Node implements ParentNode, ChildNode
             }
             if (count(array_intersect($names_arr, $node->classList->values())) == $count) {
                 $nodes[] = $node;
-
-                foreach ($node->getElementsByClassName($names) as $n) {
-                    $nodes[] = $n;
-                }
+            }
+            foreach ($node->getElementsByClassName($names) as $n) {
+                $nodes[] = $n;
             }
         }
 
         return $nodes;
+    }
+
+    public function querySelectorAll($selector)
+    {
+        $match = [
+            "ID" => "^#((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
+            "CLASS" => "^\\.((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
+            "TAG" => "^((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+|[*])",
+            "ATTR" => "^\\[[\\x20\\t\\r\\n\\f]*((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)(?:[\\x20\\t\\r\\n\\f]*([*^$|!~]?=)[\\x20\\t\\r\\n\\f]*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+))|)[\\x20\\t\\r\\n\\f]*\\]"
+        ];
+
+
+        $selectors = explode(" ", $selector);
+
+        $s = array_shift($selectors);
+
+        //search tag
+        $matches = [];
+        if (preg_match("/" . $match["TAG"] . "/", $s, $matches)) {
+            $tagName = $matches[0];
+            $s = substr($s, strlen($tagName));
+        }
+
+        $matches = [];
+        $className = [];
+        while (preg_match("/" . $match["CLASS"] . "/", $s, $matches)) {
+            $className[] = substr($matches[0], 1);
+            $s = substr($s, strlen($matches[0]));
+        }
+
+        $matches = [];
+        $attributes = [];
+        while (preg_match("/" . $match["ATTR"] . "/", $s, $matches)) {
+            $s = substr($s, strlen($matches[0]));
+            $attributes[$matches[1]] = $matches[3];
+        }
+
+        print_r($tagName);
+        print_r($className);
+        print_r($attributes);
+
+        die();
+
+        //check class
+        list($tag, $class) = explode(".", $s, 2);
+
+        $nodes = [];
+        if ($tag) {
+            $nodes = $this->getElementsByTagName($tag);
+        }
+
+        if ($class) {
+            $class = str_replace(".", " ", $class);
+            $nodes_class = $this->getElementsByClassName($class);
+
+            if ($tag) {
+                $nodes = array_intersect($nodes, $nodes_class);
+            } else {
+                $nodes = $nodes_class;
+            }
+        }
+
+
+
+        if (sizeof($selectors) == 0) return $nodes;
+
+        $selector = implode(" ", $selectors);
+        $ns = [];
+        foreach ($nodes as $node) {
+            foreach ($node->querySelectorAll($selector) as $n) {
+                $ns[] = $n;
+            }
+        }
+        return $ns;
+    }
+
+    public function querySelector($selector)
+    {
+        return $this->querySelectorAll($selector)[0];
     }
 
     public function __get($name)
@@ -178,39 +269,43 @@ class Element extends Node implements ParentNode, ChildNode
                 }
                 return $e;
                 break;
-        }
-
-        if ($name == "id") {
-            return $this->attributes["id"];
-        } elseif ($name == "outerHTML") {
-            return $this->__toString();
-        } elseif ($name == "innerText") {
-            $html = "";
-            foreach ($this->childNodes as $child) {
-                if ($child instanceof Text) {
-                    $html .= $child->wholeText;
-                } else {
-                    $html .= $child->innerText;
-                }
-            }
-            return $html;
-        } elseif ($name == "innerHTML") {
-            $html = "";
-
-            foreach ($this->childNodes as $child) {
-                if ($child instanceof Text) {
-                    if ($this->tagName == "script" || $this->tagName == "style") {
-                        $html .= (string )$child->wholeText;
+            case 'id':
+                return $this->attributes["id"];
+                break;
+            case 'outerHTML':
+                return $this->__toString();
+                break;
+            case 'innerText':
+                $html = "";
+                foreach ($this->childNodes as $child) {
+                    if ($child instanceof Text) {
+                        $html .= $child->wholeText;
                     } else {
-                        $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
+                        $html .= $child->innerText;
                     }
-                } else {
-                    $html .= $child;
                 }
-            }
-            return $html;
+                return $html;
+                break;
+            case 'innerHTML':
+                $html = "";
+
+                foreach ($this->childNodes as $child) {
+                    if ($child instanceof Text) {
+                        if ($this->tagName == "script" || $this->tagName == "style") {
+                            $html .= (string )$child->wholeText;
+                        } else {
+                            $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
+                        }
+                    } else {
+                        $html .= $child;
+                    }
+                }
+                return $html;
+                break;
+            default:
+                return parent::__get($name);
+                break;
         }
-        return parent::__get($name);
     }
 
     public function __set($name, $value)

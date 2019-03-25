@@ -10,6 +10,31 @@ final class ElementTest extends TestCase
 <div class="container"><div class="hello">Hello</div><div class="goodbye">Goodbye</div></div>
 HTML;
 
+    public function test_getElementById()
+    {
+        $div = p("<div><p><div id='div1'> <span>abc</span></div> </p> <p> <span>xxx</span></p></div>")[0];
+        $d=$div->getElementById('div1');
+        $this->assertEquals('<div id="div1"> <span>abc</span></div>', (string)$d);
+
+    }
+    public function test_querySelectorAll()
+    {
+        $div = p(self::HTML)[0];
+        $str = "";
+        foreach ($div->querySelectorAll("div") as $a) {
+            $str .= (string)$a;
+        }
+        $this->assertEquals('<div class="hello">Hello</div><div class="goodbye">Goodbye</div>', $str);
+
+
+        $str = "";
+        $div = p("<div><p><div> <span>abc</span></div> </p> <p> <span>xxx</span></p></div>")[0];
+        foreach ($div->querySelectorAll("p span") as $a) {
+            $str .= (string)$a;
+        }
+        $this->assertEquals('<span>abc</span><span>xxx</span>', $str);
+    }
+
     public function testCreate()
     {
         $e = new P\Element("div");
@@ -24,7 +49,6 @@ HTML;
         $e = new Element("div");
         $e->addClass("class1");
         $this->assertEquals('<div class="class1"></div>', $e->outerHTML);
-
     }
 
     public function testOuterHTML()
@@ -57,7 +81,6 @@ HTML;
         $e = new Element("div");
         $e->innerHTML = "<span>abc</span>";
         $this->assertEquals("abc", $e->innerText);
-
     }
 
     public function testBefore()
@@ -77,8 +100,6 @@ HTML;
 
         $child->before("Text");
         $this->assertEquals("<div>Text<p></p></div>", $parent->outerHTML);
-
-
     }
     public function testAfter()
     {
@@ -120,9 +141,5 @@ HTML;
 
 
         $this->assertEquals($div->children[0], $p);
-
-
-
     }
-
 }
