@@ -17,7 +17,7 @@ class HTMLSelectElement extends HTMLElement
             $options = [];
             foreach ($this->childNodes as $node) {
                 if ($node instanceof HTMLOptionElement) {
-                    $options[] = $nodes;
+                    $options[] = $node;
                 }
                 if ($node->attributes["value"] == $value) {
                     $node->selected = true;

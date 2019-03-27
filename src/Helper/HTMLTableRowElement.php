@@ -1,13 +1,12 @@
-<?php
-namespace P;
+<?
 
-class HTMLTableRowElement extends HTMLElement
+namespace P\Helper;
+
+use \DOMException;
+use \P\HTMLCollection;
+
+class HTMLTableRowElement extends Element
 {
-    public function __construct()
-    {
-        parent::__construct("tr");
-    }
-
     public function insertCell($index = -1)
     {
         $children = $this->cells;
@@ -17,11 +16,11 @@ class HTMLTableRowElement extends HTMLElement
             throw new DOMException("The value provided ($index) is outside the range [-1, $num_cell].");
         }
 
-        $cell = new HTMLTableCellElement();
+        $cell = $this->element->ownerDocument->createElement("td");
         if ($num_cell == $index || $index == -1) {
-            $this->appendChild($cell);
+            $this->element->appendChild($cell);
         } else {
-            $this->insertBefore($cell, $children[$index]);
+            $this->element->insertBefore($cell, $children[$index]);
         }
 
         return $cell;
@@ -49,8 +48,8 @@ class HTMLTableRowElement extends HTMLElement
         switch ($name) {
             case "cells":
                 $collection = new HTMLCollection();
-                foreach ($this->children as $child) {
-                    $collection[] = $child;
+                foreach ($this->element->childNodes as $node) {
+                    $collection[] = $node;
                 }
                 return $collection;
                 break;

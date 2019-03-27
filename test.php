@@ -2,82 +2,122 @@
 error_reporting(E_ALL & ~E_NOTICE);
 
 require_once(__DIR__ . "/vendor/autoload.php");
-use P\HTMLElement;
-use P\HTMLTableSectionElement;
-use P\HTMLTableElement;
-use P\Element;
-use P\HTMLTableRowElement;
-use P\HTMLDivElement;
+use P\Document;
+
+$d = new Document();
+$div = $d->createElement("div");
 
 
-
-$div = p("<div><p><div> <span class='def abc'>abc</span><div>inner div</div></div> </p> <p> <div class='abc'>xxx</div></p></div>")[0];
-
-$div->querySelectorAll("span.abc.def[name='test'][name1='test2']");
-exit();
-
-foreach ($div->querySelectorAll("span.abc[name='test']") as $p) {
-    print_r((string)$p);
-    echo "\n";
-}
-
-
-return;
-$div = new HTMLDivElement();
-$div->textContent = "abc";
-
+$div->classList->add("c1");
 echo (string)$div;
-return;
+die();
 
-
-$row = new HTMLTableRowElement();
-$cell = $row->insertCell();
-$cell->textContent = "cell content";
-echo (string)$cell;
-return;
-
-$t1 = new HTMLTableElement();
-
-$t2 = new HTMLTableElement();
-$t2->createTFoot();
-
-
-$t1->tFoot = $t2->tFoot;
-
-
-echo $t1->outerHTML;
-echo "\n";
-echo $t2->outerHTML;
-echo "\n";
-
-
-return;
-$div = new Element("div");
-
-$p = new Element("p");
-$div->appendChild($p);
-print_r($div->children);
+$div = p("<div class='c1 c2'>abc</div>")[0];
+echo $div->classList;
+die();
+$div->classList->add("abc");
+echo (string)$div;
+die();
 
 
 
-
-
-return;
-$html = <<<HTML
-<div class="container"><div class="hello">Hello</div><div class="goodbye">Goodbye</div></div>
-HTML;
-
-$p = new P\DOMParser($html);
-$e = $p->nodes[0];
-
-print_r($e->innerHTML);
-
+$div = p("<div class='c1 c2'>abc</div>")[0];
+$div->classList->add("abc");
+echo (string)$div;
 die();
 
 
 
 
 
-$p = p($html);
-$p->empty();
-print_r($p[0]->outerHTML);
+
+die();
+
+echo $div[0];
+
+
+die();
+
+
+
+
+$p = p("<div><script>var a=1;</script></div>");
+
+echo (string)$p[0];
+
+die();
+
+
+
+
+$doc = new Document();
+
+$str = "<br>abc";
+$doc->loadHTML($str, LIBXML_COMPACT  | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+
+
+echo $doc->saveHTML();
+
+die();
+
+$d1 = new Document();
+
+$doc = new Document();
+$doc->loadHTML($str, LIBXML_COMPACT  | LIBXML_HTML_NODEFDTD);
+
+foreach ($doc->childNodes[0]->childNodes[0]->childNodes as $n) {
+    $d1->appendChild($d1->importNode($n, true));
+}
+
+
+echo $d1->saveHTML();
+
+
+
+die();
+
+
+$a = p("<br/>abc");
+
+print_r($a);
+die();
+
+$doc = new Document();
+$e =  $doc->createElement("div");
+$e->innerHTML .= "<br>abc";
+$e->innerHTML .= "<br>xyz";
+
+echo $e->innerHTML;
+die();
+
+$str = '<div class="container"><div class="hello">Hello</div><div class="goodbye">Goodbye</div></div>';
+$doc = new Document();
+$doc->loadHTML($str, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+foreach ($doc->childNodes as $n) {
+    print_R($n);
+}
+die();
+
+$p = new Document();
+$p->loadHTML("<!--abc-->", LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+print_r($p);
+die();
+
+$c = new DOMComment("abc");
+
+print_r($c);
+
+return;
+
+$doc = new Document();
+
+$input = $doc->createElement("input");
+
+$input->name = "test";
+echo $input->name;
+
+print_r((string)$input);
+//$r = $t->insertRow();
+
+//print_r($div->querySelectorAll("span.abc"));

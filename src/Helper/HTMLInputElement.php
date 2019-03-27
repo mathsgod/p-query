@@ -1,13 +1,8 @@
-<?php
-namespace P;
+<?
+namespace P\Helper;
 
-class HTMLInputElement extends HTMLElement
+class HTMLInputElement extends Element
 {
-    public function __construct()
-    {
-        parent::__construct("input");
-    }
-
     public function __set($name, $value)
     {
         switch ($name) {
@@ -43,8 +38,7 @@ class HTMLInputElement extends HTMLElement
             case "valueAsDate":
             case "valueAsNumber":
             case "width":
-                $this->attributes[$name] = $value;
-
+                $this->element->setAttribute($name, $value);
             default:
                 parent::__set($name, $value);
         }
@@ -85,7 +79,7 @@ class HTMLInputElement extends HTMLElement
             case "valueAsDate":
             case "valueAsNumber":
             case "width":
-                return $this->attributes[$name];
+                return (string)$this->element->getAttribute($name);
         }
         return parent::__get($name);
     }

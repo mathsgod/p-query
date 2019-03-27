@@ -19,9 +19,9 @@ class Query extends \ArrayObject
     public static function Parse($html)
     {
         $h = new \P\Query();
-        $e = new \P\Element();
-        $e->innerHTML = $html;
-        foreach ($e->childNodes as $node) {
+        $parser = new DOMParser($html);
+
+        foreach ($parser->nodes as $node) {
             $node->parentNode = null;
             $h[] = $node;
         }
@@ -44,22 +44,24 @@ class Query extends \ArrayObject
                     $this[] = $node;
                 }
             } else {
-                $e = new Element();
-                $e->innerHTML = (string )$tag;
-
-                foreach ($e->childNodes as $node) {
+                $parser = new DOMParser();
+                $document = $parser->parseFromString((string)$tag);
+                foreach ($document->childNodes as $node) {
                     $this[] = $node;
                 }
             }
         } elseif ($tag) {
             if ($tag[0] == "<") {
 
-                $parser = new DOMParser($tag);
-                foreach ($parser->nodes as $node) {
+                $parser = new DOMParser();
+                $document = $parser->parseFromString($tag);
+
+                foreach ($document->childNodes as $node) {
                     $this[] = $node;
                 }
             } else {
-                $this[] = Document::createElement($tag);
+                $document = new Document();
+                $this[] = $document->createElement($tag);
             }
         }
     }
@@ -115,9 +117,9 @@ class Query extends \ArrayObject
     {
         if (is_string($node)) {
             foreach ($this as $child) {
-                $e = new Element();
-                $e->innerHTML = $node;
-                foreach ($e->childNodes as $n) {
+                $p = new DOMParser();
+                $doc = $p->parseFromString($node);
+                foreach ($doc->childNodes as $n) {
                     $child->prependChild($n);
                 }
             }
@@ -165,9 +167,9 @@ class Query extends \ArrayObject
     {
         if (is_string($node)) {
             foreach ($this as $child) {
-                $e = new Element();
-                $e->innerHTML = $node;
-                foreach ($e->childNodes as $n) {
+                $p = new DOMParser();
+                $doc = $p->parseFromString($node);
+                foreach ($doc->childNodes as $n) {
                     $child->appendChild($n);
                 }
             }
@@ -247,21 +249,10 @@ class Query extends \ArrayObject
     {
         $q = new Query();
         foreach ($this as $node) {
-            while ($node = p($node)->parent()) {
-                if ($node->count() == 0) {
+            while ($node = $node->parentNode) {
+                if ($node->matches($selector)) {
+                    $q[] = $node;
                     break;
-                }
-
-                if ($selector[0] == ".") {
-                    if ($node->hasClass(substr($selector, 1))) {
-                        $q[] = $node[0];
-                        break;
-                    }
-                } else {
-                    if ($node[0]->tagName == $selector) {
-                        $q[] = $node[0];
-                        break;
-                    }
                 }
             }
         }
@@ -271,11 +262,11 @@ class Query extends \ArrayObject
     public function data($key, $value = null)
     {
         if (func_num_args() == 1) {
-            return $this[0]->dataset->$key;
+            return $this[0]->data[$key];
         }
 
         foreach ($this as $node) {
-            $node->dataset->$key = $value;
+            $node->data[$key] = $value;
         }
         return $this;
     }
@@ -345,7 +336,9 @@ class Query extends \ArrayObject
         //for php5.6, empty is reserved word
         if ($method == "empty") {
             foreach ($this as $node) {
-                $node->childNodes = [];
+                while ($node->hasChildNodes()) {
+                    $node->removeChild($node->firstChild);
+                }
             }
             return $this;
         }
@@ -359,80 +352,18 @@ class Query extends \ArrayObject
 
     public function find($selector)
     {
-        $selectors = explode(" ", $selector);
-
         $q = new Query();
-        $q->selector = $selector;
 
-        if (sizeof($selectors) == 1) {
-            $selector = $selectors[0];
-            $firstChild = false;
-            if ($selector[0] == ">") {
-                $firstChild = true;
-                $selector = substr($selector, 1);
-            }
+        $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
+        $expression = $converter->toXPath($selector);
 
-            foreach (explode(",", $selector) as $ss) {
-                $s = $ss;
-                //search tag
-                $matches = [];
-                if (preg_match("/" . self::$match["TAG"] . "/", $s, $matches)) {
-                    $tagName = $matches[0];
-                    $s = substr($s, strlen($tagName));
-                }
+        foreach ($this as $node) {
+            $xpath = new \DOMXPath($node->ownerDocument);
 
-                $matches = [];
-                if (preg_match("/" . self::$match["CLASS"] . "/", $s, $matches)) {
-                    $className = substr($matches[0], 1);
-                    $s = substr($s, strlen($matches[0]));
-                }
-
-                $matches = [];
-                $attributes = [];
-                while (preg_match("/" . self::$match["ATTR"] . "/", $s, $matches)) {
-                    $s = substr($s, strlen($matches[0]));
-                    $attributes[$matches[1]] = $matches[3];
-                }
-
-
-                foreach ($this->children() as $node) {
-                    if ($ss == "*") {
-                        $q[] = $node;
-                    } elseif (($tagName == "" || $node->tagName == $tagName)
-                        && ($className == "" || in_array($className, $node->classList->values()))) {
-                        if ($attributes) {
-                            $result = true;
-                            foreach ($attributes as $k => $v) {
-                                if ($node->attributes[$k] != $v) {
-                                    $result = false;
-                                }
-                            }
-                            if ($result) {
-                                $q[] = $node;
-                            }
-                        } else {
-                            $q[] = $node;
-                        }
-
-                    }
-
-                    if (!$firstChild) {
-                        $p = new Query($node);
-                        foreach ($p->find($ss) as $node) {
-                            $q[] = $node;
-                        }
-                    }
-                }
-            }
-            return $q;
-        } else {
-            $s = array_shift($selectors);
-            $r = $this->find($s)->find(implode(" ", $selectors));
-            foreach ($r as $n) {
-                $q[] = $n;
+            foreach ($xpath->query($expression) as $node) {
+                $q[] = $node;
             }
         }
-
         return $q;
     }
 
@@ -442,6 +373,7 @@ class Query extends \ArrayObject
             $this->find($selector)->remove();
         } else {
             foreach ($this as $node) {
+
                 if ($parentNode = $node->parentNode) {
                     $parentNode->removeChild($node);
                 }

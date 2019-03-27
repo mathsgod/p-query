@@ -2,64 +2,104 @@
 
 namespace P;
 
-class DOMTokenList implements \ArrayAccess {
+class DOMTokenList implements \ArrayAccess
+{
 
-	protected $token = [];
+	private $attr;
+	public function __construct(Attr $attr)
+	{
+		$this->attr = $attr;
+	}
 
-	public function offsetSet($offset, $value) {
+	public function offsetSet($offset, $value)
+	{
+		$values = $this->values();
 		if (is_null($offset)) {
-			$this->token[] = $value;
+			$this->add($value);
 		} else {
-			$this->token[$offset] = $value;
+			$values[$offset] = $value;
+			$this->value = implode(" ", $values);
 		}
 	}
 
-	public function offsetExists($offset) {
-		return isset($this->token[$offset]);
+	public function offsetExists($offset)
+	{
+		return isset($this->values()[$offset]);
 	}
 
-	public function offsetUnset($offset) {
-		unset($this->token[$offset]);
+	public function offsetUnset($offset)
+	{
+		$values = $this->values();
+		unset($values[$offset]);
+		$this->value = implode(" ", $values);
 	}
 
-	public function offsetGet($offset) {
-		return isset($this->token[$offset]) ? $this->token[$offset] : null;
+	public function offsetGet($offset)
+	{
+		$values = $this->values();
+		return isset($values[$offset]) ? $values[$offset] : null;
 	}
 
-	public function values() {
-
-		return $this->token;
+	public function values()
+	{
+		if ($this->attr->nodeValue) {
+			return explode(" ", $this->attr->nodeValue);
+		} else {
+			return [];
+		}
 	}
 
-	public function __get($name) {
+	public function __get($name)
+	{
 		if ($name == "length")
-			return count($this->token);
-	}
-
-	public function add($class) {
-		if (!in_array($class, $this->token)) {
-			$this[] = $class;
+			return count($this->values());
+		if ($name == "value") {
+			return $this->attr->nodeValue;
 		}
 	}
 
-	public function remove($class) {
-		if (($key = array_search($class, $this->token)) !== false) {
-			unset($this->token[$key]);
+	public function __set($name, $value)
+	{
+		if ($name == "value") {
+			$this->attr->nodeValue = $value;
 		}
 	}
 
-	public function contains($token) {
-		return in_array($token, $this->token);
+	public function add($value)
+	{
+		$values = $this->values();
+		if (!in_array($value, $values)) {
+			$values[] = $value;
+			$this->value = implode(" ", $values);
+		}
+		return;
 	}
 
-	public function toggle($class) {
-		if ($this->contains($class)) {
-			$this->remove($class);
+	public function remove()
+	{
+		$values = $this->values();
+		foreach (func_get_args() as $c) {
+			if (($key = array_search($c, $values)) !== false) {
+				unset($values[$key]);
+			}
+		}
+
+		$this->value = implode(" ", $values);
+	}
+
+	public function contains($token)
+	{
+		return in_array($token, $this->values());
+	}
+
+	public function toggle($token)
+	{
+		if ($this->contains($token)) {
+			$this->remove($token);
+			return false;
 		} else {
-			$this->add($class);
+			$this->add($token);
+			return true;
 		}
-
 	}
-
-
 }

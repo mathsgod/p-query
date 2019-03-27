@@ -2,58 +2,28 @@
 
 namespace P;
 
-class Document extends Node {
-	public function __construct() {
-		$this->nodeType = Node::DOCUMENT_NODE;
+class Document extends \DOMDocument
+{
+	public function __construct($version = '', $encoding = 'UTF-8')
+	{
+		parent::__construct($version, $encoding);
+		$this->registerNodeClass("DOMDocument", Document::class);
+		$this->registerNodeClass("DOMElement", Element::class);
+		$this->registerNodeClass("DOMText", Text::class);
+		$this->registerNodeClass("DOMNode", Node::class);
+		$this->registerNodeClass("DOMAttr", Attr::class);
+		$this->registerNodeClass("DOMDocumentFragment", DocumentFragment::class);
+		$this->registerNodeClass("DOMComment", Comment::class);
+		$this->registerNodeClass("DOMNodeList", NodeList::class);
+		$this->formatOutput = false;
 	}
 
-	public static function createElement($tagName) {
-		switch (strtolower($tagName)) {
-			case "span":
-				return new HTMLSpanElement();
-				break;
-			case "optgroup":
-				return new HTMLOptGroupElement();
-				break;
-			case "thead":
-			case "tfoot":
-				return new HTMLTableSectionElement(strtolower($tagName));
-				break;
-			case "div":
-				return new HTMLDivElement();
-				break;
-			case "input":
-				return new HTMLInputElement();
-				break;
-			case "select":
-				return new HTMLSelectElement();
-				break;
-			case "option":
-				return new HTMLOptionElement();
-				break;
-			case "button":
-				return new HTMLButtonElement();
-				break;
-			case "a":
-				return new HTMLAnchorElement();
-				break;
-			case "table":
-				return new HTMLTableElement();
-				break;
-			case "tr":
-				return new HTMLTableRowElement();
-				break;
-			case "td":
-				return new HTMLTableCellElement();
-				break;
-			default:
-				return new HTMLElement(strtolower($tagName));
-		}
-	}
+	public function querySelectorAll(string $selector)
+	{
+		$converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
+		$expression = $converter->toXPath($selector);
 
-	public static function createTextNode($text) {
-		return new Text($text);
+		$xpath = new \DOMXPath($this);
+		return $xpath->evaluate($expression);
 	}
 }
-
-?>

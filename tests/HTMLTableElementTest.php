@@ -1,8 +1,10 @@
 <?
+
 declare (strict_types = 1);
 error_reporting(E_ALL && ~E_WARNING);
+
 use PHPUnit\Framework\TestCase;
-use P\HTMLTableElement;
+use P\Document;
 
 final class HTMLTableElementTest extends TestCase
 {
@@ -10,59 +12,56 @@ final class HTMLTableElementTest extends TestCase
 <table></table>
 HTML;
 
-    public function testCreate()
+public function test_createTHead()
     {
-        $e = new P\HTMLTableElement();
-        $this->assertInstanceOf(
-            P\HTMLTableElement::class,
-            $e
-        );
-    }
 
-    public function test_createTHead()
-    {
-        $t = new P\HTMLTableElement();
+        $doc = new Document();
+        $t = $doc->createElement("table");
         $h = $t->createTHead();
 
-        $this->assertInstanceOf(P\HTMLTableSectionElement::class, $h);
+        $this->assertInstanceOf(P\Element::class, $h);
         $this->assertEquals("<table><thead></thead></table>", $t->outerHTML);
 
         $bhody = $t->createTHead();
-        $this->assertInstanceOf(P\HTMLTableSectionElement::class, $h);
+        $this->assertInstanceOf(P\Element::class, $h);
         $this->assertEquals("<table><thead></thead></table>", $t->outerHTML);
     }
 
     public function test_createTBody()
     {
-        $t = new P\HTMLTableElement();
+        $doc = new Document();
+        $t = $doc->createElement("table");
         $body = $t->createTBody();
 
-        $this->assertInstanceOf(P\HTMLTableSectionElement::class, $body);
+        $this->assertInstanceOf(P\Element::class, $body);
         $this->assertEquals("<table><tbody></tbody></table>", $t->outerHTML);
 
         $body = $t->createTBody();
-        $this->assertInstanceOf(P\HTMLTableSectionElement::class, $body);
+        $this->assertInstanceOf(P\Element::class, $body);
         $this->assertEquals("<table><tbody></tbody><tbody></tbody></table>", $t->outerHTML);
     }
 
     public function test_createTFoot()
     {
-        $t = new P\HTMLTableElement();
+        $doc = new Document();
+        $t = $doc->createElement("table");
+
         $f = $t->createTFoot();
 
-        $this->assertInstanceOf(P\HTMLTableSectionElement::class, $f);
+        $this->assertInstanceOf(P\Element::class, $f);
         $this->assertEquals("<table><tfoot></tfoot></table>", $t->outerHTML);
-
     }
 
-    public function test_insertRow(){
-        $t = new P\HTMLTableElement();
-        $r=$t->insertRow();
+    public function test_insertRow()
+    {
+        $doc = new Document();
+        $t = $doc->createElement("table");
 
-        $this->assertInstanceOf(P\HTMLTableRowElement::class, $r);
-        
+        $r = $t->insertRow();
+
+        $this->assertInstanceOf(P\Element::class, $r);
+
         $this->assertEquals("<table><tbody><tr></tr></tbody></table>", $t->outerHTML);
     }
-
-
 }
+

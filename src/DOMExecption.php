@@ -1,9 +1,8 @@
 <?
 namespace P;
 
-use Exception;
 
-class DOMException extends Exception
+class DOMException extends \Exception
 {
 
 }
