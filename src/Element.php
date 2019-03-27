@@ -134,6 +134,9 @@ class Element extends \DOMElement
             case 'tr':
                 $helper = new Helper\HTMLTableRowElement($this);
                 break;
+            case 'textarea':
+                $helper = new Helper\HTMLTextAreaElement($this);
+                break;
         }
 
         if ($helper) {
@@ -164,9 +167,15 @@ class Element extends \DOMElement
         switch ($this->tagName) {
             case 'input':
                 $helper = new Helper\HTMLInputElement($this);
-                $helper->__set($name, $value);
-                return;
                 break;
+            case 'textarea':
+                $helper = new Helper\HTMLTextAreaElement($this);
+                break;
+        }
+
+        if ($helper) {
+            $helper->__set($name, $value);
+            return;
         }
 
         $this->name = $value;
@@ -216,15 +225,18 @@ class Element extends \DOMElement
 
         switch ($this->tagName) {
             case 'table':
-                $helper = new HTMLTableElementHelper($this);
+                $helper = new Helper\HTMLTableElement($this);
                 break;
             case 'input':
                 $helper = new Helper\HTMLInputElement($this);
                 break;
+            case 'textarea':
+                $helper = new Helper\HTMLTextAreaElement($this);
+                break;
         }
 
         if ($helper) {
-            return $helper->$name;
+            return $helper->__get($name);
         }
     }
 }

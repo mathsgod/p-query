@@ -14,7 +14,6 @@ class Document extends \DOMDocument
 		$this->registerNodeClass("DOMAttr", Attr::class);
 		$this->registerNodeClass("DOMDocumentFragment", DocumentFragment::class);
 		$this->registerNodeClass("DOMComment", Comment::class);
-		$this->registerNodeClass("DOMNodeList", NodeList::class);
 		$this->formatOutput = false;
 	}
 

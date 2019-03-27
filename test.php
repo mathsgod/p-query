@@ -4,6 +4,18 @@ error_reporting(E_ALL & ~E_NOTICE);
 require_once(__DIR__ . "/vendor/autoload.php");
 use P\Document;
 
+$doc = new Document();
+$t = $doc->createElement("textarea");
+print_R($t->getNodePath());
+die();
+$t->name = "input1";
+
+
+$t->setUserData("a","hello",null);
+
+echo $t->getUserData("a");
+die();
+
 $d = new Document();
 $div = $d->createElement("div");
 
