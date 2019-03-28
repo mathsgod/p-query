@@ -221,6 +221,12 @@ class Element extends \DOMElement
                 }
                 return new DOMTokenList($this->attributes["class"]);
                 break;
+            case 'style':
+                if (!$this->hasAttribute("style")) {
+                    $this->setAttribute("style", "");
+                }
+                return new CSSStyleDeclaration($this->attributes["style"]);
+                break;
         }
 
         switch ($this->tagName) {

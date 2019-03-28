@@ -126,17 +126,16 @@ class Query extends \ArrayObject
             return $this;
         }
 
-        $nodes = $node;
-        if ($nodes instanceof \P\Node) {
+        if ($node instanceof Node || $node instanceof Element) {
             foreach ($this as $child) {
-                $child->prependChild($nodes);
+                $child->prependChild($child->ownerDocument->importNode($node, true));
             }
             return $this;
         }
 
         foreach ($this as $child) {
-            foreach ($nodes as $n) {
-                $child->prependChild($n);
+            foreach ($node as $n) {
+                $child->prependChild($child->ownerDocument->importNode($n, true));
             }
         }
         return $this;
@@ -170,24 +169,22 @@ class Query extends \ArrayObject
                 $p = new DOMParser();
                 $doc = $p->parseFromString($node);
                 foreach ($doc->childNodes as $n) {
-                    $child->appendChild($n);
+                    $child->appendChild($child->owenrDocument->importNode($n, true));
                 }
             }
             return $this;
-        } else {
-            $nodes = $node;
         }
-
-        if ($nodes instanceof \P\Node) {
+        if ($node instanceof Node || $node instanceof Element) {
             foreach ($this as $child) {
-                $child->appendChild($nodes);
+
+                $child->appendChild($child->ownerDocument->importNode($node, true));
             }
             return $this;
         }
 
         foreach ($this as $child) {
-            foreach ($nodes as $n) {
-                $child->appendChild($n);
+            foreach ($node as $n) {
+                $child->appendChild($child->ownerDocument->importNode($n, true));
             }
         }
         return $this;
@@ -216,7 +213,7 @@ class Query extends \ArrayObject
             $after = p($content);
             foreach ($after as $after_node) {
                 if ($node->parentNode) {
-                    $node->parentNode->insertBefore($after_node, $node->nextSibling);
+                    $node->parentNode->insertBefore($node->ownerDocument->importNode($after_node, true), $node->nextSibling);
                 }
             }
         }
@@ -227,7 +224,7 @@ class Query extends \ArrayObject
         foreach ($this as $node) {
             $before = p($content);
             foreach ($before as $before_node) {
-                $node->parentNode->insertBefore($before_node, $node);
+                $node->parentNode->insertBefore($node->ownerDocument->importNode($before_node, true), $node);
             }
         }
         return $this;
@@ -235,12 +232,18 @@ class Query extends \ArrayObject
 
     public function css($name, $value = null)
     {
-        foreach ($this as $node) {
-            if ($value === "") {
-                unset($node->style[$name]);
-            } else {
-                $node->style[$name] = $value;
+
+        $name = str_replace(' ', '', ucwords(str_replace('-', ' ', $name)));
+        $name[0] = strtolower($name[0]);
+        if (func_num_args() == 1) {
+            foreach ($this as $node) {
+                return $node->style->$name;
             }
+            return null;
+        }
+
+        foreach ($this as $node) {
+            $node->style->$name = $value;
         }
         return $this;
     }

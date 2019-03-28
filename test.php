@@ -2,7 +2,27 @@
 error_reporting(E_ALL & ~E_NOTICE);
 
 require_once(__DIR__ . "/vendor/autoload.php");
+
 use P\Document;
+
+
+$p = p("<button style='background-color:blue'>test</button>");
+$p->css("background-color", "yellow");
+
+echo $p[0]->style->cssText;
+
+return;
+
+
+
+$i = p("<i></i>")->addClass("fa fa-fw");
+
+$i->appendTo($p);
+
+
+echo (string)$p[0];
+die();
+
 
 $doc = new Document();
 $t = $doc->createElement("textarea");
@@ -11,7 +31,7 @@ die();
 $t->name = "input1";
 
 
-$t->setUserData("a","hello",null);
+$t->setUserData("a", "hello", null);
 
 echo $t->getUserData("a");
 die();

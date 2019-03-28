@@ -66,4 +66,55 @@ HTML;
     }
 
 
+    public function test_append(){
+        $p=p("<button>test</button>");
+        $i=p("<i class='fa fa-fw'></i>");
+        $p->append($i);
+        $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
+    }
+    public function test_preppend(){
+        $p=p("<button>test</button>");
+        $i=p("<i class='fa fa-fw'></i>");
+        $p->prepend($i);
+        $this->assertEquals((string)$p[0], '<button><i class="fa fa-fw"></i>test</button>');
+    }
+    public function test_appendTo(){
+        $p=p("<button>test</button>");
+        $i=p("<i class='fa fa-fw'></i>");
+        $i->appendTo($p);
+        $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
+    }
+
+    public function test_prependTo(){
+        $p=p("<button>test</button>");
+        $i=p("<i class='fa fa-fw'></i>");
+        $i->prependTo($p);
+        $this->assertEquals((string)$p[0], '<button><i class="fa fa-fw"></i>test</button>');
+    }
+
+    public function test_attr(){
+        $d=p("<div id='div0'>test</div>");
+        $this->assertEquals($d->attr("id"), "div0");
+        $d->attr('id','div1');
+        $this->assertEquals($d->attr("id"), "div1");
+       
+    }
+
+    public function test_after(){
+        $p=p('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
+        $p->find(".inner")->after("<p>Test</p>");
+        $this->assertEquals((string)$p[0], '<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div><p>Test</p></div>');
+    }
+
+    public function test_before(){
+        $p=p('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
+        $p->find(".inner")->before("<p>Test</p>");
+        $this->assertEquals((string)$p[0], '<div class="container"><h2>Greetings</h2><p>Test</p><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div></div>');
+    }
+
+    public function test_css(){
+        $p=p('<div style="background-color:blue;"></div>');
+        $this->assertEquals($p->css("background-color"),"blue");
+    }
+
 }
