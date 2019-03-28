@@ -387,7 +387,7 @@ class Query extends \ArrayObject
     public function removeAttr($attributeName)
     {
         foreach ($this as $node) {
-            unset($node->attributes[$attributeName]);
+            $node->removeAttribute($attributeName);
         }
         return $this;
     }
@@ -425,7 +425,7 @@ class Query extends \ArrayObject
     public function required()
     {
         foreach ($this as $node) {
-            $node->attributes["required"] = true;
+            $node->setAttribute("required", true);
         }
         return $this;
     }
@@ -444,32 +444,40 @@ class Query extends \ArrayObject
     public function val($value = null)
     {
         if (!func_num_args()) {
-            $node = $this[0];
+            $node = $this[0]; //first node
             if ($node->tagName == "select") {
-                foreach (p($node)->find("option") as $option) {
-                    if ($option->attributes["selected"]) {
-                        return $option->attributes["value"];
+                if ($node->hasAttribute("multiple")) {
+                    $values = [];
+                    foreach (p($node)->find("option[selected]") as $option) {
+                        $values[] = $option->getAttribute("value");
+                    }
+                    return $values;
+                }
+
+                foreach (p($node)->find("option[selected]") as $option) {
+                    if ($option->hasAttribute("selected")) {
+                        return $option->getAttribute("value");
                     }
                 }
             }
-            return $node->attributes["value"];
+            return $node->getAttribute("value");
         }
         foreach ($this as $node) {
             if ($node->tagName == "input") {
-                $node->attributes["value"] = $value;
+                $node->setAttribute("value", $value);
             } elseif ($node->tagName == "select") {
                 if (!is_array($value)) {
                     $value = [$value];
                 }
                 foreach (p($node)->find("option") as $option) {
-                    if (in_array($option->attributes["value"], $value)) {
-                        $option->attributes["selected"] = true;
+                    if (in_array($option->getAttribute("value"), $value)) {
+                        $option->setAttribute("selected", true);
                     } else {
-                        unset($option->attributes["selected"]);
+                        $option->removeAttribute("selected");
                     }
                 }
             } elseif ($node->tagName == "option") {
-                $node->attributes["value"] = $value;
+                $node->setAttribute("value", $value);
             }
         }
         return $this;
@@ -504,10 +512,11 @@ class Query extends \ArrayObject
     public function wrap($wrappingElement)
     {
         foreach ($this as $node) {
-            $we = p($wrappingElement);
+            $we = p($wrappingElement)[0];
+            $we = $node->ownerDocument->importNode($we, true);
             $parent = $node->parentNode;
-            $parent->replaceChild($we[0], $node);
-            $we[0]->appendChild($node);
+            $parent->replaceChild($we, $node);
+            $we->appendChild($node);
         }
         return $this;
     }
@@ -515,9 +524,12 @@ class Query extends \ArrayObject
     public function wrapInner($wrappingElement)
     {
         foreach ($this as $node) {
-            $we = p($wrappingElement);
-            $we->append(p($node)->contents());
-            p($node)->append($we);
+            $we = p($wrappingElement)[0];
+            $we = $node->ownerDocument->importNode($we, true);
+            foreach ($node->childNodes as $n) {
+                $we->appendChild($n);
+            }
+            $node->appendChild($we);
         }
         return $this;
     }
@@ -552,11 +564,7 @@ class Query extends \ArrayObject
     {
         $q = new Query();
         foreach ($this as $node) {
-            $index = p($node)->index();
-            if ($index >= 1) {
-                $index--;
-                $q[] = p($node)->parent()->children()[$index];
-            }
+            $q[] = $node->previousSibling;
         }
         return $q;
     }
@@ -565,15 +573,7 @@ class Query extends \ArrayObject
     {
         $q = new Query();
         foreach ($this as $node) {
-            $index = p($node)->index();
-            if ($index != -1) {
-                $index++;
-                // check size
-                $count = p($node)->parent()->children()->count();
-                if ($count >= $index) {
-                    $q[] = p($node)->parent()->children()[$index];
-                }
-            }
+            $q[] = $node->nextSibling;
         }
         return $q;
     }
@@ -582,10 +582,11 @@ class Query extends \ArrayObject
     {
         $index = -1;
         $parent = $this->parent();
-
-        if (!$parent) {
+        if (!$parent->count()) {
             return $index;
         }
+        
+        
         foreach ($parent->children() as $i => $children) {
             if ($children === $this[0]) {
                 $index = $i;

@@ -79,14 +79,6 @@ class Element extends \DOMElement
         $this->parentNode->replaceChild($nodes, $this);
     }
 
-
-
-    public function appendChild(\DOMNode  $newNode)
-    {
-        //return parent::appendChild($this->ownerDocument->importNode($newNode, true));
-        return parent::appendChild($newNode);
-    }
-
     public function querySelectorAll(string $selector)
     {
         $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
@@ -162,6 +154,10 @@ class Element extends \DOMElement
                 }
                 return;
                 break;
+            case "innerText":
+                $this->textContent = $value;
+                return;
+                break;
         }
 
         switch ($this->tagName) {
@@ -196,15 +192,7 @@ class Element extends \DOMElement
                 return substr($doc->saveHTML(), 0, -1);
                 break;
             case 'innerText':
-                $html = "";
-                foreach ($this->childNodes as $child) {
-                    if ($child instanceof Text) {
-                        $html .= $child->wholeText;
-                    } else {
-                        $html .= $child->textContent;
-                    }
-                }
-                return $html;
+                return $this->textContent;
                 break;
             case 'children':
                 $collection = new HTMLCollection();

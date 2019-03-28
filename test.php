@@ -5,10 +5,32 @@ require_once(__DIR__ . "/vendor/autoload.php");
 
 use P\Document;
 
+$p=p("<input required/>")[0];
+
+print_r($p->getAttributeNode("required")->isId());
+die();
+
+print_r($p->setAttribute("required",null));
+
+echo (string)$p;
+
+die();
+
+
+$d=p("<div><span>abc</span><span>def</span><span>123</span></div>")[0];
+
+echo $d->innerText;
+
+die();
+
+
+
+
 
 $p = p("<button style='background-color:blue'>test</button>");
-$p->css("background-color", "yellow");
+echo $p->css("background-color");
 
+die();
 echo $p[0]->style->cssText;
 
 return;
