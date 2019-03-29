@@ -2,6 +2,8 @@
 
 namespace P;
 
+use DOMNode;
+
 class Query extends \ArrayObject
 {
     public static $match = [
@@ -37,7 +39,7 @@ class Query extends \ArrayObject
     public function __construct($tag = null)
     {
         if (is_object($tag)) {
-            if ($tag instanceof Node) {
+            if ($tag instanceof DOMNode) {
                 $this[] = $tag;
             } elseif ($tag instanceof Query) {
                 foreach ($tag as $node) {
@@ -126,7 +128,7 @@ class Query extends \ArrayObject
             return $this;
         }
 
-        if ($node instanceof Node || $node instanceof Element) {
+        if ($node instanceof DOMNode) {
             foreach ($this as $child) {
                 $child->prependChild($child->ownerDocument->importNode($node, true));
             }
@@ -174,8 +176,9 @@ class Query extends \ArrayObject
             }
             return $this;
         }
-        if ($node instanceof Node || $node instanceof Element) {
+        if ($node instanceof DOMNode) {
             foreach ($this as $child) {
+
 
                 $child->appendChild($child->ownerDocument->importNode($node, true));
             }
@@ -585,8 +588,8 @@ class Query extends \ArrayObject
         if (!$parent->count()) {
             return $index;
         }
-        
-        
+
+
         foreach ($parent->children() as $i => $children) {
             if ($children === $this[0]) {
                 $index = $i;

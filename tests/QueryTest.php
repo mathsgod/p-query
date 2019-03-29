@@ -72,7 +72,7 @@ HTML;
         $p->append($i);
         $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
     }
-    public function test_preppend()
+    public function test_prepend()
     {
         $p = p("<button>test</button>");
         $i = p("<i class='fa fa-fw'></i>");
