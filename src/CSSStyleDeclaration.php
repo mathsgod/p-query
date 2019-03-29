@@ -1,12 +1,12 @@
 <?
 namespace P;
-
+use DOMNode;
 class CSSStyleDeclaration
 {
-    private $attr;
-    public function __construct(Attr $attr)
+    private $node;
+    public function __construct(DOMNode $node)
     {
-        $this->attr = $attr;
+        $this->node = $node;
     }
 
     public function __set($name, $value)
@@ -17,7 +17,7 @@ class CSSStyleDeclaration
         }, $name);
 
         $values = [];
-        foreach (explode(";", $this->attr->nodeValue) as $v) {
+        foreach (explode(";", $this->node->nodeValue) as $v) {
             list($a, $b) = explode(":", $v);
             $values[$a] = $b;
         }
@@ -30,19 +30,19 @@ class CSSStyleDeclaration
         }
 
 
-        $this->attr->nodeValue = implode("; ", $str);
+        $this->node->nodeValue = implode("; ", $str);
     }
 
     public function __get($name)
     {
         switch ($name) {
             case "cssText":
-                return $this->attr->nodeValue;
+                return $this->node->nodeValue;
                 break;
         }
 
         $values = [];
-        foreach (explode(";", $this->attr->nodeValue) as $v) {
+        foreach (explode(";", $this->node->nodeValue) as $v) {
             list($a, $b) = explode(":", $v);
             $values[$a] = $b;
         }

@@ -71,6 +71,13 @@ HTML;
         $i = p("<i class='fa fa-fw'></i>");
         $p->append($i);
         $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
+
+
+        $p = p("<button></button>");
+
+        $p->append(' <span class="caret"></span>');
+        $this->assertEquals('<button> <span class="caret"></span></button>',(string)$p);
+
     }
     public function test_prepend()
     {
@@ -172,4 +179,5 @@ HTML;
         $this->assertEquals(0, $p->find("span")->index());
         $this->assertEquals(1, $p->find("p")->index());
     }
+
 }

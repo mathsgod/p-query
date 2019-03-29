@@ -174,7 +174,7 @@ class Element extends \DOMElement
             return;
         }
 
-        $this->name = $value;
+        $this->$name = $value;
     }
 
     public function __get($name)
@@ -207,13 +207,13 @@ class Element extends \DOMElement
                 if (!$this->hasAttribute("class")) {
                     $this->setAttribute("class", "");
                 }
-                return new DOMTokenList($this->attributes["class"]);
+                return new DOMTokenList($this->attributes->getNamedItem("class"));
                 break;
             case 'style':
                 if (!$this->hasAttribute("style")) {
                     $this->setAttribute("style", "");
                 }
-                return new CSSStyleDeclaration($this->attributes["style"]);
+                return new CSSStyleDeclaration($this->attributes->getNamedItem("style"));
                 break;
         }
 

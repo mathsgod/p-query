@@ -105,7 +105,7 @@ class Query extends \ArrayObject
         }
 
         foreach ($this as $i => $node) {
-            $node->childNodes = [];
+            p($node)->empty();
             if ($html instanceof \Closure) {
                 $node->innerHTML = (string )$html($i);
             } else {
@@ -171,7 +171,7 @@ class Query extends \ArrayObject
                 $p = new DOMParser();
                 $doc = $p->parseFromString($node);
                 foreach ($doc->childNodes as $n) {
-                    $child->appendChild($child->owenrDocument->importNode($n, true));
+                    $child->appendChild($child->ownerDocument->importNode($n, true));
                 }
             }
             return $this;
