@@ -15,7 +15,8 @@ class DOMTokenList implements \ArrayAccess
 	{
 		$values = $this->values();
 		if (is_null($offset)) {
-			$this->add($value);
+			$values[] = $value;
+			$this->value = implode(" ", $values);
 		} else {
 			$values[$offset] = $value;
 			$this->value = implode(" ", $values);
@@ -69,8 +70,7 @@ class DOMTokenList implements \ArrayAccess
 	{
 		$values = $this->values();
 		if (!in_array($value, $values)) {
-			$values[] = $value;
-			$this->value = implode(" ", $values);
+			$this[]=$value;
 		}
 		return;
 	}
