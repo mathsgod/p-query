@@ -147,10 +147,8 @@ class Element extends \DOMElement
                 }
 
                 $p = new DOMParser();
-                $document = $p->parseFromString($value);
-
-                foreach ($document->childNodes as $n) {
-                    parent::appendChild($this->ownerDocument->importNode($n, true));
+                foreach ($p->parseFromString($value) as $n) {
+                    parent::appendChild($this->ownerDocument->importNode($n,true));
                 }
                 return;
                 break;

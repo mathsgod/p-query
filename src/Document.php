@@ -4,6 +4,8 @@ namespace P;
 
 class Document extends \DOMDocument
 {
+	public static $DOCUMENT;
+
 	public function __construct($version = '', $encoding = 'UTF-8')
 	{
 		parent::__construct($version, $encoding);
@@ -24,5 +26,13 @@ class Document extends \DOMDocument
 
 		$xpath = new \DOMXPath($this);
 		return $xpath->evaluate($expression);
+	}
+
+	public static function Current()
+	{
+		if (!self::$DOCUMENT) {
+			self::$DOCUMENT = new Document();
+		}
+		return self::$DOCUMENT;
 	}
 }

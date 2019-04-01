@@ -6,29 +6,9 @@ use DOMNode;
 
 class Query extends \ArrayObject
 {
-    public static $match = [
-        "ID" => "^#((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
-        "CLASS" => "^\\.((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)",
-        "TAG" => "^((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+|[*])",
-        "ATTR" => "^\\[[\\x20\\t\\r\\n\\f]*((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+)(?:[\\x20\\t\\r\\n\\f]*([*^$|!~]?=)[\\x20\\t\\r\\n\\f]*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|((?:\\\\.|[\\w-]|[^\\x00-\\xa0])+))|)[\\x20\\t\\r\\n\\f]*\\]"
-    ];
-
     public static function _($q)
     {
         return new Query($q);
-    }
-
-    public static function Parse($html)
-    {
-        $h = new \P\Query();
-        $parser = new DOMParser($html);
-
-        foreach ($parser->nodes as $node) {
-            $node->parentNode = null;
-            $h[] = $node;
-        }
-
-        return $h;
     }
 
     public static function ParseFile($file)
@@ -47,8 +27,7 @@ class Query extends \ArrayObject
                 }
             } else {
                 $parser = new DOMParser();
-                $document = $parser->parseFromString((string)$tag);
-                foreach ($document->childNodes as $node) {
+                foreach ($parser->parseFromString((string)$tag) as $node) {
                     $this[] = $node;
                 }
             }
@@ -56,13 +35,13 @@ class Query extends \ArrayObject
             if ($tag[0] == "<") {
 
                 $parser = new DOMParser();
-                $document = $parser->parseFromString($tag);
 
-                foreach ($document->childNodes as $node) {
+                foreach ($parser->parseFromString($tag) as $node) {
                     $this[] = $node;
                 }
+                
             } else {
-                $document = new Document();
+                $document = Document::Current();
                 $this[] = $document->createElement($tag);
             }
         }
@@ -166,11 +145,10 @@ class Query extends \ArrayObject
 
     public function append($node)
     {
-        if (is_string($node)) {
+         if (is_string($node)) {
             foreach ($this as $child) {
                 $p = new DOMParser();
-                $doc = $p->parseFromString($node);
-                foreach ($doc->childNodes as $n) {
+                foreach ($p->parseFromString($node) as $n) {
                     $child->appendChild($child->ownerDocument->importNode($n, true));
                 }
             }
@@ -366,7 +344,7 @@ class Query extends \ArrayObject
         foreach ($this as $node) {
             $xpath = new \DOMXPath($node->ownerDocument);
 
-            foreach ($xpath->query($expression) as $node) {
+            foreach ($xpath->query($expression,$node) as $node) {
                 $q[] = $node;
             }
         }

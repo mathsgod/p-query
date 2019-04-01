@@ -1,9 +1,9 @@
 <?
 namespace P\Helper;
-
+use DOMElement;
 class HTMLSelectElement extends Element
 {
-    public function add(\P\Element $item)
+    public function add(DOMElement $item)
     {
         $this->element->appendChild($item);
     }

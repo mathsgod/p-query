@@ -3,6 +3,7 @@ declare (strict_types = 1);
 error_reporting(E_ALL && ~E_WARNING);
 use PHPUnit\Framework\TestCase;
 use P\Element;
+use P\Document;
 
 final class ElementTest extends TestCase
 {
@@ -14,7 +15,7 @@ HTML;
     public function __construct()
     {
         parent::__construct();
-        $this->doc = new P\Document;
+        $this->doc =Document::Current();
     }
 
 
