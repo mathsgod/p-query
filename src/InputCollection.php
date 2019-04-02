@@ -14,7 +14,7 @@ class InputCollection extends Query
     public function minlength($value)
     {
         foreach ($this as $node) {
-            $node->attributes["minlength"] = $value;
+            $node->setAttribute("minlength", $value);
         }
         return $this;
     }
@@ -22,7 +22,7 @@ class InputCollection extends Query
     public function type($value)
     {
         foreach ($this as $node) {
-            $node->attributes["type"] = $value;
+            $node->setAttribute("type", $value);
         }
         return $this;
     }
@@ -30,7 +30,7 @@ class InputCollection extends Query
     public function min($value)
     {
         foreach ($this as $node) {
-            $node->attributes["min"] = $value;
+            $node->setAttribute("min", $value);
         }
         return $this;
     }
@@ -38,7 +38,7 @@ class InputCollection extends Query
     public function max($value)
     {
         foreach ($this as $node) {
-            $node->attributes["max"] = $value;
+            $node->setAttribute("max", $value);
         }
         return $this;
     }
@@ -46,7 +46,7 @@ class InputCollection extends Query
     public function name($value)
     {
         foreach ($this as $node) {
-            $node->attributes["name"] = $value;
+            $node->attributes("name", $value);
         }
         return $this;
     }

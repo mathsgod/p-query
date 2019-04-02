@@ -1,9 +1,13 @@
-<?php
-
-namespace P\Helper;
+<?
+namespace P;
 
 class HTMLTextAreaElement extends Element
 {
+    public function __construct($value = "", $uri = null)
+    {
+        parent::__construct("textarea", $value, $uri);
+    }
+
     public function __set($name, $value)
     {
         switch ($name) {
@@ -23,7 +27,7 @@ class HTMLTextAreaElement extends Element
             case "type":
             case "defaultValue":
             case "value":
-                $this->element->setAttribute($name, $value);
+                $this->setAttribute($name, $value);
                 break;
             default:
                 parent::__set($name, $value);
@@ -47,12 +51,12 @@ class HTMLTextAreaElement extends Element
             case "rows":
             case "wrap":
             case "type":
-                return $this->element->getAttribute($name);
+                return $this->getAttribute($name);
                 break;
             case "textLength":
-                return strlen($this->element->nodeValue);
+                return strlen($this->nodeValue);
             case "value":
-                return $this->element->nodeValue;
+                return $this->nodeValue;
             default:
                 return parent::__get($name);
         }

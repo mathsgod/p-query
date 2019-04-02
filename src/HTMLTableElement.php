@@ -1,19 +1,18 @@
 <?
-
-namespace P\Helper;
-
-use \DOMException;
-use \P\HTMLCollection;
-use \P\TypeError;
+namespace P;
 
 class HTMLTableElement extends Element
 {
+    public function __construct($value = "", $uri = null)
+    {
+        parent::__construct("table", $value, $uri);
+    }
 
     public function __get($name)
     {
         switch ($name) {
             case "caption":
-                foreach ($this->element->childNodes as $node) {
+                foreach ($this->childNodes as $node) {
                     if ($node->tagName == "caption") {
                         return $node;
                     }
@@ -21,7 +20,7 @@ class HTMLTableElement extends Element
                 break;
             case 'tBodies':
                 $collection = new HTMLCollection();
-                foreach ($this->element->childNodes as $node) {
+                foreach ($this->childNodes as $node) {
                     if ($node->tagName == "tbody") {
                         $collection[] = $node;
                     }
@@ -29,14 +28,14 @@ class HTMLTableElement extends Element
                 return $collection;
                 break;
             case 'tHead':
-                foreach ($this->element->childNodes as $node) {
+                foreach ($this->childNodes as $node) {
                     if ($node->tagName == "thead") {
                         return $node;
                     }
                 }
                 break;
             case "tFoot":
-                foreach ($this->element->childNodes as $child) {
+                foreach ($this->childNodes as $child) {
                     if ($node->tagName == "tfoot") {
                         return $node;
                     }
@@ -44,7 +43,7 @@ class HTMLTableElement extends Element
                 break;
         }
 
-        return $this->$name;
+        return parent::__get($name);
     }
 
     public function __set($name, $value)
@@ -64,12 +63,12 @@ class HTMLTableElement extends Element
                 if (!$value)
                     return;
 
-                for ($child = $this->element->firstChildElement; $child; $child = $child->nextElementSibling) {
+                for ($child = $this->firstChildElement; $child; $child = $child->nextElementSibling) {
                     if (!$child->tagName != "caption" && !$child->tagName != "colgroup") {
                         break;
                     }
                 }
-                $this->element->insertBefore($value, $child);
+                $this->insertBefore($value, $child);
                 return;
             case "tFoot":
                 if (!$value instanceof HTMLTableSectionElement) {
@@ -82,7 +81,7 @@ class HTMLTableElement extends Element
 
                 $this->deleteTFoot();
                 if ($value)
-                    $this->element->appendChild($value);
+                    $this->appendChild($value);
 
                 return;
         }
@@ -93,10 +92,10 @@ class HTMLTableElement extends Element
 
     public function createTBody()
     {
-        $tbody = $this->element->ownerDocument->createElement("tbody");
+        $tbody = $this->ownerDocument->createElement("tbody");
 
         if ($this->tBodies->length == 0) {
-            $this->element->appendChild($tbody);
+            $this->appendChild($tbody);
         } else {
             //find last body
             $this->tBodies[$this->tBodies->length - 1]->after($tbody);
@@ -110,8 +109,8 @@ class HTMLTableElement extends Element
         if ($this->tHead) {
             return $this->tHead;
         }
-        $thead = $this->element->ownerDocument->createElement('thead');
-        $this->element->prepend($thead);
+        $thead = $this->ownerDocument->createElement('thead');
+        $this->prependChild($thead);
         return $thead;
     }
 
@@ -120,8 +119,8 @@ class HTMLTableElement extends Element
         if ($this->tFoot) {
             return $this->tFoot;
         }
-        $tfoot = $this->element->ownerDocument->createElement('tfoot');
-        $this->element->append($tfoot);
+        $tfoot = $this->ownerDocument->createElement('tfoot');
+        $this->appendChild($tfoot);
         return $tfoot;
     }
 

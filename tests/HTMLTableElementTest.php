@@ -63,5 +63,21 @@ public function test_createTHead()
 
         $this->assertEquals("<table><tbody><tr></tr></tbody></table>", $t->outerHTML);
     }
+
+    public function test_insertCell(){
+        $doc = new Document();
+        $t = $doc->createElement("table");
+        $r = $t->insertRow();
+        $cell=$r->insertCell();
+        $cell=$r->insertCell();
+        $cell->textContent="hello";
+
+        $r = $t->insertRow();
+        $cell=$r->insertCell();
+        $cell=$r->insertCell();
+        $cell->textContent="hello";
+
+        $this->assertEquals("<table><tbody><tr><td></td><td>hello</td></tr><tr><td></td><td>hello</td></tr></tbody></table>", $t->outerHTML);
+    }
 }
 

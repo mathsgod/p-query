@@ -5,7 +5,9 @@ namespace P;
 class Document extends \DOMDocument
 {
 	public static $DOCUMENT;
+	private $nodes = [];
 
+	
 	public function __construct($version = '', $encoding = 'UTF-8')
 	{
 		parent::__construct($version, $encoding);
@@ -34,5 +36,51 @@ class Document extends \DOMDocument
 			self::$DOCUMENT = new Document();
 		}
 		return self::$DOCUMENT;
+	}
+
+	public function createElement($name, $value = null)
+	{
+		if ($class = self::ELEMENT_CLASS[$name]) {
+			$this->registerNodeClass("DOMElement", $class);
+		} else {
+			$this->registerNodeClass("DOMElement", Element::class);
+		}
+
+		$element = parent::createElement($name, $value);
+		$this->nodes[] = $element;
+		return $element;
+	}
+
+	const ELEMENT_CLASS = [
+		"div" => HTMLDivElement::class,
+		"span" => HTMLSpanElement::class,
+		"input" => HTMLInputElement::class,
+		"table" => HTMLTableElement::class,
+		"thead" => HTMLTableSectionElement::class,
+		"tbody" => HTMLTableSectionElement::class,
+		"tfoot" => HTMLTableSectionElement::class,
+		"tr" => HTMLTableRowElement::class,
+		"textarea" => HTMLTextAreaElement::class
+	];
+
+	public function importNode(\DOMNode $node, $deep = false)
+	{
+		if ($node instanceof \DOMElement) {
+			$n = $this->createElement($node->tagName);
+
+			foreach ($node->attributes as $attr) {
+				$n->setAttribute($attr->name, $attr->value);
+			}
+
+			if ($deep) {
+				foreach ($node->childNodes as $child) {
+					$n->appendChild($this->importNode($child, true));
+				}
+			}
+		} else {
+			$n = parent::importNode($node, true);
+		}
+
+		return $n;
 	}
 }

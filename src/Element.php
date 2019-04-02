@@ -4,13 +4,17 @@ namespace P;
 
 use \DOMNode;
 
+
 class Element extends \DOMElement
 {
     public $data = [];
 
+
+
     public function __construct($name, $value = "", $uri = null)
     {
         parent::__construct($name, $value, $uri);
+        Document::Current()->appendChild($this);
     }
 
     public function contains(DOMNode $otherNode)
@@ -109,34 +113,6 @@ class Element extends \DOMElement
         return $this->insertBefore($newnode, $firstChild);
     }
 
-    public function __call($name, $arguments)
-    {
-        switch ($this->tagName) {
-            case 'input':
-                $helper = new Helper\HTMLInputElement($this);
-                break;
-            case 'table':
-                $helper = new Helper\HTMLTableElement($this);
-                break;
-            case 'thead':
-            case 'tbody':
-            case 'tfoot':
-                $helper = new Helper\HTMLTableSectionElement($this);
-                break;
-            case 'tr':
-                $helper = new Helper\HTMLTableRowElement($this);
-                break;
-            case 'textarea':
-                $helper = new Helper\HTMLTextAreaElement($this);
-                break;
-        }
-
-        if ($helper) {
-            return call_user_func_array([$helper, $name], $arguments);
-        }
-
-        return parent::__call($name, $arguments);
-    }
 
     public function __set($name, $value)
     {
@@ -148,7 +124,7 @@ class Element extends \DOMElement
 
                 $p = new DOMParser();
                 foreach ($p->parseFromString($value) as $n) {
-                    parent::appendChild($this->ownerDocument->importNode($n,true));
+                    parent::appendChild($this->ownerDocument->importNode($n, true));
                 }
                 return;
                 break;
@@ -158,19 +134,6 @@ class Element extends \DOMElement
                 break;
         }
 
-        switch ($this->tagName) {
-            case 'input':
-                $helper = new Helper\HTMLInputElement($this);
-                break;
-            case 'textarea':
-                $helper = new Helper\HTMLTextAreaElement($this);
-                break;
-        }
-
-        if ($helper) {
-            $helper->__set($name, $value);
-            return;
-        }
 
         $this->$name = $value;
     }
@@ -214,21 +177,6 @@ class Element extends \DOMElement
                 return new CSSStyleDeclaration($this->attributes->getNamedItem("style"));
                 break;
         }
-
-        switch ($this->tagName) {
-            case 'table':
-                $helper = new Helper\HTMLTableElement($this);
-                break;
-            case 'input':
-                $helper = new Helper\HTMLInputElement($this);
-                break;
-            case 'textarea':
-                $helper = new Helper\HTMLTextAreaElement($this);
-                break;
-        }
-
-        if ($helper) {
-            return $helper->__get($name);
-        }
+      
     }
 }

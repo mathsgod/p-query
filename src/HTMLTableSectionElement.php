@@ -1,12 +1,12 @@
 <?
-namespace P\Helper;
+namespace P;
 
 class HTMLTableSectionElement extends Element
 {
     public function insertRow()
     {
-        $row = $this->element->ownerDocument->createElement("tr");
-        $this->element->appendChild($row);
+        $row = $this->ownerDocument->createElement("tr");
+        $this->appendChild($row);
         return $row;
     }
 
@@ -15,7 +15,7 @@ class HTMLTableSectionElement extends Element
         switch ($name) {
             case "rows":
                 $collection = new HTMLCollection();
-                foreach ($this->element->childNodes as $node) {
+                foreach ($this->childNodes as $node) {
                     $collection[] = $node;
                 }
                 return $collection;

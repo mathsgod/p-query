@@ -5,11 +5,11 @@ class HTMLSelectElement extends HTMLElement
 {
     public $required = false;
     public $name = null;
-
-    public function __construct()
+    public function __construct($value = "", $uri = null)
     {
-        parent::__construct("select");
+        parent::__construct("select", $value, $uri);
     }
+
 
     public function __set($name, $value)
     {
@@ -68,3 +68,4 @@ class HTMLSelectElement extends HTMLElement
         return $this->getElementsByTagName("option")[$index];
     }
 }
+

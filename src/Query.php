@@ -3,6 +3,7 @@
 namespace P;
 
 use DOMNode;
+use DOMElement;
 
 class Query extends \ArrayObject
 {
@@ -39,7 +40,6 @@ class Query extends \ArrayObject
                 foreach ($parser->parseFromString($tag) as $node) {
                     $this[] = $node;
                 }
-                
             } else {
                 $document = Document::Current();
                 $this[] = $document->createElement($tag);
@@ -145,27 +145,25 @@ class Query extends \ArrayObject
 
     public function append($node)
     {
-         if (is_string($node)) {
+        if (is_string($node)) {
             foreach ($this as $child) {
                 $p = new DOMParser();
                 foreach ($p->parseFromString($node) as $n) {
-                    $child->appendChild($child->ownerDocument->importNode($n, true));
+                    $child->appendChild($n);
                 }
             }
             return $this;
         }
         if ($node instanceof DOMNode) {
             foreach ($this as $child) {
-
-
-                $child->appendChild($child->ownerDocument->importNode($node, true));
+                $child->appendChild($node);
             }
             return $this;
         }
 
         foreach ($this as $child) {
             foreach ($node as $n) {
-                $child->appendChild($child->ownerDocument->importNode($n, true));
+                $child->appendChild($n);
             }
         }
         return $this;
@@ -194,7 +192,7 @@ class Query extends \ArrayObject
             $after = p($content);
             foreach ($after as $after_node) {
                 if ($node->parentNode) {
-                    $node->parentNode->insertBefore($node->ownerDocument->importNode($after_node, true), $node->nextSibling);
+                    $node->parentNode->insertBefore($after_node, $node->nextSibling);
                 }
             }
         }
@@ -205,7 +203,7 @@ class Query extends \ArrayObject
         foreach ($this as $node) {
             $before = p($content);
             foreach ($before as $before_node) {
-                $node->parentNode->insertBefore($node->ownerDocument->importNode($before_node, true), $node);
+                $node->parentNode->insertBefore($before_node, $node);
             }
         }
         return $this;
@@ -297,18 +295,31 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function children()
+    public function children($selector=null)
     {
         $q = new Query();
+        $q->selector = $selector;
+
+      
         foreach ($this as $node) {
-            foreach ($node->childNodes as $child) {
-                if ($child instanceof Text) {
-                    continue;
+            if ($selector) {
+                foreach ($node->childNodes as $child) {
+                    if($child instanceof DOMElement){
+                        if($child->matches($selector)){
+                            $q[] = $child;
+                        }
+                    }
                 }
-                if ($child instanceof Comment) {
-                    continue;
+            } else {
+                foreach ($node->childNodes as $child) {
+                    if ($child instanceof Text) {
+                        continue;
+                    }
+                    if ($child instanceof Comment) {
+                        continue;
+                    }
+                    $q[] = $child;
                 }
-                $q[] = $child;
             }
         }
         return $q;
@@ -344,7 +355,7 @@ class Query extends \ArrayObject
         foreach ($this as $node) {
             $xpath = new \DOMXPath($node->ownerDocument);
 
-            foreach ($xpath->query($expression,$node) as $node) {
+            foreach ($xpath->query($expression, $node) as $node) {
                 $q[] = $node;
             }
         }
@@ -494,7 +505,6 @@ class Query extends \ArrayObject
     {
         foreach ($this as $node) {
             $we = p($wrappingElement)[0];
-            $we = $node->ownerDocument->importNode($we, true);
             $parent = $node->parentNode;
             $parent->replaceChild($we, $node);
             $we->appendChild($node);
@@ -506,7 +516,6 @@ class Query extends \ArrayObject
     {
         foreach ($this as $node) {
             $we = p($wrappingElement)[0];
-            $we = $node->ownerDocument->importNode($we, true);
             foreach ($node->childNodes as $n) {
                 $we->appendChild($n);
             }
