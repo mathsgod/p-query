@@ -1,7 +1,7 @@
 <?
 namespace P;
 
-class HTMLTextAreaElement extends Element
+class HTMLTextAreaElement extends HTMLElement
 {
     public function __construct($value = "", $uri = null)
     {

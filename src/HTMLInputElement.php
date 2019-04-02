@@ -1,7 +1,7 @@
 <?
 namespace P;
 
-class  HTMLInputElement extends Element
+class  HTMLInputElement extends HTMLElement
 {
     public function __construct($value = "", $uri = null)
     {

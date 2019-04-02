@@ -1,7 +1,7 @@
 <?
 namespace P;
 
-class HTMLSpanElement extends Element
+class HTMLSpanElement extends HTMLElement
 {
     public function __construct($value = "", $uri = null)
     {

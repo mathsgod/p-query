@@ -1,7 +1,7 @@
 <?
 namespace P;
 
-class HTMLTableRowElement extends Element
+class HTMLTableRowElement extends HTMLElement
 {
     public function __construct($value = "", $uri = null)
     {

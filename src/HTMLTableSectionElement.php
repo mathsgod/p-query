@@ -1,7 +1,7 @@
 <?
 namespace P;
 
-class HTMLTableSectionElement extends Element
+class HTMLTableSectionElement extends HTMLElement
 {
     public function insertRow()
     {
