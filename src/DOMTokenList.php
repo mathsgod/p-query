@@ -1,7 +1,9 @@
 <?php
 
 namespace P;
+
 use DOMNode;
+
 class DOMTokenList implements \ArrayAccess
 {
 
@@ -13,11 +15,10 @@ class DOMTokenList implements \ArrayAccess
 
 	public function offsetSet($offset, $value)
 	{
-		$values = $this->values();
 		if (is_null($offset)) {
-			$values[] = $value;
-			$this->value = implode(" ", $values);
+			$this->add($value);
 		} else {
+			$values = $this->values();
 			$values[$offset] = $value;
 			$this->value = implode(" ", $values);
 		}
@@ -66,24 +67,15 @@ class DOMTokenList implements \ArrayAccess
 		}
 	}
 
-	public function add($value)
+	public function add(...$values)
 	{
-		$values = $this->values();
-		if (!in_array($value, $values)) {
-			$this[]=$value;
-		}
-		return;
+		$values = array_merge($this->values(), $values);
+		$this->value = implode(" ", $values);
 	}
 
-	public function remove()
+	public function remove(...$values)
 	{
-		$values = $this->values();
-		foreach (func_get_args() as $c) {
-			if (($key = array_search($c, $values)) !== false) {
-				unset($values[$key]);
-			}
-		}
-
+		$values = array_diff($this->values(), $values);
 		$this->value = implode(" ", $values);
 	}
 

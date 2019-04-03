@@ -194,6 +194,10 @@ HTML;
         $div->classList->add("abc");
         $this->assertEquals('<div class="c1 c2 abc">abc</div>', (string)$div);
 
+        $div = p("<div class='c1 c2'>abc</div>")[0];
+        $div->classList->add("abc","def");
+        $this->assertEquals('<div class="c1 c2 abc def">abc</div>', (string)$div);
+
         $div = p("<div class='c1 c2 c3'>abc</div>")[0];
         $div->classList->remove("c1", "c2");
         $this->assertEquals('<div class="c3">abc</div>', (string)$div);

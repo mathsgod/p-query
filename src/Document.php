@@ -60,7 +60,10 @@ class Document extends \DOMDocument
 		"tbody" => HTMLTableSectionElement::class,
 		"tfoot" => HTMLTableSectionElement::class,
 		"tr" => HTMLTableRowElement::class,
-		"textarea" => HTMLTextAreaElement::class
+		"textarea" => HTMLTextAreaElement::class,
+		"form"=>HTMLFormElement::class,
+		"select"=>HTMLSelectElement::class,
+		"a"=>HTMLAnchorElement::class
 	];
 
 	public function importNode(\DOMNode $node, $deep = false)

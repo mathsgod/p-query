@@ -14,8 +14,8 @@ class AnchorCollection extends Query {
 	
 	public function fancybox(){
 		foreach($this as $node){
-			$node->attributes["data-fancybox"]=true;
-			$node->attributes["data-type"]="ajax";
+			$node->setAttribute("data-fancybox",true);
+			$node->setAttribute("data-type","ajax");
 		}
 		return $this;
 	}

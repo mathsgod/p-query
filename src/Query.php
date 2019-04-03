@@ -178,7 +178,7 @@ class Query extends \ArrayObject
                 }
                 return $this;
             }
-            return $this[0]->attributes[$name];
+            return $this[0]->getAttribute($name);
         }
         foreach ($this as $node) {
             $node->setAttribute($name, $value);

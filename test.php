@@ -10,6 +10,41 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 require_once(__DIR__ . "/vendor/autoload.php");
 
+$u = memory_get_usage();
+$doc1 = new Document();
+$div1 = $doc1->createElement("div", "1");
+
+$div1->setAttribute("is","hello");
+print_r($div1->attributes["is"]);
+die();
+
+$doc2 = new Document();
+$div2 = $doc2->createElement("div", "2");
+$div1->appendChild($doc1->importNode($div2, true));
+
+$div2->value="3";
+echo $div1;
+die();
+$doc1->registerNodeClass("DOMElement", null);
+foreach ($div1->childNodes as $c) {
+    print_r($c);
+}
+
+echo memory_get_usage() - $u;;
+
+
+die();
+$select = p("select")[0];
+
+$sc = new P\SelectCollection();
+$sc[] = $select;
+$sc->ds(["a", "b", "c"]);
+
+echo $select;
+die();
+
+
+
 $p = p("<span><div>123<span>def</span></div></span><div>456</div>");
 $p = p("<textarea>123a</textarea>");
 /*
@@ -25,9 +60,9 @@ $doc = $p[0]->ownerDocument;
 $css = new CssSelectorConverter();
 $x = $css->toXPath("textarea");
 $xpath = new DOMXPath($doc);
-foreach ($xpath->evaluate($x,$p[0]) as $n) {
+foreach ($xpath->evaluate($x, $p[0]) as $n) {
     echo $n->textLength;
-//    print_r($n);
+    //    print_r($n);
 }
 
 

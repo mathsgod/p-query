@@ -34,9 +34,9 @@ class SelectCollection extends Query
 	{
 		foreach ($this as $select) {
 			if (!$value_member) {
-				$value_member = $select->attributes["data-field"];
+				$value_member = $select->getAttribute("data-field");
 			}
-			$data_value = $select->attributes["data-value"];
+			$data_value = $select->getAttribute("data-value");
 
 			foreach ($datasource as $key => $o) {
 				$option = p("option");
@@ -64,7 +64,6 @@ class SelectCollection extends Query
 					}
 				}
 
-
 				//check optgroup
 				if ($optgroup_getter = p($select)->attr("optgroup")) {
 					$optgroup_value = \My\Func::_($optgroup_getter)->call($o);
@@ -75,14 +74,18 @@ class SelectCollection extends Query
 					}
 
 				} else {
+		
 					p($select)->append($option);
 				}
 
 
 			}
-		}
 
+		}
+		
 
 		return $this;
 	}
 }
+
+
