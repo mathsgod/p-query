@@ -177,6 +177,18 @@ class Element extends \DOMElement
                 return new CSSStyleDeclaration($this->attributes->getNamedItem("style"));
                 break;
         }
-      
+    }
+
+    public function setAttribute($name, $value = null)
+    {
+        if ($value === true || func_num_args() == 1) {
+            $this->removeAttribute($name);
+            @$attr = new Attr($name);
+            $this->appendChild($attr);
+        } elseif ($value === false) {
+            $this->removeAttribute($name);
+        } else {
+            parent::setAttribute($name, $value);
+        }
     }
 }

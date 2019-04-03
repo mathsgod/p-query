@@ -63,7 +63,8 @@ class Document extends \DOMDocument
 		"textarea" => HTMLTextAreaElement::class,
 		"form"=>HTMLFormElement::class,
 		"select"=>HTMLSelectElement::class,
-		"a"=>HTMLAnchorElement::class
+		"a"=>HTMLAnchorElement::class,
+		"option"=>HTMLOptionElement::class
 	];
 
 	public function importNode(\DOMNode $node, $deep = false)
@@ -72,7 +73,7 @@ class Document extends \DOMDocument
 			$n = $this->createElement($node->tagName);
 
 			foreach ($node->attributes as $attr) {
-				$n->setAttribute($attr->name, $attr->value);
+				$n->appendChild($n->ownerDocument->importNode($attr));
 			}
 
 			if ($deep) {

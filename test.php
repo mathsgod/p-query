@@ -10,11 +10,20 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 require_once(__DIR__ . "/vendor/autoload.php");
 
+
+$s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
+
+$s->value = 2;
+
+echo $s;
+
+die();
+
 $u = memory_get_usage();
 $doc1 = new Document();
 $div1 = $doc1->createElement("div", "1");
 
-$div1->setAttribute("is","hello");
+$div1->setAttribute("is", "hello");
 print_r($div1->attributes["is"]);
 die();
 
@@ -22,7 +31,7 @@ $doc2 = new Document();
 $div2 = $doc2->createElement("div", "2");
 $div1->appendChild($doc1->importNode($div2, true));
 
-$div2->value="3";
+$div2->value = "3";
 echo $div1;
 die();
 $doc1->registerNodeClass("DOMElement", null);

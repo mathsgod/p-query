@@ -44,6 +44,7 @@ class  HTMLInputElement extends HTMLElement
             case "valueAsNumber":
             case "width":
                 $this->setAttribute($name, $value);
+                break;
             default:
                 parent::__set($name, $value);
         }

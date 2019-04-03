@@ -3,33 +3,40 @@ namespace P;
 
 class HTMLSelectElement extends HTMLElement
 {
-    public $required = false;
-    public $name = null;
     public function __construct($value = "", $uri = null)
     {
         parent::__construct("select", $value, $uri);
     }
 
-
     public function __set($name, $value)
     {
-        if ($name == "value") {
-            $options = [];
-            foreach ($this->childNodes as $node) {
-                if ($node instanceof HTMLOptionElement) {
-                    $options[] = $node;
-                }
-                if ($node->attributes["value"] == $value) {
-                    $node->selected = true;
+
+        switch ($name) {
+            case "required":
+            case "multiple":
+                if ($value) {
+                    $this->setAttribute($name);
                 } else {
-                    if (!$this->attributes["multiple"]) {
-                        $node->selected = false;
+                    $this->removeAttribute($name);
+                }
+                return;
+            case "name":
+                $this->setAttribute($name, $value);
+                return;
+            case "value":
+                foreach (p($this)->find("option") as  $option) {
+                    if (p($option)->val() == $value) {
+                        $option->selected = true;
+                    } else {
+                        if (!$this->hasAttribute("multiple")) {
+                            $option->select = false;
+                        }
                     }
                 }
-            }
-        } else {
-            parent::__set($name, $value);
+                return;
         }
+
+        parent::__set($name, $value);
     }
 
     public function options($arrs)
@@ -46,26 +53,8 @@ class HTMLSelectElement extends HTMLElement
         $this->appendChild($item);
     }
 
-    public function __toString()
-    {
-        if ($this->required) $this->attributes["request"] = $this->required;
-        if ($this->name) $this->attributes["name"] = $this->name;
-        /*        if ($this->value) {
-            foreach($this->childNodes as $node) {
-                if ($node->value == $this->value) {
-                    $node->selected = true;
-                } else {
-                    $node->selected = false;
-                }
-            }
-        }
-         */
-        return parent::__toString();
-    }
-
     public function item($index)
     {
         return $this->getElementsByTagName("option")[$index];
     }
 }
-
