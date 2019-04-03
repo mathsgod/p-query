@@ -16,7 +16,8 @@ class DOMTokenList implements \ArrayAccess
 	public function offsetSet($offset, $value)
 	{
 		if (is_null($offset)) {
-			$this->add($value);
+			$values = array_merge($this->values(), [$value]);
+			$this->value = implode(" ", $values);
 		} else {
 			$values = $this->values();
 			$values[$offset] = $value;
@@ -69,8 +70,9 @@ class DOMTokenList implements \ArrayAccess
 
 	public function add(...$values)
 	{
-		$values = array_merge($this->values(), $values);
-		$this->value = implode(" ", $values);
+		foreach ($values as $value) {
+			$this[] = $value;
+		}
 	}
 
 	public function remove(...$values)
