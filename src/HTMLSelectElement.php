@@ -14,11 +14,7 @@ class HTMLSelectElement extends HTMLElement
         switch ($name) {
             case "required":
             case "multiple":
-                if ($value) {
-                    $this->setAttribute($name);
-                } else {
-                    $this->removeAttribute($name);
-                }
+                $this->setAttribute($name, $value);
                 return;
             case "name":
                 $this->setAttribute($name, $value);
@@ -37,6 +33,30 @@ class HTMLSelectElement extends HTMLElement
         }
 
         parent::__set($name, $value);
+    }
+
+    public function __get($name)
+    {
+        switch ($name) {
+            case "length":
+                return p($this)->find("option")->count();
+            case "options":
+                $options = new HTMLOptionsCollection();
+                foreach (p($this)->find("option") as $option) {
+                    $options[] = $option;
+                }
+                return $options;
+            case "value":
+                $option = p($this)->find("option[selected]");
+                if ($option->count()) {
+                    return p($option[0])->val();
+                }
+                return;
+            case "name":
+                return $this->getAttribute("name");
+        }
+
+        return parent::__get($name);
     }
 
     public function options($arrs)
