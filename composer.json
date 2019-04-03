@@ -20,7 +20,8 @@
     "license": "proprietary",
     "authors": [
         {
-            "name": "Raymond Chong"
+            "name": "Raymond Chong",
+            "email": "mathsgod@yahoo.com"
         }
     ],
     "minimum-stability": "stable"
