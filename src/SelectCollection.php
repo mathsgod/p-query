@@ -1,5 +1,6 @@
 <?
 namespace P;
+
 class SelectCollection extends Query
 {
 
@@ -10,7 +11,6 @@ class SelectCollection extends Query
 			foreach ($data as $i => $k) {
 				p("optgroup")->attr("index", $i)->attr("label", $k)->appendTo($select);
 			}
-
 		}
 		return $this;
 	}
@@ -24,7 +24,6 @@ class SelectCollection extends Query
 		$data_value = $select->attributes["data-value"];
 		if ($data_value !== null) {
 			$select->value = $data_value;
-
 		}
 
 		return $this;
@@ -68,24 +67,18 @@ class SelectCollection extends Query
 				if ($optgroup_getter = p($select)->attr("optgroup")) {
 					$optgroup_value = \My\Func::_($optgroup_getter)->call($o);
 					foreach (p($select)->find("optgroup") as $optgroup) {
-						if ($optgroup->attributes["index"] == $optgroup_value) {
+						if ($optgroup->getAttribute("index") == $optgroup_value) {
 							$optgroup->appendChild($option[0]);
 						}
 					}
-
 				} else {
-		
+
 					p($select)->append($option);
 				}
-
-
 			}
-
 		}
-		
+
 
 		return $this;
 	}
 }
-
-

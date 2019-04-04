@@ -12,7 +12,7 @@ class Document extends \DOMDocument
 	{
 		parent::__construct($version, $encoding);
 		$this->registerNodeClass("DOMDocument", Document::class);
-		$this->registerNodeClass("DOMElement", Element::class);
+		$this->registerNodeClass("DOMElement", HTMLElement::class);
 		$this->registerNodeClass("DOMText", Text::class);
 		$this->registerNodeClass("DOMNode", Node::class);
 		$this->registerNodeClass("DOMAttr", Attr::class);
@@ -43,7 +43,7 @@ class Document extends \DOMDocument
 		if ($class = self::ELEMENT_CLASS[$name]) {
 			$this->registerNodeClass("DOMElement", $class);
 		} else {
-			$this->registerNodeClass("DOMElement", Element::class);
+			$this->registerNodeClass("DOMElement", HTMLElement::class);
 		}
 
 		$element = parent::createElement($name, $value);
@@ -52,22 +52,25 @@ class Document extends \DOMDocument
 	}
 
 	const ELEMENT_CLASS = [
+		"a" => HTMLAnchorElement::class,
+		"button" => HTMLButtonElement::class,
 		"div" => HTMLDivElement::class,
+		"form" => HTMLFormElement::class,
+		"img" => HTMLImageElement::class,
 		"span" => HTMLSpanElement::class,
 		"input" => HTMLInputElement::class,
+		"optgroup" => HTMLOptGroupElement::class,
+		"option" => HTMLOptionElement::class,
+		"select" => HTMLSelectElement::class,
+		"span" => HTMLSpanElement::class,
+		"td" => HTMLTableCellElement::class,
+		"th" => HTMLTableCellElement::class,
 		"table" => HTMLTableElement::class,
+		"tr" => HTMLTableRowElement::class,
 		"thead" => HTMLTableSectionElement::class,
 		"tbody" => HTMLTableSectionElement::class,
 		"tfoot" => HTMLTableSectionElement::class,
-		"tr" => HTMLTableRowElement::class,
-		"textarea" => HTMLTextAreaElement::class,
-		"form" => HTMLFormElement::class,
-		"select" => HTMLSelectElement::class,
-		"a" => HTMLAnchorElement::class,
-		"option" => HTMLOptionElement::class,
-		"button" => HTMLButtonElement::class,
-		"td" => HTMLTableCellElement::class,
-		"th" => HTMLTableCellElement::class,
+		"textarea" => HTMLTextAreaElement::class
 	];
 
 	public function importNode(\DOMNode $node, $deep = false)

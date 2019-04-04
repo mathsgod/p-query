@@ -76,8 +76,7 @@ HTML;
         $p = p("<button></button>");
 
         $p->append(' <span class="caret"></span>');
-        $this->assertEquals('<button> <span class="caret"></span></button>',(string)$p);
-
+        $this->assertEquals('<button> <span class="caret"></span></button>', (string)$p);
     }
     public function test_prepend()
     {
@@ -180,4 +179,10 @@ HTML;
         $this->assertEquals(1, $p->find("p")->index());
     }
 
+    public function test_hasClass()
+    {
+        $p = p("<div class='c1'><span>abc</span><p>xyz</p></div>");
+        $this->assertTrue($p->hasClass("c1"));
+        $this->assertFalse($p->hasClass("c2"));
+    }
 }

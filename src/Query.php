@@ -543,7 +543,7 @@ class Query extends \ArrayObject
     public function hasClass($className)
     {
         foreach ($this as $node) {
-            if (in_array($className, $node->classList->values())) {
+            if($node->classList->contains($className)){
                 return true;
             }
         }

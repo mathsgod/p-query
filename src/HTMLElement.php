@@ -28,9 +28,17 @@ class HTMLElement extends Element
             $attr = static::ATTRIBUTES[$name];
             if (is_array($attr)) {
                 $name = $attr["name"];
+                $type = $attr["type"];
             } else {
                 $name = strtolower($name);
+                $type = "string";
             }
+
+
+            if ($type == "json") {
+                $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+            }
+
             $this->setAttribute($name, $value);
             return;
         }
@@ -49,11 +57,18 @@ class HTMLElement extends Element
             $attr = static::ATTRIBUTES[$name];
             if (is_array($attr)) {
                 $name = $attr["name"];
+                $type = $attr["type"];
             } else {
                 $name = strtolower($name);
+                $type = "string";
             }
 
-            return  $this->getAttribute($name);
+            $value = $this->getAttribute($name);
+
+            if ($type == "json") {
+                $value = json_decode($value, true);
+            }
+            return $value;
         }
         return parent::__get($name);
     }
