@@ -128,10 +128,6 @@ class Element extends \DOMElement
                 }
                 return;
                 break;
-            case "innerText":
-                $this->textContent = $value;
-                return;
-                break;
         }
 
 
@@ -151,9 +147,6 @@ class Element extends \DOMElement
                 $doc = new Document();
                 $doc->appendChild($doc->importNode($this, true));
                 return substr($doc->saveHTML(), 0, -1);
-                break;
-            case 'innerText':
-                return $this->textContent;
                 break;
             case 'children':
                 $collection = new HTMLCollection();
@@ -183,8 +176,7 @@ class Element extends \DOMElement
     {
         if ($value === true || func_num_args() == 1) {
             $this->removeAttribute($name);
-            @$attr = new Attr($name);
-            $this->appendChild($attr);
+            $this->appendChild($this->ownerDocument->createAttribute($name));
         } elseif ($value === false) {
             $this->removeAttribute($name);
         } else {

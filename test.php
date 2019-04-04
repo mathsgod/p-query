@@ -5,11 +5,25 @@ use P\HTMLDivElement;
 use P\HTMLSpanElement;
 use P\Document;
 use Symfony\Component\CssSelector\CssSelectorConverter;
+use P\HTMLInputElement;
+use P\HTMLFormElement;
 
 error_reporting(E_ALL & ~E_NOTICE);
-
 require_once(__DIR__ . "/vendor/autoload.php");
 
+
+print_r(HTMLInputElement::ATTRIBUTES);
+die();
+class AInput extends HTMLInputElement
+{
+    const ATTRIBUTES = parent::ATTRIBUTES + ["c" => "string"];
+}
+
+$f = new AInput();
+$f->required = true;
+$f->c="aa";
+echo $f;
+die();
 
 $s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
 

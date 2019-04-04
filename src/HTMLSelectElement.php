@@ -3,6 +3,15 @@ namespace P;
 
 class HTMLSelectElement extends HTMLElement
 {
+    const ATTRIBUTES = [
+        "autofocus" => "bool",
+        "disabled" => "bool",
+        "multiple" => "bool",
+        "name" => "string",
+        "required" => "bool",
+        "size" => "int"
+    ] + parent::ATTRIBUTES;
+
     public function __construct($value = "", $uri = null)
     {
         parent::__construct("select", $value, $uri);
@@ -10,15 +19,7 @@ class HTMLSelectElement extends HTMLElement
 
     public function __set($name, $value)
     {
-
         switch ($name) {
-            case "required":
-            case "multiple":
-                $this->setAttribute($name, $value);
-                return;
-            case "name":
-                $this->setAttribute($name, $value);
-                return;
             case "value":
                 foreach (p($this)->find("option") as  $option) {
                     if (p($option)->val() == $value) {
@@ -57,15 +58,6 @@ class HTMLSelectElement extends HTMLElement
         }
 
         return parent::__get($name);
-    }
-
-    public function options($arrs)
-    {
-        foreach ($arrs as $v) {
-            $item = new HTMLOptionElement($v, $v);
-            $this->add($item);
-        }
-        return;
     }
 
     public function add(HTMLOptionElement $item)

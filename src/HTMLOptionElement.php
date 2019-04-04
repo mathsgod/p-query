@@ -3,6 +3,14 @@ namespace P;
 
 class HTMLOptionElement extends HTMLElement
 {
+    const ATTRIBUTES = [
+        "defaultSelected" => "bool",
+        "disabled" => "bool",
+        "label" => "string",
+        "selected" => "bool",
+        "value" => "string"
+    ] + parent::ATTRIBUTES;
+
     public function __construct($text = null, $value = null, $defaultSelected = false)
     {
         parent::__construct("option");

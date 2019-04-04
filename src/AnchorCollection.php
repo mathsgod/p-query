@@ -3,6 +3,7 @@
 namespace P;
 class AnchorCollection extends Query {
 
+	
 	public function href($getter) {
 
 		foreach ($this as $node) {

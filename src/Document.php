@@ -7,7 +7,7 @@ class Document extends \DOMDocument
 	public static $DOCUMENT;
 	private $nodes = [];
 
-	
+
 	public function __construct($version = '', $encoding = 'UTF-8')
 	{
 		parent::__construct($version, $encoding);
@@ -61,10 +61,13 @@ class Document extends \DOMDocument
 		"tfoot" => HTMLTableSectionElement::class,
 		"tr" => HTMLTableRowElement::class,
 		"textarea" => HTMLTextAreaElement::class,
-		"form"=>HTMLFormElement::class,
-		"select"=>HTMLSelectElement::class,
-		"a"=>HTMLAnchorElement::class,
-		"option"=>HTMLOptionElement::class
+		"form" => HTMLFormElement::class,
+		"select" => HTMLSelectElement::class,
+		"a" => HTMLAnchorElement::class,
+		"option" => HTMLOptionElement::class,
+		"button" => HTMLButtonElement::class,
+		"td" => HTMLTableCellElement::class,
+		"th" => HTMLTableCellElement::class,
 	];
 
 	public function importNode(\DOMNode $node, $deep = false)

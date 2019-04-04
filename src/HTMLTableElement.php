@@ -3,6 +3,9 @@ namespace P;
 
 class HTMLTableElement extends HTMLElement
 {
+
+    const ATTRIBUTES = ["align" => "string"] + parent::ATTRIBUTES;
+
     public function __construct($value = "", $uri = null)
     {
         parent::__construct("table", $value, $uri);
