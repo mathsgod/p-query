@@ -18,12 +18,24 @@ class SelectCollection extends Query
 	public function options($options)
 	{
 		foreach ($this as $select) {
-			$select->options($options);
+			foreach ($options as $v) {
+				$opt = new HTMLOptionElement();
+				$opt->value = $v;
+				$opt->textContent = $v;
+				$select->add($opt);
+			}
 		}
 
-		$data_value = $select->attributes["data-value"];
+		$data_value = p($select)->data("value");
+
 		if ($data_value !== null) {
-			$select->value = $data_value;
+			if (is_array($data_value)) {
+				foreach ($data_value as $v) {
+					$select->value = $v;
+				}
+			} else {
+				$select->value = $data_value;
+			}
 		}
 
 		return $this;
@@ -35,7 +47,7 @@ class SelectCollection extends Query
 			if (!$value_member) {
 				$value_member = $select->getAttribute("data-field");
 			}
-			$data_value = $select->getAttribute("data-value");
+			$data_value = p($select)->data("value");
 
 			foreach ($datasource as $key => $o) {
 				$option = p("option");

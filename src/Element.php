@@ -124,7 +124,7 @@ class Element extends \DOMElement
 
                 $p = new DOMParser();
                 foreach ($p->parseFromString($value) as $n) {
-                    parent::appendChild($this->ownerDocument->importNode($n, true));
+                    parent::appendChild($this->ownerDocument->importNode($n,true));
                 }
                 return;
                 break;

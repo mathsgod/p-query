@@ -11,6 +11,20 @@ use P\HTMLFormElement;
 error_reporting(E_ALL & ~E_NOTICE);
 require_once(__DIR__ . "/vendor/autoload.php");
 
+$div=p("<div></div>")[0];
+$div->innerHTML='<a href="javascript:void(0)" is="x-editable" data-mode="inline" data-type="text" data-pk="company" data-url="Config/update">Hostlink</a>';
+
+echo $div;
+die();
+$p = p("<select></select>")[0];
+
+p($p)->data("value", ["1", "2", "3"]);
+print_r($p);
+
+
+echo $p;
+
+return;
 
 print_r(HTMLInputElement::ATTRIBUTES);
 die();
@@ -21,7 +35,7 @@ class AInput extends HTMLInputElement
 
 $f = new AInput();
 $f->required = true;
-$f->c="aa";
+$f->c = "aa";
 echo $f;
 die();
 

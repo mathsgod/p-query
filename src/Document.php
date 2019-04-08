@@ -87,6 +87,7 @@ class Document extends \DOMDocument
 					$n->appendChild($this->importNode($child, true));
 				}
 			}
+
 		} else {
 			$n = parent::importNode($node, true);
 		}
