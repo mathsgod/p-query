@@ -148,10 +148,7 @@ class Element extends \DOMElement
                 }
                 return $innerHTML;
             case "outerHTML":
-                return  $this->ownerDocument->saveHTML($this);
-                $doc = new Document();
-                $doc->appendChild($doc->importNode($this));
-                return substr(preg_replace("/\>\</",  ">" . $this->innerHTML . "<", $doc->saveHTML(),1), 0, -1);
+                return $this->ownerDocument->saveHTML($this);
                 break;
             case 'children':
                 $collection = new HTMLCollection();

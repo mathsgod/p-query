@@ -15,7 +15,7 @@ final class HTMLSelectElementTest extends TestCase
 
         $s->value = 2;
 
-        $this->assertEquals('<select><option value="1">1</option><option value="2" selected>2</option></select>', (string)$s);
+        $this->assertEquals('<select><option value="1">1</option><option value="2" selected>2</option></select>', str_replace("\n","",$s));
 
         $this->assertEquals("2", $s->value);
     }

@@ -34,10 +34,7 @@ class Query extends \ArrayObject
             }
         } elseif ($tag) {
             if ($tag[0] == "<") {
-
-                $parser = new DOMParser();
-
-                foreach ($parser->parseFromString($tag) as $node) {
+                foreach (self::parseHTML($tag) as $node) {
                     $this[] = $node;
                 }
             } else {
@@ -98,9 +95,8 @@ class Query extends \ArrayObject
     {
         if (is_string($node)) {
             foreach ($this as $child) {
-                $p = new DOMParser();
-                $doc = $p->parseFromString($node);
-                foreach ($doc->childNodes as $n) {
+                $p = p($node);
+                foreach ($p as $n) {
                     $child->prependChild($n);
                 }
             }
@@ -147,8 +143,7 @@ class Query extends \ArrayObject
     {
         if (is_string($node)) {
             foreach ($this as $child) {
-                $p = new DOMParser();
-                foreach ($p->parseFromString($node) as $n) {
+                foreach (self::parseHTML($node) as $n) {
                     $child->appendChild($n);
                 }
             }
@@ -295,17 +290,17 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function children($selector=null)
+    public function children($selector = null)
     {
         $q = new Query();
         $q->selector = $selector;
 
-      
+
         foreach ($this as $node) {
             if ($selector) {
                 foreach ($node->childNodes as $child) {
-                    if($child instanceof DOMElement){
-                        if($child->matches($selector)){
+                    if ($child instanceof DOMElement) {
+                        if ($child->matches($selector)) {
                             $q[] = $child;
                         }
                     }
@@ -543,7 +538,7 @@ class Query extends \ArrayObject
     public function hasClass($className)
     {
         foreach ($this as $node) {
-            if($node->classList->contains($className)){
+            if ($node->classList->contains($className)) {
                 return true;
             }
         }
@@ -584,5 +579,11 @@ class Query extends \ArrayObject
             }
         }
         return $index;
+    }
+
+    public static function parseHTML($str)
+    {
+        $parser = new DOMParser();
+        return $parser->parseFromString($str);
     }
 }

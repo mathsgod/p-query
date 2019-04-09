@@ -22,7 +22,7 @@ HTML;
     {
         $doc = new Document();
         $element = $doc->createElement("div", "一二三");
-        
+
         $this->assertEquals("<div>一二三</div>", (string)$element);
     }
 
@@ -71,20 +71,19 @@ HTML;
 */
     public function testOuterHTML()
     {
-        $e = p("div")[0];
-        $e->innerHTML = "<span>abc</span>";
+        $e = p("<div><span>abc</span></div>")[0];
+        //        $e->innerHTML = "<span>abc</span>";
 
-        $this->assertEquals('<div><span>abc</span></div>', $e->outerHTML);
+        $this->assertEquals('<div><span>abc</span></div>', str_replace("\n", "", $e->outerHTML));
 
         $e =  p("div")[0];
         $e->innerHTML .= "<br>abc";
         $e->innerHTML .= "<br>xyz";
-        $this->assertEquals("<div><br>abc<br>xyz</div>", $e->outerHTML);
+        $this->assertEquals("<div><br>abc<br>xyz</div>",  str_replace("\n", "", $e->outerHTML));
 
-        $div=p("<div><span>一二三<span></div>")[0];
-        
-        $this->assertEquals("<div><span>一二三<span></div>", $div->outerHTML);
+        $div = p("<div><span>一二三</span></div>")[0];
 
+        $this->assertEquals("<div><span>一二三</span></div>",  str_replace("\n", "", $div));
     }
 
     public function testInnerHTML()
@@ -118,7 +117,7 @@ HTML;
 
         $span =  $this->doc->createElement("span");
         $child->before($span);
-        $this->assertEquals("<div><span></span><p></p></div>", $parent->outerHTML);
+        $this->assertEquals("<div><span></span><p></p></div>",  str_replace("\n", "", $parent));
 
         //-----------------
         $parent =  $this->doc->createElement("div");
@@ -126,7 +125,7 @@ HTML;
         $parent->appendChild($child);
 
         $child->before("Text");
-        $this->assertEquals("<div>Text<p></p></div>", $parent->outerHTML);
+        $this->assertEquals("<div>Text<p></p></div>", str_replace("\n", "", $parent));
     }
     public function testAfter()
     {
@@ -136,7 +135,7 @@ HTML;
 
         $span =  $this->doc->createElement("span");
         $child->after($span);
-        $this->assertEquals("<div><p></p><span></span></div>", $parent->outerHTML);
+        $this->assertEquals("<div><p></p><span></span></div>", str_replace("\n", "", $parent));
 
         //-----------------
         $parent =  $this->doc->createElement("div");;
@@ -144,7 +143,7 @@ HTML;
         $parent->appendChild($child);
 
         $child->after("Text");
-        $this->assertEquals("<div><p></p>Text</div>", $parent->outerHTML);
+        $this->assertEquals("<div><p></p>Text</div>", str_replace("\n", "", $parent));
     }
 
     public function testReplaceWith()
@@ -155,7 +154,7 @@ HTML;
 
         $span = $this->doc->createElement("span");
         $child->replaceWith($span);
-        $this->assertEquals("<div><span></span></div>", $parent->outerHTML);
+        $this->assertEquals("<div><span></span></div>", str_replace("\n","",$parent));
     }
 
     public function test_children()
@@ -197,7 +196,7 @@ HTML;
 
         $div->prepend($p);
 
-        $this->assertEquals("<div><p></p><span>abc</span></div>", (string)$div);
+        $this->assertEquals("<div><p></p><span>abc</span></div>", str_replace("\n","",$div));
     }
 
     public function test_classList()

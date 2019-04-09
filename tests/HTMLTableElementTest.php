@@ -34,11 +34,11 @@ public function test_createTHead()
         $body = $t->createTBody();
 
         $this->assertInstanceOf(P\Element::class, $body);
-        $this->assertEquals("<table><tbody></tbody></table>", $t->outerHTML);
+        $this->assertEquals("<table><tbody></tbody></table>", str_replace("\n","",$t));
 
         $body = $t->createTBody();
         $this->assertInstanceOf(P\Element::class, $body);
-        $this->assertEquals("<table><tbody></tbody><tbody></tbody></table>", $t->outerHTML);
+        $this->assertEquals("<table><tbody></tbody><tbody></tbody></table>", str_replace("\n","",$t));
     }
 
     public function test_createTFoot()
@@ -77,7 +77,7 @@ public function test_createTHead()
         $cell=$r->insertCell();
         $cell->textContent="hello";
 
-        $this->assertEquals("<table><tbody><tr><td></td><td>hello</td></tr><tr><td></td><td>hello</td></tr></tbody></table>", $t->outerHTML);
+        $this->assertEquals("<table><tbody><tr><td></td><td>hello</td></tr><tr><td></td><td>hello</td></tr></tbody></table>", str_replace("\n","",$t));
     }
 }
 
