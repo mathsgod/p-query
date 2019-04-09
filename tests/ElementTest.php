@@ -80,6 +80,11 @@ HTML;
         $e->innerHTML .= "<br>abc";
         $e->innerHTML .= "<br>xyz";
         $this->assertEquals("<div><br>abc<br>xyz</div>", $e->outerHTML);
+
+        $div=p("<div><span>一二三<span></div>")[0];
+        
+        $this->assertEquals("<div><span>一二三<span></div>", $div->outerHTML);
+
     }
 
     public function testInnerHTML()

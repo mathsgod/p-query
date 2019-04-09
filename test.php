@@ -11,6 +11,22 @@ use P\HTMLFormElement;
 error_reporting(E_ALL & ~E_NOTICE);
 require_once(__DIR__ . "/vendor/autoload.php");
 
+$br=p("<tr>abc</tr>")[0];
+
+echo $br;
+die();
+
+$li=p("li")[0];
+$a = p("a")->attr("href", "google.com")->text("google")->appendTo($li);
+
+print_r($li->outerHTML);
+die();
+$nav=p("nav")[0];
+p($nav)->append($li);
+echo $nav;
+die();
+
+
 $doc = new Document();
 $div= $doc->createElement("div");
 $div->innerHTML="\n一二三\n";

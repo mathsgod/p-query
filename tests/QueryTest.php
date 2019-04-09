@@ -91,6 +91,11 @@ HTML;
         $i = p("<i class='fa fa-fw'></i>");
         $i->appendTo($p);
         $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
+
+        $li = p("li")[0];
+        p("a")->text("google")->appendTo($li);
+
+        $this->assertEquals('<li><a>google</a></li>', (string)$li);
     }
 
     public function test_prependTo()

@@ -134,7 +134,7 @@ class Query extends \ArrayObject
 
     public function appendTo($target)
     {
-        if ($target instanceof Element) {
+        if ($target instanceof DOMElement) {
             p($target)->append($this);
         } else {
             $target->append($this);
