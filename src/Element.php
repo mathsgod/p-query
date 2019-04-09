@@ -3,7 +3,7 @@
 namespace P;
 
 use \DOMNode;
-
+use \DOMElement;
 
 class Element extends \DOMElement
 {
@@ -124,7 +124,7 @@ class Element extends \DOMElement
 
                 $p = new DOMParser();
                 foreach ($p->parseFromString($value) as $n) {
-                    parent::appendChild($this->ownerDocument->importNode($n,true));
+                    parent::appendChild($this->ownerDocument->importNode($n, true));
                 }
                 return;
                 break;
@@ -140,13 +140,17 @@ class Element extends \DOMElement
             case "innerHTML":
                 $innerHTML = '';
                 foreach ($this->childNodes as $child) {
-                    $innerHTML .= $child->ownerDocument->saveHTML($child);
+                    if ($child instanceof DOMElement) {
+                        $innerHTML .= $child->outerHTML;
+                    } else {
+                        $innerHTML .= $child->ownerDocument->saveHTML($child);
+                    }
                 }
                 return $innerHTML;
             case "outerHTML":
                 $doc = new Document();
-                $doc->appendChild($doc->importNode($this, true));
-                return substr($doc->saveHTML(), 0, -1);
+                $doc->appendChild($doc->importNode($this));
+                return substr(preg_replace("/\>\</",  ">" . $this->innerHTML . "<", $doc->saveHTML()), 0, -1);
                 break;
             case 'children':
                 $collection = new HTMLCollection();

@@ -15,7 +15,15 @@ HTML;
     public function __construct()
     {
         parent::__construct();
-        $this->doc =Document::Current();
+        $this->doc = Document::Current();
+    }
+
+    public function test_element_encoding()
+    {
+        $doc = new Document();
+        $element = $doc->createElement("div", "一二三");
+        
+        $this->assertEquals("<div>一二三</div>", (string)$element);
     }
 
 
@@ -63,14 +71,14 @@ HTML;
 */
     public function testOuterHTML()
     {
-        $e =  $this->doc->createElement("div");
+        $e = p("div")[0];
         $e->innerHTML = "<span>abc</span>";
 
         $this->assertEquals('<div><span>abc</span></div>', $e->outerHTML);
 
-        $e =  $this->doc->createElement("div");
-        $e->innerHTML .= "<br/>abc";
-        $e->innerHTML .= "<br/>xyz";
+        $e =  p("div")[0];
+        $e->innerHTML .= "<br>abc";
+        $e->innerHTML .= "<br>xyz";
         $this->assertEquals("<div><br>abc<br>xyz</div>", $e->outerHTML);
     }
 
@@ -93,9 +101,8 @@ HTML;
         $this->assertEquals("abc", $e->innerText);
 
         $e =  $this->doc->createElement("div");
-        $e->innerText="<p>abc</p>";
-        $this->assertEquals("<div>&lt;p&gt;abc&lt;/p&gt;</div>",(string)$e);
-
+        $e->innerText = "<p>abc</p>";
+        $this->assertEquals("<div>&lt;p&gt;abc&lt;/p&gt;</div>", (string)$e);
     }
 
     public function testBefore()
@@ -195,7 +202,7 @@ HTML;
         $this->assertEquals('<div class="c1 c2 abc">abc</div>', (string)$div);
 
         $div = p("<div class='c1 c2'>abc</div>")[0];
-        $div->classList->add("abc","def");
+        $div->classList->add("abc", "def");
         $this->assertEquals('<div class="c1 c2 abc def">abc</div>', (string)$div);
 
         $div = p("<div class='c1 c2 c3'>abc</div>")[0];
@@ -216,7 +223,7 @@ HTML;
         $this->assertEquals($div->classList->length, 3);
 
         $div = p("<div class='c1 c2 c3'>abc</div>")[0];
-        $div->classList[]="c4";
+        $div->classList[] = "c4";
         $this->assertEquals($div->classList->length, 4);
     }
 }

@@ -11,8 +11,82 @@ use P\HTMLFormElement;
 error_reporting(E_ALL & ~E_NOTICE);
 require_once(__DIR__ . "/vendor/autoload.php");
 
-$div=p("<div></div>")[0];
-$div->innerHTML='<a href="javascript:void(0)" is="x-editable" data-mode="inline" data-type="text" data-pk="company" data-url="Config/update">Hostlink</a>';
+$doc = new Document();
+$div= $doc->createElement("div");
+$div->innerHTML="\n一二三\n";
+
+
+
+echo $div->outerHTML;
+die();
+
+
+
+$doc = new Document();
+$parent = $doc->createElement("div");
+
+
+
+$child =  $doc->createElement("p","一二三");
+$parent->appendChild($child);
+
+//$this->parentNode->insertBefore($nodes, $this->nextSibling);
+
+$span =  $doc->createElement("span");
+$parent->insertBefore($span);
+
+$doc->normalize();
+$doc->appendChild($parent);
+$doc->normalizeDocument();
+echo $doc->saveHTML($parent);
+die();
+echo $parent->outerHTML;
+
+die();
+$e =  p("div")[0];
+$e->innerHTML .= "<br>一二三";
+
+$e->innerHTML .= "<br>xyz";
+
+echo $e->innerHTML;
+
+echo "\n-----\n";
+
+echo $e;
+
+die();
+$doc = new Document();
+$doc->appendChild($n = $doc->importNode($e, true));
+echo $doc->saveHTML($n);
+die();
+
+
+/*
+$doc=new Document();
+
+
+
+$str=mb_convert_encoding('<div>一二三</div>', 'HTML-ENTITIES', 'UTF-8');
+
+//echo $str;
+
+$doc->loadHTML($str, LIBXML_COMPACT  | LIBXML_HTML_NODEFDTD  | LIBXML_HTML_NOIMPLIED);
+
+echo $doc->saveHTML($doc->childNodes[0]);
+die();
+*/
+//$div = p("<div></div>")[0];
+$doc = Document::Current();
+$div = $doc->createElement("div");
+$span = p("<span>一二三</span>")[0];
+
+$div->appendChild($span);
+
+echo $div->ownerDocument->saveHTML($div);
+
+exit();
+
+$div->innerHTML = '<a href="javascript:void(0)" is="x-editable" data-mode="inline" data-type="text" data-pk="company" data-url="Config/update">Hostlink</a>';
 
 echo $div;
 die();
