@@ -11,6 +11,35 @@ use P\HTMLFormElement;
 error_reporting(E_ALL & ~E_NOTICE);
 require_once(__DIR__ . "/vendor/autoload.php");
 
+$div = p("<div><span>a<p>b</p>c</span></div>");
+echo $div;
+die();
+foreach($div[0]->childNodes as $n){
+    print_r($n);
+}
+
+die();
+$p = $div->find("p");
+
+print_r($p);
+die();
+
+die();
+$o=p("<select a='1' b='2'></select>")[0];
+print_r($o->attributes);
+die();
+echo $o;
+die();
+$s = p("<select><option value='1'>a</option><option value='2' selected>b</option></select>")[0];
+
+
+echo $s;
+
+
+die();
+
+
+
 
 $s = p("select");
 $s->prepend("<option></option>");

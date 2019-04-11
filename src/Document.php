@@ -75,19 +75,19 @@ class Document extends \DOMDocument
 
 	public function importNode(\DOMNode $node, $deep = false)
 	{
+
 		if ($node instanceof \DOMElement) {
 			$n = $this->createElement($node->tagName);
 
 			foreach ($node->attributes as $attr) {
-				$n->appendChild($n->ownerDocument->importNode($attr));
+				$n->appendChild($this->importNode(clone $attr));
 			}
 
 			if ($deep) {
 				foreach ($node->childNodes as $child) {
-					$n->appendChild($this->importNode($child, true));
+					$n->appendChild($this->importNode(clone $child, true));
 				}
 			}
-
 		} else {
 			$n = parent::importNode($node, true);
 		}
