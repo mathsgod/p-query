@@ -28,12 +28,12 @@ class Element extends \DOMElement
         return false;
     }
 
-    public function __toString(): string
+    public function __toString()
     {
         return $this->outerHTML;
     }
 
-    public function append($nodes): void
+    public function append($nodes)
     {
         if ($nodes instanceof DOMNode) {
             $this->appendChild($nodes);
@@ -42,7 +42,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function prepend($nodes): void
+    public function prepend($nodes)
     {
         if ($nodes instanceof DOMNode) {
             $this->prependChild($nodes);
@@ -51,7 +51,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function before($nodes): void
+    public function before($nodes)
     {
         if (!$this->parentNode) return;
         if ($nodes instanceof DOMNode) {
@@ -61,7 +61,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function after($nodes): void
+    public function after($nodes)
     {
         if (!$this->parentNode) return;
         if ($nodes instanceof DOMNode) {
@@ -72,7 +72,7 @@ class Element extends \DOMElement
     }
 
 
-    public function replaceWith($nodes): void
+    public function replaceWith($nodes)
     {
         if (!$this->parentNode) return;
         if (!$nodes instanceof DOMNode) {
@@ -107,7 +107,7 @@ class Element extends \DOMElement
         return  $matches->length == 1;
     }
 
-    public function remove(): void
+    public function remove()
     {
         if ($this->parentNode) {
             $this->parentNode->removeChild($this);
@@ -181,7 +181,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function setAttribute($name, $value = null): void
+    public function setAttribute($name, $value = null)
     {
         if ($value === true || func_num_args() == 1) {
             $this->removeAttribute($name);
