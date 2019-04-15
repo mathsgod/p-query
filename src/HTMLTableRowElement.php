@@ -3,12 +3,12 @@ namespace P;
 
 class HTMLTableRowElement extends HTMLElement
 {
-    public function __construct($value = "", $uri = null)
+    public function __construct(string $value = "", string $uri = null)
     {
         parent::__construct("tr", $value, $uri);
     }
 
-    public function insertCell($index = -1)
+    public function insertCell($index = -1): HTMLTableCellElement
     {
         $children = $this->cells;
         $num_cell = $children->length;

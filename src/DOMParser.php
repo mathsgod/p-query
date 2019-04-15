@@ -3,12 +3,12 @@ namespace P;
 
 class DOMParser
 {
-    public function parseFromString($str)
+    public function parseFromString(string $str): array
     {
 
         libxml_use_internal_errors(true);
 
-        
+
         $option = 0;
         if (LIBXML_VERSION >= 20621) {
             $option |=  LIBXML_COMPACT;

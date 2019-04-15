@@ -1,10 +1,13 @@
 <?php
 
 namespace P;
-class AnchorCollection extends Query {
 
-	
-	public function href($getter) {
+class AnchorCollection extends Query
+{
+
+
+	public function href($getter): self
+	{
 
 		foreach ($this as $node) {
 			$object = p($node)->data("object");
@@ -12,13 +15,13 @@ class AnchorCollection extends Query {
 		}
 		return $this;
 	}
-	
-	public function fancybox(){
-		foreach($this as $node){
-			$node->setAttribute("data-fancybox",true);
-			$node->setAttribute("data-type","ajax");
+
+	public function fancybox(): self
+	{
+		foreach ($this as $node) {
+			$node->setAttribute("data-fancybox", true);
+			$node->setAttribute("data-type", "ajax");
 		}
 		return $this;
 	}
-
 }

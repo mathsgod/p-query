@@ -81,12 +81,12 @@ class DOMTokenList implements \ArrayAccess
 		$this->value = implode(" ", $values);
 	}
 
-	public function contains($token)
+	public function contains(string $token): bool
 	{
 		return in_array($token, $this->values());
 	}
 
-	public function toggle($token)
+	public function toggle(string $token)
 	{
 		if ($this->contains($token)) {
 			$this->remove($token);

@@ -35,6 +35,13 @@ HTML;
         $this->assertEquals('<div class="goodbye">Goodbye</div>', $p->html());
     }
 
+    public function test_remove2()
+    {
+        $div = p("<div><span>a<p>b</p>c<p>d</p></span></div>");
+        $div->find("p")->remove();
+        $this->assertEquals("<div><span>ac</span></div>", (string)$div);
+    }
+
     public function testEmpty()
     {
         $p = p(self::HTML);
@@ -118,14 +125,14 @@ HTML;
     {
         $p = p('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->after("<p>Test</p>");
-        $this->assertEquals('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div><p>Test</p></div>',str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div><p>Test</p></div>', str_replace("\n", "", $p));
     }
 
     public function test_before()
     {
         $p = p('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->before("<p>Test</p>");
-        $this->assertEquals('<div class="container"><h2>Greetings</h2><p>Test</p><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div></div>',str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><h2>Greetings</h2><p>Test</p><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div></div>', str_replace("\n", "", $p));
     }
 
     public function test_css()
@@ -162,7 +169,7 @@ HTML;
     {
         $p = p('<div class="container"><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->wrapInner("<div class='new'></div>");
-        $this->assertEquals('<div class="container"><div class="inner"><div class="new">Hello</div></div><div class="inner"><div class="new">Goodbye</div></div></div>',str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><div class="inner"><div class="new">Hello</div></div><div class="inner"><div class="new">Goodbye</div></div></div>', str_replace("\n", "", $p));
     }
 
     public function test_prev()

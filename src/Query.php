@@ -44,12 +44,12 @@ class Query extends \ArrayObject
         }
     }
 
-    public function size()
+    public function size(): int
     {
         return count($this);
     }
 
-    public function last()
+    public function last(): self
     {
         $q = new Query();
         if (count($this)) {
@@ -58,7 +58,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function first()
+    public function first(): self
     {
         $q = new Query();
         if (count($this)) {
@@ -91,7 +91,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function prepend($node)
+    public function prepend($node): self
     {
         if (is_string($node)) {
             foreach ($this as $child) {
@@ -118,7 +118,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function prependTo($target)
+    public function prependTo($target): self
     {
         if ($target instanceof Element) {
             p($target)->prepend($this);
@@ -128,7 +128,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function appendTo($target)
+    public function appendTo($target): self
     {
         if ($target instanceof DOMElement) {
             p($target)->append($this);
@@ -139,7 +139,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function append($node)
+    public function append($node): self
     {
         if (is_string($node)) {
             foreach ($this as $child) {
@@ -236,7 +236,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function data($key, $value = null)
+    public function data(string $key, $value = null)
     {
         if (func_num_args() == 1) {
             return $this[0]->data[$key];
@@ -248,7 +248,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function addClass($className)
+    public function addClass(string $className = ""): self
     {
         $class = explode(" ", $className);
 
@@ -262,15 +262,23 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function text($text)
+    public function text(string $text = "")
     {
+        if (func_num_args() == 0) {
+            $text = "";
+            foreach ($this as $node) {
+                $text .= $node->innerText;
+            }
+            return $text;
+        }
+
         foreach ($this as $node) {
             $node->innerText = $text;
         }
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $str = "";
         foreach ($this as $node) {
@@ -279,7 +287,7 @@ class Query extends \ArrayObject
         return $str;
     }
 
-    public function contents()
+    public function contents(): self
     {
         $q = new Query();
         foreach ($this as $node) {
@@ -290,7 +298,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function children($selector = null)
+    public function children($selector = null): self
     {
         $q = new Query();
         $q->selector = $selector;
@@ -371,7 +379,7 @@ class Query extends \ArrayObject
         }
     }
 
-    public function removeAttr($attributeName)
+    public function removeAttr($attributeName): self
     {
         foreach ($this as $node) {
             $node->removeAttribute($attributeName);
@@ -379,7 +387,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function removeClass($className)
+    public function removeClass($className = null): self
     {
         if (func_num_args() == 0) {
             foreach ($this as $node) {
@@ -470,7 +478,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function filter($selector)
+    public function filter($selector): self
     {
         $q = new Query();
         foreach ($this as $node) {
@@ -485,7 +493,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function parent()
+    public function parent(): self
     {
         $q = new Query();
         foreach ($this as $node) {
@@ -496,7 +504,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function wrap($wrappingElement)
+    public function wrap($wrappingElement): self
     {
         foreach ($this as $node) {
             $we = p($wrappingElement)[0];
@@ -507,7 +515,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function wrapInner($wrappingElement)
+    public function wrapInner($wrappingElement): self
     {
         foreach ($this as $node) {
             $we = p($wrappingElement)[0];
@@ -519,7 +527,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function toggleClass($className)
+    public function toggleClass(string $className): self
     {
         $classes = explode(" ", $className);
         foreach ($this as $node) {
@@ -535,7 +543,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function hasClass($className)
+    public function hasClass(string $className): bool
     {
         foreach ($this as $node) {
             if ($node->classList->contains($className)) {
@@ -545,7 +553,7 @@ class Query extends \ArrayObject
         return false;
     }
 
-    public function prev()
+    public function prev(): self
     {
         $q = new Query();
         foreach ($this as $node) {
@@ -554,7 +562,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function next()
+    public function next(): self
     {
         $q = new Query();
         foreach ($this as $node) {
@@ -563,7 +571,7 @@ class Query extends \ArrayObject
         return $q;
     }
 
-    public function index()
+    public function index(): int
     {
         $index = -1;
         $parent = $this->parent();

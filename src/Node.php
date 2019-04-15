@@ -1,10 +1,10 @@
 <?php
- // create by Raymond Chong
+// create by Raymond Chong
 namespace P;
 
 class Node extends \DOMNode
 {
-    public function contains(Node $otherNode)
+    public function contains(Node $otherNode): bool
     {
         if ($this == $otherNode) {
             return true;
@@ -17,4 +17,3 @@ class Node extends \DOMNode
         return false;
     }
 }
-

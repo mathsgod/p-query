@@ -10,4 +10,9 @@ class HTMLImageElement extends HTMLElement
         "src" => "string",
         "width" => "int"
     ] + parent::ATTRIBUTES;
+
+    public function __construct(string $value = "", string $uri = null)
+    {
+        parent::__construct("img", $value, $uri);
+    }
 }

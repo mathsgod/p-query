@@ -11,7 +11,24 @@ use P\HTMLFormElement;
 error_reporting(E_ALL & ~E_NOTICE);
 require_once(__DIR__ . "/vendor/autoload.php");
 
-$div = p("<div><span>a<p>b</p>c</span></div>");
+$div = p("<div><span>a<p>b</p>c<p>d</p></span></div>");
+
+echo $div->text();
+
+die();
+foreach($div->find("p") as $p){
+    print_r($p);
+}
+
+die();
+
+foreach($div->querySelectorAll("p") as $p){
+    $p->remove();
+}
+echo $div;
+
+die();
+
 echo $div;
 die();
 foreach($div[0]->childNodes as $n){

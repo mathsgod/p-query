@@ -3,7 +3,7 @@ namespace P;
 
 class InputCollection extends Query
 {
-    public function required($value = true)
+    public function required($value = true): self
     {
         foreach ($this as $node) {
             $node->setAttribute("required", $value);
@@ -11,7 +11,7 @@ class InputCollection extends Query
         return $this;
     }
 
-    public function minlength($value)
+    public function minlength($value): self
     {
         foreach ($this as $node) {
             $node->setAttribute("minlength", $value);
@@ -19,7 +19,7 @@ class InputCollection extends Query
         return $this;
     }
 
-    public function type($value)
+    public function type($value): self
     {
         foreach ($this as $node) {
             $node->setAttribute("type", $value);
@@ -27,7 +27,7 @@ class InputCollection extends Query
         return $this;
     }
 
-    public function min($value)
+    public function min($value): self
     {
         foreach ($this as $node) {
             $node->setAttribute("min", $value);
@@ -35,7 +35,7 @@ class InputCollection extends Query
         return $this;
     }
 
-    public function max($value)
+    public function max($value): self
     {
         foreach ($this as $node) {
             $node->setAttribute("max", $value);
@@ -43,7 +43,7 @@ class InputCollection extends Query
         return $this;
     }
 
-    public function name($value)
+    public function name($value): self
     {
         foreach ($this as $node) {
             $node->attributes("name", $value);

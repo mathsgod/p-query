@@ -154,7 +154,7 @@ HTML;
 
         $span = $this->doc->createElement("span");
         $child->replaceWith($span);
-        $this->assertEquals("<div><span></span></div>", str_replace("\n","",$parent));
+        $this->assertEquals("<div><span></span></div>", str_replace("\n", "", $parent));
     }
 
     public function test_children()
@@ -196,7 +196,7 @@ HTML;
 
         $div->prepend($p);
 
-        $this->assertEquals("<div><p></p><span>abc</span></div>", str_replace("\n","",$div));
+        $this->assertEquals("<div><p></p><span>abc</span></div>", str_replace("\n", "", $div));
     }
 
     public function test_classList()
@@ -229,5 +229,12 @@ HTML;
         $div = p("<div class='c1 c2 c3'>abc</div>")[0];
         $div->classList[] = "c4";
         $this->assertEquals($div->classList->length, 4);
+    }
+
+    public function test_remove()
+    {
+        $div = p("<div><span>a<p>b</p>c<p>d</p></span></div>")[0];
+        $div->querySelector('span')->remove();
+        $this->assertEquals("<div></div>", (string)$div);
     }
 }

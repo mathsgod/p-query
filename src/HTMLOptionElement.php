@@ -11,17 +11,9 @@ class HTMLOptionElement extends HTMLElement
         "value" => "string"
     ] + parent::ATTRIBUTES;
 
-    public function __construct($text = null, $value = null, $defaultSelected = false)
+    public function __construct($value = "", $uri = null)
     {
-        parent::__construct("option");
-        /*if ($value) {
-            $this->attributes["value"] = $value;
-        }
-
-        $this->attributes["selected"] = $defaultSelected;
-        if ($text) {
-            $this->appendChild(new Text($text));
-        }*/
+        parent::__construct("option", $value, $uri);
     }
 
     public function __set($name, $value)

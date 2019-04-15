@@ -1,23 +1,21 @@
 <?php
-
 namespace P;
 
-use \DOMNode;
-use \DOMElement;
+use DOMNode;
+use DOMElement;
+use DOMNodeList;
 
 class Element extends \DOMElement
 {
     public $data = [];
 
-
-
-    public function __construct($name, $value = "", $uri = null)
+    public function __construct(string $name, string $value = "", string $uri = null)
     {
         parent::__construct($name, $value, $uri);
         Document::Current()->appendChild($this);
     }
 
-    public function contains(DOMNode $otherNode)
+    public function contains(DOMNode $otherNode): bool
     {
         if ($this == $otherNode) {
             return true;
@@ -30,12 +28,12 @@ class Element extends \DOMElement
         return false;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->outerHTML;
     }
 
-    public function append($nodes)
+    public function append($nodes): void
     {
         if ($nodes instanceof DOMNode) {
             $this->appendChild($nodes);
@@ -44,7 +42,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function prepend($nodes)
+    public function prepend($nodes): void
     {
         if ($nodes instanceof DOMNode) {
             $this->prependChild($nodes);
@@ -53,7 +51,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function before($nodes)
+    public function before($nodes): void
     {
         if (!$this->parentNode) return;
         if ($nodes instanceof DOMNode) {
@@ -63,7 +61,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function after($nodes)
+    public function after($nodes): void
     {
         if (!$this->parentNode) return;
         if ($nodes instanceof DOMNode) {
@@ -74,7 +72,7 @@ class Element extends \DOMElement
     }
 
 
-    public function replaceWith($nodes)
+    public function replaceWith($nodes): void
     {
         if (!$this->parentNode) return;
         if (!$nodes instanceof DOMNode) {
@@ -83,7 +81,16 @@ class Element extends \DOMElement
         $this->parentNode->replaceChild($nodes, $this);
     }
 
-    public function querySelectorAll(string $selector)
+    public function querySelector(string $selector): ?DOMElement
+    {
+        $nodelist = $this->querySelectorAll($selector);
+        if ($nodelist->length) {
+            return $nodelist->item(0);
+        }
+        return null;
+    }
+
+    public function querySelectorAll(string $selector): DOMNodeList
     {
         $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
         $expression = $converter->toXPath($selector);
@@ -92,7 +99,7 @@ class Element extends \DOMElement
         return $xpath->evaluate($expression, $this);
     }
 
-    public function matches(string $selectorString)
+    public function matches(string $selectorString): bool
     {
         $doc = new Document();
         $doc->appendChild($doc->importNode($this));
@@ -100,14 +107,14 @@ class Element extends \DOMElement
         return  $matches->length == 1;
     }
 
-    public function remove()
+    public function remove(): void
     {
         if ($this->parentNode) {
             $this->parentNode->removeChild($this);
         }
     }
 
-    public function prependChild(DOMNode $newnode)
+    public function prependChild(DOMNode $newnode): DOMNode
     {
         $firstChild = $this->firstChild;
         return $this->insertBefore($newnode, $firstChild);
@@ -174,7 +181,7 @@ class Element extends \DOMElement
         }
     }
 
-    public function setAttribute($name, $value = null)
+    public function setAttribute($name, $value = null): void
     {
         if ($value === true || func_num_args() == 1) {
             $this->removeAttribute($name);

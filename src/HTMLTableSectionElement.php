@@ -3,7 +3,7 @@ namespace P;
 
 class HTMLTableSectionElement extends HTMLElement
 {
-    public function insertRow()
+    public function insertRow(): HTMLTableRowElement
     {
         $row = $this->ownerDocument->createElement("tr");
         $this->appendChild($row);

@@ -5,7 +5,7 @@ use \DOMNode;
 
 class Text extends \DOMText
 {
-    public function contains(DOMNode $otherNode)
+    public function contains(DOMNode $otherNode): bool
     {
         if ($this == $otherNode) {
             return true;
@@ -13,9 +13,8 @@ class Text extends \DOMText
         return false;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->wholeText;
     }
 }
-
