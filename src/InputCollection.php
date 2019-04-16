@@ -8,6 +8,7 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->setAttribute("required", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -16,6 +17,7 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->setAttribute("minlength", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -24,6 +26,7 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->setAttribute("type", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -32,6 +35,7 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->setAttribute("min", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -40,6 +44,7 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->setAttribute("max", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -48,6 +53,7 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->attributes("name", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 }
