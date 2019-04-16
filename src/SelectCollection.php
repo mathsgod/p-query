@@ -12,6 +12,7 @@ class SelectCollection extends Query
 				p("optgroup")->attr("index", $i)->attr("label", $k)->appendTo($select);
 			}
 		}
+		$this->trigger("change");
 		return $this;
 	}
 
@@ -37,7 +38,7 @@ class SelectCollection extends Query
 				$select->value = $data_value;
 			}
 		}
-
+		$this->trigger("change");
 		return $this;
 	}
 
@@ -90,7 +91,7 @@ class SelectCollection extends Query
 			}
 		}
 
-
+		$this->trigger("change");
 		return $this;
 	}
 }
