@@ -262,7 +262,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function text(string $text = "")
+    public function text(?string $text = "")
     {
         if (func_num_args() == 0) {
             $text = "";
