@@ -301,7 +301,7 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function __toString(): string
+    public function __toString()
     {
         $str = "";
         foreach ($this as $node) {
