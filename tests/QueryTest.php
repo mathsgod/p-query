@@ -197,4 +197,15 @@ HTML;
         $this->assertTrue($p->hasClass("c1"));
         $this->assertFalse($p->hasClass("c2"));
     }
+
+    public function test_event()
+    {
+        $p = p("<input value='1' />");
+
+        $p->on("change", function ($e) {
+            $this->assertEquals("change", $e->type);
+        });
+
+        $p->trigger("change");
+    }
 }

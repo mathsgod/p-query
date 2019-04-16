@@ -4,6 +4,7 @@ error_reporting(E_ALL && ~E_WARNING);
 use PHPUnit\Framework\TestCase;
 use P\Element;
 use P\Document;
+use P\Event;
 
 final class ElementTest extends TestCase
 {
@@ -236,5 +237,15 @@ HTML;
         $div = p("<div><span>a<p>b</p>c<p>d</p></span></div>")[0];
         $div->querySelector('span')->remove();
         $this->assertEquals("<div></div>", (string)$div);
+    }
+
+    public function test_addEvent()
+    {
+        $input = p("<input value='a'/>")[0];
+        $input->addEventListener('update', function ($e) {
+            $this->assertEquals($e->type, "update");
+        });
+
+        $input->dispatchEvent(new Event('update'));
     }
 }

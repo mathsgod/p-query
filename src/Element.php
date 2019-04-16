@@ -8,11 +8,34 @@ use DOMNodeList;
 class Element extends \DOMElement
 {
     public $data = [];
+    public $_events = [];
 
     public function __construct(string $name, string $value = "", string $uri = null)
     {
         parent::__construct($name, $value, $uri);
         Document::Current()->appendChild($this);
+    }
+
+    public function addEventListener(string $type, callable $listener)
+    {
+        $this->_events[$type][] = $listener;
+    }
+
+    public function removeEventListener(string $type, callable $listener)
+    {
+        $events = [];
+        foreach ($this->_events[$type] as $event) {
+            if ($event !== $listener) {
+                $events[] = $event;
+            }
+        }
+        $this->_events[$type] = $events;
+    }
+
+    public function dispatchEvent(Event $event){
+        foreach($this->_events[$event->type] as $c){
+            $c($event);
+        }
     }
 
     public function contains(DOMNode $otherNode): bool

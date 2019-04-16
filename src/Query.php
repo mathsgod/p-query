@@ -44,6 +44,29 @@ class Query extends \ArrayObject
         }
     }
 
+    public function on($event, $handler)
+    {
+        foreach ($this as $node) {
+            if ($node instanceof Element) {
+                $node->addEventListener($event, $handler);
+            }
+        }
+        return $this;
+    }
+
+    public function trigger($event)
+    {
+        if (is_string($event)) {
+            $event = new Event($event);
+        }
+        foreach ($this as $node) {
+            if ($node instanceof Element) {
+                $node->dispatchEvent($event);
+            }
+        }
+        return $this;
+    }
+
     public function size(): int
     {
         return count($this);
