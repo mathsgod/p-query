@@ -48,8 +48,8 @@ class SelectCollection extends Query
 			if (!$value_member) {
 				$value_member = $select->getAttribute("data-field");
 			}
-			$data_value = p($select)->data("value");
-
+			$data_value = $select->getAttribute("data-value");
+			
 			foreach ($datasource as $key => $o) {
 				$option = p("option");
 				if (is_object($o)) {
