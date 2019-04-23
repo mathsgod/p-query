@@ -10,8 +10,8 @@
         ]
     },
     "require": {
-        "php": ">=7.1",
-        "symfony/css-selector": "^4.2"
+        "php": ">=7.0",
+        "symfony/css-selector": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"

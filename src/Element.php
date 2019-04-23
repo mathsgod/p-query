@@ -104,7 +104,7 @@ class Element extends \DOMElement
         $this->parentNode->replaceChild($nodes, $this);
     }
 
-    public function querySelector(string $selector): ?DOMElement
+    public function querySelector(string $selector)
     {
         $nodelist = $this->querySelectorAll($selector);
         if ($nodelist->length) {
