@@ -4,7 +4,7 @@ error_reporting(E_ALL && ~E_WARNING);
 
 use PHPUnit\Framework\TestCase;
 use P\Document;
-use P\HTMLOptionsCollection;
+use P\OptionCollection;
 
 final class HTMLSelectElementTest extends TestCase
 {
@@ -35,7 +35,7 @@ final class HTMLSelectElementTest extends TestCase
     {
         $s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
         $this->assertEquals(2, $s->options->length);
-        $this->assertInstanceOf(HTMLOptionsCollection::class, $s->options);
+        $this->assertInstanceOf(OptionCollection::class, $s->options);
     }
 
     public function test_length()
