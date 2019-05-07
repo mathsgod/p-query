@@ -22,7 +22,7 @@ class HTMLSelectElement extends HTMLElement
         switch ($name) {
             case "value":
                 foreach (p($this)->find("option") as  $option) {
-                    if (p($option)->val() == $value) {
+                    if ($option->value == $value) {
                         $option->selected = true;
                     } else {
                         if (!$this->hasAttribute("multiple")) {

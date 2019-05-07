@@ -1,31 +1,28 @@
 <?
+require_once("vendor/autoload.php");
 
-class C
-{
+use P\HTMLOptionElement;
 
-    public $c = 1;
+$select = p("<select></select>")[0];
+
+
+foreach (range(1, 4) as $v) {
+
+    $opt = new HTMLOptionElement();
+    $opt->value = $v;
+    $opt->textContent = $v;
+    $select->add($opt);
 }
+print_r($select);
 
-class A
-{
-    public $a;
+foreach($select->childNodes as $node){
+    print_r($node);
 }
+die();
 
-class B extends A
-{
-
-    public  $s;
-
-    public function getTest(int $a = null)
-    {
-        if (__DIR__ == "abc") {
-            return null;
-        } else {
-            return new C();
-        }
-    }
+print_r(p($select)->find("option"));
+return;
+foreach (p($select)->find("option") as $opt) {
+    print_r($opt);
+    print_r($opt->value);
 }
-
-$b = new B();
-$b->s = 1;
-$b->getTest();

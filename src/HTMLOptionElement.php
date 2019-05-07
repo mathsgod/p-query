@@ -15,15 +15,4 @@ class HTMLOptionElement extends HTMLElement
     {
         parent::__construct("option", $value, $uri);
     }
-
-    public function __set($name, $value)
-    {
-
-        switch ($name) {
-            case "selected":
-                $this->setAttribute($name, $value);
-                return;
-        }
-        parent::__set($name, $value);
-    }
 }

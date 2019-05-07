@@ -65,15 +65,15 @@ class Document extends DOMDocument
 		return self::$DOCUMENT;
 	}
 
-	public function createElement(string $name, $value = null): DOMElement
+	public function createElement($tagName, $value = null): DOMElement
 	{
-		if ($class = self::ELEMENT_CLASS[$name]) {
+		if ($class = self::ELEMENT_CLASS[$tagName]) {
 			$this->registerNodeClass("DOMElement", $class);
 		} else {
 			$this->registerNodeClass("DOMElement", HTMLElement::class);
 		}
 
-		$element = parent::createElement($name, $value);
+		$element = parent::createElement($tagName, $value);
 		$this->nodes[] = $element;
 		return $element;
 	}
