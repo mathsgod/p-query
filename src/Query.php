@@ -196,7 +196,10 @@ class Query extends \ArrayObject
                 }
                 return $this;
             }
-            return $this[0]->getAttribute($name);
+            if (count($this)) {
+                return $this[0]->getAttribute($name);
+            }
+            return null;
         }
         foreach ($this as $node) {
             $node->setAttribute($name, $value);

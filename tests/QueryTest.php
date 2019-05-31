@@ -2,12 +2,26 @@
 declare (strict_types = 1);
 error_reporting(E_ALL && ~E_WARNING);
 use PHPUnit\Framework\TestCase;
+use P\Query;
 
 final class QueryTest extends TestCase
 {
     const HTML = <<<HTML
 <div class="container"><div class="hello">Hello</div><div class="goodbye">Goodbye</div></div>
 HTML;
+
+    public function test_href()
+    {
+        $html = file_get_contents(__DIR__ . "/html/no_href.html");
+        $p = p($html)->find("a");
+        $this->assertInstanceOf(Query::class, $p);
+        $this->assertNull($p->attr("href"));
+
+        $html = file_get_contents(__DIR__ . "/html/has_href.html");
+        $p = p($html)->find("a");
+        $this->assertInstanceOf(Query::class, $p);
+        $this->assertNotNull($p->attr("href"));
+    }
 
     public function testCreate()
     {
