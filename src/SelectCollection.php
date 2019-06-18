@@ -4,6 +4,13 @@ namespace P;
 class SelectCollection extends Query
 {
 
+	public function prepend($node): Query
+	{
+		$ret = parent::prepend($node);
+		$this->trigger("change");
+		return $ret;
+	}
+
 	public function optGroup($data, $getter)
 	{
 		foreach ($this as $select) {
@@ -20,7 +27,7 @@ class SelectCollection extends Query
 	{
 		foreach ($this as $select) {
 			foreach ($options as $v) {
-				$opt=p("<option>")[0];
+				$opt = p("<option>")[0];
 				$opt->value = $v;
 				$opt->textContent = $v;
 				$select->add($opt);
