@@ -28,7 +28,7 @@ class Query extends \ArrayObject
                 }
             } else {
                 $parser = new DOMParser();
-                foreach ($parser->parseFromString((string)$tag) as $node) {
+                foreach ($parser->parseFromString((string) $tag) as $node) {
                     $this[] = $node;
                 }
             }
@@ -96,7 +96,7 @@ class Query extends \ArrayObject
             $html = "";
             foreach ($this as $node) {
                 foreach ($node->childNodes as $child) {
-                    $html .= (string )$child;
+                    $html .= (string) $child;
                 }
             }
 
@@ -106,9 +106,9 @@ class Query extends \ArrayObject
         foreach ($this as $i => $node) {
             p($node)->empty();
             if ($html instanceof \Closure) {
-                $node->innerHTML = (string )$html($i);
+                $node->innerHTML = (string) $html($i);
             } else {
-                $node->innerHTML = (string )$html;
+                $node->innerHTML = (string) $html;
             }
         }
         return $this;
@@ -123,6 +123,7 @@ class Query extends \ArrayObject
                     $child->prependChild($n);
                 }
             }
+            $this->trigger("change");
             return $this;
         }
 
@@ -130,6 +131,7 @@ class Query extends \ArrayObject
             foreach ($this as $child) {
                 $child->prependChild($child->ownerDocument->importNode($node, true));
             }
+            $this->trigger("change");
             return $this;
         }
 
@@ -138,6 +140,7 @@ class Query extends \ArrayObject
                 $child->prependChild($child->ownerDocument->importNode($n, true));
             }
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -170,12 +173,14 @@ class Query extends \ArrayObject
                     $child->appendChild($n);
                 }
             }
+            $this->trigger("change");
             return $this;
         }
         if ($node instanceof DOMNode) {
             foreach ($this as $child) {
                 $child->appendChild($node);
             }
+            $this->trigger("change");
             return $this;
         }
 
@@ -184,6 +189,7 @@ class Query extends \ArrayObject
                 $child->appendChild($n);
             }
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -204,6 +210,7 @@ class Query extends \ArrayObject
         foreach ($this as $node) {
             $node->setAttribute($name, $value);
         }
+        $this->trigger("change");
         return $this;
     }
 
@@ -308,7 +315,7 @@ class Query extends \ArrayObject
     {
         $str = "";
         foreach ($this as $node) {
-            $str .= (string )$node;
+            $str .= (string) $node;
         }
         return $str;
     }
