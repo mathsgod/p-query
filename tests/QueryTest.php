@@ -1,6 +1,8 @@
 <?
-declare (strict_types = 1);
+
+declare(strict_types=1);
 error_reporting(E_ALL && ~E_WARNING);
+
 use PHPUnit\Framework\TestCase;
 use P\Query;
 
@@ -53,14 +55,14 @@ HTML;
     {
         $div = p("<div><span>a<p>b</p>c<p>d</p></span></div>");
         $div->find("p")->remove();
-        $this->assertEquals("<div><span>ac</span></div>", (string)$div);
+        $this->assertEquals("<div><span>ac</span></div>", (string) $div);
     }
 
     public function testEmpty()
     {
         $p = p(self::HTML);
         $p->empty();
-        $this->assertEquals('<div class="container"></div>', (string)$p[0]);
+        $this->assertEquals('<div class="container"></div>', (string) $p[0]);
     }
 
     public function testClosest()
@@ -91,32 +93,32 @@ HTML;
         $p = p("<button>test</button>");
         $i = p("<i class='fa fa-fw'></i>");
         $p->append($i);
-        $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
+        $this->assertEquals((string) $p[0], '<button>test<i class="fa fa-fw"></i></button>');
 
 
         $p = p("<button></button>");
 
         $p->append(' <span class="caret"></span>');
-        $this->assertEquals('<button> <span class="caret"></span></button>', (string)$p);
+        $this->assertEquals('<button> <span class="caret"></span></button>', (string) $p);
     }
     public function test_prepend()
     {
         $p = p("<button>test</button>");
         $i = p("<i class='fa fa-fw'></i>");
         $p->prepend($i);
-        $this->assertEquals((string)$p[0], '<button><i class="fa fa-fw"></i>test</button>');
+        $this->assertEquals((string) $p[0], '<button><i class="fa fa-fw"></i>test</button>');
     }
     public function test_appendTo()
     {
         $p = p("<button>test</button>");
         $i = p("<i class='fa fa-fw'></i>");
         $i->appendTo($p);
-        $this->assertEquals((string)$p[0], '<button>test<i class="fa fa-fw"></i></button>');
+        $this->assertEquals((string) $p[0], '<button>test<i class="fa fa-fw"></i></button>');
 
         $li = p("li")[0];
         p("a")->text("google")->appendTo($li);
 
-        $this->assertEquals('<li><a>google</a></li>', (string)$li);
+        $this->assertEquals('<li><a>google</a></li>', (string) $li);
     }
 
     public function test_prependTo()
@@ -124,7 +126,7 @@ HTML;
         $p = p("<button>test</button>");
         $i = p("<i class='fa fa-fw'></i>");
         $i->prependTo($p);
-        $this->assertEquals((string)$p[0], '<button><i class="fa fa-fw"></i>test</button>');
+        $this->assertEquals((string) $p[0], '<button><i class="fa fa-fw"></i>test</button>');
     }
 
     public function test_attr()
@@ -159,13 +161,13 @@ HTML;
     {
         $p = p('<div style="background-color:blue;"></div>');
         $p->removeAttr("style");
-        $this->assertEquals("<div></div>", (string)$p[0]);
+        $this->assertEquals("<div></div>", (string) $p[0]);
     }
 
     public function test_val()
     {
         $p = p("<select><option value='1'></option><option value='2' selected></option></select>");
-        $this->assertEquals("2", (string)$p->val());
+        $this->assertEquals("2", (string) $p->val());
 
         $p = p("<select multiple><option value='1' selected></option><option value='2' selected></option></select>");
 
@@ -189,12 +191,12 @@ HTML;
     public function test_prev()
     {
         $p = p("<div><span>abc</span><p></p></div>");
-        $this->assertEquals("<span>abc</span>", (string)$p->find("p")->prev()[0]);
+        $this->assertEquals("<span>abc</span>", (string) $p->find("p")->prev()[0]);
     }
     public function test_next()
     {
         $p = p("<div><span>abc</span><p>xyz</p></div>");
-        $this->assertEquals("<p>xyz</p>", (string)$p->find("span")->next()[0]);
+        $this->assertEquals("<p>xyz</p>", (string) $p->find("span")->next()[0]);
     }
 
     public function test_index()
@@ -221,5 +223,16 @@ HTML;
         });
 
         $p->trigger("change");
+    }
+
+    public function test_change()
+    {
+        $p = p("<div></div>");
+
+        $p->on("change", function ($e) {
+            $this->assertEquals("change", $e->type);
+        });
+
+        $p->attr("test", 1);
     }
 }
