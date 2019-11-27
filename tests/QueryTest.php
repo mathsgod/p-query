@@ -235,4 +235,19 @@ HTML;
 
         $p->attr("test", 1);
     }
+
+    public function test_attr_func()
+    {
+        $p = p("<div id='id1'></div>");
+        $p->attr("a", function () {
+            return "b";
+        });
+        $this->assertEquals("b", $p->attr("a"));
+
+        $p->attr("b", function () {
+            return $this->getAttribute("a");
+        });
+
+        $this->assertEquals("b", $p->attr("b"));
+    }
 }

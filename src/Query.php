@@ -208,7 +208,11 @@ class Query extends \ArrayObject
             return null;
         }
         foreach ($this as $node) {
-            $node->setAttribute($name, $value);
+            if ($value instanceof \Closure) {
+                $node->setAttribute($name, $value->call($node));
+            } else {
+                $node->setAttribute($name, $value);
+            }
         }
         $this->trigger("change");
         return $this;
