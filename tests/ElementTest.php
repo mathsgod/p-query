@@ -203,6 +203,7 @@ HTML;
     public function test_classList()
     {
         $div = p("<div class='c1 c2'>abc</div>")[0];
+        
         $div->classList->add("abc");
         $this->assertEquals('<div class="c1 c2 abc">abc</div>', (string)$div);
 
