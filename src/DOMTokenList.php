@@ -2,15 +2,16 @@
 
 namespace P;
 
-use DOMNode;
 
 class DOMTokenList implements \ArrayAccess
 {
+	private $element;
+	private $attribute_name;
 
-	private $node;
-	public function __construct(DOMNode $node)
+	public function __construct(Element $element, string $attribute_name)
 	{
-		$this->node = $node;
+		$this->element = $element;
+		$this->attribute_name = $attribute_name;
 	}
 
 	public function offsetSet($offset, $value)
@@ -45,10 +46,11 @@ class DOMTokenList implements \ArrayAccess
 
 	public function values()
 	{
-		if ($this->node->nodeValue) {
-			return explode(" ", $this->node->nodeValue);
+		$attribute = $this->element->getAttribute($this->attribute_name);
+		if ($attribute) {
+			return explode(" ", $attribute);
 		} else {
-			return [];
+			return  [];
 		}
 	}
 
@@ -57,14 +59,14 @@ class DOMTokenList implements \ArrayAccess
 		if ($name == "length")
 			return count($this->values());
 		if ($name == "value") {
-			return $this->node->nodeValue;
+			return  (string) $this->element->getAttribute($this->attribute_name);
 		}
 	}
 
 	public function __set($name, $value)
 	{
 		if ($name == "value") {
-			$this->node->nodeValue = $value;
+			$this->element->setAttribute($this->attribute_name, $value);
 		}
 	}
 

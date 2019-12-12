@@ -1,4 +1,5 @@
 <?php
+
 namespace P;
 
 use DOMNode;
@@ -7,12 +8,14 @@ use DOMNodeList;
 
 class Element extends \DOMElement
 {
+    public $classList = null;
     public $data = [];
     public $_events = [];
 
     public function __construct(string $name, string $value = "", string $uri = null)
     {
         parent::__construct($name, $value, $uri);
+        $this->classList = new DOMTokenList($this, "class");
         Document::Current()->appendChild($this);
     }
 
@@ -32,8 +35,9 @@ class Element extends \DOMElement
         $this->_events[$type] = $events;
     }
 
-    public function dispatchEvent(Event $event){
-        foreach($this->_events[$event->type] as $c){
+    public function dispatchEvent(Event $event)
+    {
+        foreach ($this->_events[$event->type] as $c) {
             $c($event);
         }
     }
@@ -104,7 +108,7 @@ class Element extends \DOMElement
         $this->parentNode->replaceChild($nodes, $this);
     }
 
-    public function querySelector(string $selector): ?DOMElement
+    public function querySelector(string $selector)
     {
         $nodelist = $this->querySelectorAll($selector);
         if ($nodelist->length) {
@@ -188,12 +192,6 @@ class Element extends \DOMElement
                     }
                 }
                 return $collection;
-                break;
-            case 'classList':
-                if (!$this->hasAttribute("class")) {
-                    $this->setAttribute("class", "");
-                }
-                return new DOMTokenList($this->attributes->getNamedItem("class"));
                 break;
             case 'style':
                 if (!$this->hasAttribute("style")) {

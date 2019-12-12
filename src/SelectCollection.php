@@ -4,6 +4,13 @@ namespace P;
 class SelectCollection extends Query
 {
 
+	public function prepend($node): Query
+	{
+		$ret = parent::prepend($node);
+		$this->trigger("change");
+		return $ret;
+	}
+
 	public function optGroup($data, $getter)
 	{
 		foreach ($this as $select) {
@@ -20,24 +27,26 @@ class SelectCollection extends Query
 	{
 		foreach ($this as $select) {
 			foreach ($options as $v) {
-				$opt = new HTMLOptionElement();
+				$opt = p("<option>")[0];
 				$opt->value = $v;
 				$opt->textContent = $v;
 				$select->add($opt);
 			}
-		}
 
-		$data_value = p($select)->data("value");
+			$data_value = json_decode($select->getAttribute("data-value"));
 
-		if ($data_value !== null) {
-			if (is_array($data_value)) {
-				foreach ($data_value as $v) {
-					$select->value = $v;
+			if ($data_value !== null) {
+				if (is_array($data_value)) {
+					foreach ($data_value as $v) {
+						$select->value = $v;
+					}
+				} else {
+					$select->value = $data_value;
 				}
-			} else {
-				$select->value = $data_value;
 			}
 		}
+
+
 		$this->trigger("change");
 		return $this;
 	}
@@ -48,8 +57,8 @@ class SelectCollection extends Query
 			if (!$value_member) {
 				$value_member = $select->getAttribute("data-field");
 			}
-			$data_value = $select->getAttribute("data-value");
-			
+			$data_value = json_decode($select->getAttribute("data-value"));
+
 			foreach ($datasource as $key => $o) {
 				$option = p("option");
 				if (is_object($o)) {
