@@ -12,6 +12,15 @@ final class QueryTest extends TestCase
 <div class="container"><div class="hello">Hello</div><div class="goodbye">Goodbye</div></div>
 HTML;
 
+
+
+    public function test_find()
+    {
+        $p = p("<table><tbody></tbody></table>");
+        $tbody = $p->find("tbody");
+        $this->assertEquals("<tbody></tbody>", (string) $tbody);
+    }
+
     public function test_href()
     {
         $html = file_get_contents(__DIR__ . "/html/no_href.html");
