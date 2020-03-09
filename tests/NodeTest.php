@@ -16,25 +16,32 @@ final class NodeTest extends TestCase
         $div = p("<div><span>abc<p>pp</p></span></div>");
         $p = $div->find("p");
         $this->assertTrue($div[0]->contains($p[0]));
-
     }
 
     public function test_textContent()
     {
-        $t = new P\Text("ABC");
+        $doc = new Document;
+        $t = $doc->createTextNode("ABC");
         $this->assertEquals('ABC', $t->textContent);
 
-        $e = new Element("div");
+        $doc = new Document;
+        $e = $doc->createElement("div");
         $e->innerHTML = "a<span>b</span>c";
         $this->assertEquals('abc', $e->textContent);
+
+
+        $e = $doc->createElement("div");
+        $e->textContent = "testing123";
+        $this->assertEquals('testing123', $e->textContent);
     }
 
     public function test_normalize()
     {
 
-        $wrapper = Document::createElement("div");
-        $wrapper->appendChild(Document::createTextNode("Part 1 "));
-        $wrapper->appendChild(Document::createTextNode("Part 2 "));
+        $doc = new Document;
+        $wrapper = $doc->createElement("div");
+        $wrapper->appendChild($doc->createTextNode(("Part 1 ")));
+        $wrapper->appendChild($doc->createTextNode(("Part 2 ")));
 
         $this->assertEquals('Part 1 ', $wrapper->childNodes[0]->textContent);
         $this->assertEquals('Part 2 ', $wrapper->childNodes[1]->textContent);
@@ -43,7 +50,4 @@ final class NodeTest extends TestCase
         $this->assertEquals(1, count($wrapper->childNodes));
         $this->assertEquals('Part 1 Part 2 ', $wrapper->childNodes[0]->textContent);
     }
-
-
-
 }
