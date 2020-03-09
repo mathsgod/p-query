@@ -26,6 +26,6 @@ jobs:
     # - name: Run test suite
     #   run: composer run-script test
     - name: test
-      run: vendor/bin/phpunit
+      run: vendor/bin/phpunit --bootstrap vendor/autoload.php tests
     
       
