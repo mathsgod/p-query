@@ -26,6 +26,6 @@
     ],
     "minimum-stability": "stable",
     "scripts": {
-        "test": "php ./vendor/phpunit/phpunit/phpunit tests"
+        "test": "vendor/bin/phpunit"
     }
 }
