@@ -1,4 +1,5 @@
-<?
+<?php
+
 namespace P;
 
 class InputCollection extends Query
@@ -8,46 +9,47 @@ class InputCollection extends Query
         foreach ($this as $node) {
             $node->setAttribute("required", $value);
         }
+        $this->trigger("change");
         return $this;
     }
-
     public function minlength($value)
     {
         foreach ($this as $node) {
-            $node->attributes["minlength"] = $value;
+            $node->setAttribute("minlength", $value);
         }
+        $this->trigger("change");
         return $this;
     }
-
     public function type($value)
     {
         foreach ($this as $node) {
-            $node->attributes["type"] = $value;
+            $node->setAttribute("type", $value);
         }
+        $this->trigger("change");
         return $this;
     }
-
     public function min($value)
     {
         foreach ($this as $node) {
-            $node->attributes["min"] = $value;
+            $node->setAttribute("min", $value);
         }
+        $this->trigger("change");
         return $this;
     }
-
     public function max($value)
     {
         foreach ($this as $node) {
-            $node->attributes["max"] = $value;
+            $node->setAttribute("max", $value);
         }
+        $this->trigger("change");
         return $this;
     }
-
     public function name($value)
     {
         foreach ($this as $node) {
-            $node->attributes["name"] = $value;
+            $node->attributes("name", $value);
         }
+        $this->trigger("change");
         return $this;
     }
 }

@@ -1,25 +1,24 @@
-<?
+<?php
 
 namespace P;
 
 class HTMLTableSectionElement extends HTMLElement
 {
-
     public function insertRow()
     {
-        $row = new HTMLTableRowElement();
+        $row = $this->ownerDocument->createElement("tr");
         $this->appendChild($row);
         return $row;
     }
-
     public function __get($name)
     {
-        if ($name == "rows") {
-            $collection = new HTMLCollection();
-            foreach ($this->children as $child) {
-                $collection[] = $child;
-            }
-            return $collection;
+        switch ($name) {
+            case "rows":
+                $collection = new HTMLCollection();
+                foreach ($this->childNodes as $node) {
+                    $collection[] = $node;
+                }
+                return $collection;
         }
         return parent::__get($name);
     }

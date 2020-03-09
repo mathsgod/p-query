@@ -1,6 +1,8 @@
 <?php
-namespace P;
-class DocumentFragment extends Node {
-}
 
-?>
+namespace P;
+
+use DOMDocumentFragment;
+class DocumentFragment extends DOMDocumentFragment
+{
+}

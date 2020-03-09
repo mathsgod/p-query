@@ -1,37 +1,19 @@
 <?php
+
 namespace P;
 
-class Text extends Node
+use DOMNode;
+class Text extends \DOMText
 {
-    public $data = "";
-
-    public function __construct($value = "")
+    public function contains(DOMNode $otherNode)
     {
-        $this->data = $value;
-        $this->nodeType = Node::TEXT_NODE;
-    }
-
-    public function __tostring()
-    {
-        // return $this-> htmlspecialchars((string)$value, ENT_COMPAT | ENT_HTML401| ENT_IGNORE)
-        return (string)$this->data;
-    }
-
-    public function __get($name)
-    {
-        if ($name == "wholeText") {
-            return $this->data;
-        } elseif ($name == "length") {
-            return strlen($this->data);
+        if ($this == $otherNode) {
+            return true;
         }
-        return parent::__get($name);
+        return false;
     }
-
-    public function appendData($data)
+    public function __toString()
     {
-        $this->data .= $data;
+        return $this->wholeText;
     }
-
-
-
 }

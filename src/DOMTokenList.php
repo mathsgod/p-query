@@ -2,64 +2,88 @@
 
 namespace P;
 
-class DOMTokenList implements \ArrayAccess {
-
-	protected $token = [];
-
-	public function offsetSet($offset, $value) {
-		if (is_null($offset)) {
-			$this->token[] = $value;
-		} else {
-			$this->token[$offset] = $value;
-		}
-	}
-
-	public function offsetExists($offset) {
-		return isset($this->token[$offset]);
-	}
-
-	public function offsetUnset($offset) {
-		unset($this->token[$offset]);
-	}
-
-	public function offsetGet($offset) {
-		return isset($this->token[$offset]) ? $this->token[$offset] : null;
-	}
-
-	public function values() {
-
-		return $this->token;
-	}
-
-	public function __get($name) {
-		if ($name == "length")
-			return count($this->token);
-	}
-
-	public function add($class) {
-		if (!in_array($class, $this->token)) {
-			$this[] = $class;
-		}
-	}
-
-	public function remove($class) {
-		if (($key = array_search($class, $this->token)) !== false) {
-			unset($this->token[$key]);
-		}
-	}
-
-	public function contains() {
-		return in_array($class, $this->token);
-	}
-
-	public function toggle($class) {
-		if ($this->contains($class)) {
-			$this->remove($class);
-		} else {
-			$this->add($class);
-		}
-
-	}
-
-
+class DOMTokenList implements \ArrayAccess
+{
+    private $element;
+    private $attribute_name;
+    public function __construct(Element $element, $attribute_name)
+    {
+        $this->element = $element;
+        $this->attribute_name = $attribute_name;
+    }
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $values = array_merge($this->values(), [$value]);
+            $this->value = implode(" ", $values);
+        } else {
+            $values = $this->values();
+            $values[$offset] = $value;
+            $this->value = implode(" ", $values);
+        }
+    }
+    public function offsetExists($offset)
+    {
+        return isset($this->values()[$offset]);
+    }
+    public function offsetUnset($offset)
+    {
+        $values = $this->values();
+        unset($values[$offset]);
+        $this->value = implode(" ", $values);
+    }
+    public function offsetGet($offset)
+    {
+        $values = $this->values();
+        return isset($values[$offset]) ? $values[$offset] : null;
+    }
+    public function values()
+    {
+        $attribute = $this->element->getAttribute($this->attribute_name);
+        if ($attribute) {
+            return explode(" ", $attribute);
+        } else {
+            return [];
+        }
+    }
+    public function __get($name)
+    {
+        if ($name == "length") {
+            return count($this->values());
+        }
+        if ($name == "value") {
+            return (string) $this->element->getAttribute($this->attribute_name);
+        }
+    }
+    public function __set($name, $value)
+    {
+        if ($name == "value") {
+            $this->element->setAttribute($this->attribute_name, $value);
+        }
+    }
+    public function add(...$values)
+    {
+        foreach ($values as $value) {
+            $this[] = $value;
+        }
+    }
+    public function remove(...$values)
+    {
+        $values = array_diff($this->values(), $values);
+        $this->value = implode(" ", $values);
+    }
+    public function contains($token)
+    {
+        return in_array($token, $this->values());
+    }
+    public function toggle($token)
+    {
+        if ($this->contains($token)) {
+            $this->remove($token);
+            return false;
+        } else {
+            $this->add($token);
+            return true;
+        }
+    }
 }

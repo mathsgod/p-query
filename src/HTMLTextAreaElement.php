@@ -1,71 +1,23 @@
 <?php
 
 namespace P;
-class HTMLTextAreaElement extends HTMLElement {
-    public $value;
-    public $rows;
-    public $cols;
 
-    public function __construct() {
-        parent::__construct("textarea");
+class HTMLTextAreaElement extends HTMLElement
+{
+    const ATTRIBUTES = ["autocomplete" => "string", "autofocus" => "string", "placeholder" => "string", "rows" => "int", "cols" => "int", "autofocus" => "bool", "name" => "string", "disabled" => "bool", "readOnly" => ["type" => "bool", "name" => "readonly"], "required" => "bool", "tabIndex" => "int", "dirName" => "string", "maxLength" => ["type" => "string", "name" => "maxlength"], "minLength" => ["type" => "string", "name" => "minlength"], "autocapitalize" => "string", "wrap" => "string"] + parent::ATTRIBUTES;
+    public function __construct($value = "", $uri = null)
+    {
+        parent::__construct("textarea", $value, $uri);
     }
-    public function __toString() {
-        if ($this->rows)$this->attributes["rows"] = $this->rows;
-        if ($this->cols)$this->attributes["cols"] = $this->cols;
-        $this->childNodes = array();
-        $this->appendChild(new Text($this->value));
-        return parent::__toString();
-    }
-
-    public function __set($name, $value) {
+    public function __get($name)
+    {
         switch ($name) {
-            case "autocomplete":
-            case "autofocus":
-            case "cols":
-            case "dirName":
-            case "disabled":
-            case "maxLength":
-            case "minLength":
-            case "name":
-            case "placeholder":
-            case "readOnly":
-            case "required":
-            case "rows":
-            case "wrap":
-            case "type":
-            case "defaultValue":
-            case "value":
-                $this->attributes[$name] = $value;
-                break;
-            default:
-                parent::__set($name, $value);
-        }
-    }
-
-    public function __get($name) {
-        switch ($name) {
-            case "autocomplete":
-            case "autofocus":
-            case "cols":
-            case "dirName":
-            case "disabled":
-            case "maxLength":
-            case "minLength":
-            case "name":
-            case "placeholder":
-            case "readOnly":
-            case "required":
-            case "rows":
-            case "wrap":
-            case "type":
-                return $this->attributes[$name];
-                break;
             case "textLength":
-                return strlen($this->value);
+                return strlen($this->nodeValue);
+            case "value":
+                return $this->nodeValue;
             default:
                 return parent::__get($name);
         }
     }
 }
-
-?>

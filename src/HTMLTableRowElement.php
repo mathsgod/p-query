@@ -1,40 +1,35 @@
 <?php
+
 namespace P;
 
 class HTMLTableRowElement extends HTMLElement
 {
-    public function __construct()
+    public function __construct($value = "", $uri = null)
     {
-        parent::__construct("tr");
+        parent::__construct("tr", $value, $uri);
     }
-
     public function insertCell($index = -1)
     {
         $children = $this->cells;
         $num_cell = $children->length;
-
         if ($index < -1 || $index > $num_cell) {
-            throw new DOMException("The value provided ($index) is outside the range [-1, $num_cell].");
+            throw new DOMException("The value provided ({$index}) is outside the range [-1, {$num_cell}].");
         }
-
-        $cell = new HTMLTableCellElement();
-        if ($num_cells == $index || $index == -1) {
+        $cell = $this->ownerDocument->createElement("td");
+        if ($num_cell == $index || $index == -1) {
             $this->appendChild($cell);
         } else {
             $this->insertBefore($cell, $children[$index]);
         }
-
         return $cell;
     }
-
     public function deleteCell($index = -1)
     {
         $children = $this->cells;
         $num_cells = $children->length;
         if ($index < -1 || $index >= $num_cells) {
-            throw new DOMException(" The value provided ($index) is outside the range [0, $num_cells).");
+            throw new DOMException(" The value provided ({$index}) is outside the range [0, {$num_cells}).");
         }
-
         if ($index == -1) {
             if ($num_cells == 0) {
                 return;
@@ -43,14 +38,13 @@ class HTMLTableRowElement extends HTMLElement
         }
         $children[$index]->remove();
     }
-
     public function __get($name)
     {
         switch ($name) {
             case "cells":
                 $collection = new HTMLCollection();
-                foreach ($this->children as $child) {
-                    $collection[] = $child;
+                foreach ($this->childNodes as $node) {
+                    $collection[] = $node;
                 }
                 return $collection;
                 break;

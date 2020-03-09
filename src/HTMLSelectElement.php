@@ -1,68 +1,57 @@
 <?php
+
 namespace P;
 
 class HTMLSelectElement extends HTMLElement
 {
-    public $required = false;
-    public $name = null;
-
-    public function __construct()
+    const ATTRIBUTES = ["autofocus" => "bool", "disabled" => "bool", "multiple" => "bool", "name" => "string", "required" => "bool", "size" => "int"] + parent::ATTRIBUTES;
+    public function __construct($value = "", $uri = null)
     {
-        parent::__construct("select");
+        parent::__construct("select", $value, $uri);
     }
-
     public function __set($name, $value)
     {
-        if ($name == "value") {
-            $options = [];
-            foreach ($this->childNodes as $node) {
-                if ($node instanceof HTMLOptionElement) {
-                    $options[] = $nodes;
-                }
-                if ($node->attributes["value"] == $value) {
-                    $node->selected = true;
-                } else {
-                    if (!$this->attributes["multiple"]) {
-                        $node->selected = false;
+        switch ($name) {
+            case "value":
+                foreach (p($this)->find("option") as $option) {
+                    if ($option->value == $value) {
+                        $option->selected = true;
+                    } else {
+                        if (!$this->hasAttribute("multiple")) {
+                            $option->select = false;
+                        }
                     }
                 }
-            }
-        } else {
-            parent::__set($name, $value);
+                return;
         }
+        parent::__set($name, $value);
     }
-
-    public function options($arrs)
+    public function __get($name)
     {
-        foreach ($arrs as $v) {
-            $item = new HTMLOptionElement($v, $v);
-            $this->add($item);
+        switch ($name) {
+            case "length":
+                return p($this)->find("option")->count();
+            case "options":
+                $options = new OptionCollection();
+                foreach (p($this)->find("option") as $option) {
+                    $options[] = $option;
+                }
+                return $options;
+            case "value":
+                $option = p($this)->find("option[selected]");
+                if ($option->count()) {
+                    return p($option[0])->val();
+                }
+                return;
+            case "name":
+                return $this->getAttribute("name");
         }
-        return;
+        return parent::__get($name);
     }
-
     public function add(HTMLOptionElement $item)
     {
         $this->appendChild($item);
     }
-
-    public function __toString()
-    {
-        if ($this->required) $this->attributes["request"] = $this->required;
-        if ($this->name) $this->attributes["name"] = $this->name;
-        /*        if ($this->value) {
-            foreach($this->childNodes as $node) {
-                if ($node->value == $this->value) {
-                    $node->selected = true;
-                } else {
-                    $node->selected = false;
-                }
-            }
-        }
-         */
-        return parent::__toString();
-    }
-
     public function item($index)
     {
         return $this->getElementsByTagName("option")[$index];

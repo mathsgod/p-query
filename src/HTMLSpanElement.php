@@ -1,8 +1,11 @@
 <?php
 
 namespace P;
-class HTMLSpanElement extends HTMLElement {
-	public function __construct()	{
-		parent::__construct("span");
-	}
+
+class HTMLSpanElement extends HTMLElement
+{
+    public function __construct($value = "", $uri = null)
+    {
+        parent::__construct("span", $value, $uri);
+    }
 }

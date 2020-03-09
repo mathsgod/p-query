@@ -2,309 +2,195 @@
 
 namespace P;
 
-class Element extends Node implements ParentNode, ChildNode
+use DOMNode;
+use DOMElement;
+use DOMNodeList;
+class Element extends \DOMElement
 {
-    const ClosedTag = ['input', 'hr', 'br', 'img', 'link', 'meta', 'base'];
-    public $attributes = [];
-    public $style = [];
-    public $classList;
-    public $tagName;
-    public $dataset;
-
-    public function __construct($name = null)
+    public $classList = null;
+    public $data = [];
+    public $_events = [];
+    public function __construct($name, $value = "", $uri = null)
     {
-        $this->tagName = $name;
-        $this->nodeType = Node::ELEMENT_NODE;
-        $this->dataset = new DOMStringMap($this);
-        $this->classList = new DOMTokenList;
+        parent::__construct($name, $value, $uri);
+        $this->classList = new DOMTokenList($this, "class");
+        Document::Current()->appendChild($this);
     }
-
-    //extra function
-    public function addClass($className)
+    public function addEventListener($type, callable $listener)
     {
-        foreach (explode(" ", $className) as $class) {
-            $this->classList->add($class);
-        }
-
-        return $this;
+        $this->_events[$type][] = $listener;
     }
-
-    public function attr($name, $value = null)
+    public function removeEventListener($type, callable $listener)
     {
-        if (func_num_args() == 1) {
-            if (is_array($name) || is_object($name)) {
-                foreach ($name as $k => $v) {
-                    $this->attr($k, $v);
-                }
-                return $this;
+        $events = [];
+        foreach ($this->_events[$type] as $event) {
+            if ($event !== $listener) {
+                $events[] = $event;
             }
-            return $this->attributes[$name];
         }
-
-        $this->attributes[$name] = $value;
-
-        return $this;
+        $this->_events[$type] = $events;
     }
-
-    //--
-
-    //Child Node
-    public function removes()
+    public function dispatchEvent(Event $event)
     {
-        if ($parentNode = $this->parentNode) {
-            $parentNode->removeChild($this);
+        foreach ($this->_events[$event->type] as $c) {
+            $c($event);
         }
     }
-
-    public function before($nodes)
+    public function contains(DOMNode $otherNode)
     {
-        if (!$this->parentNode) return;
-        if ($nodes instanceof Node) {
-            $this->parentNode->insertBefore($nodes, $this);
-        } else {
-            $this->parentNode->insertBefore(new Text($nodes), $this);
+        if ($this == $otherNode) {
+            return true;
         }
-    }
-
-    public function after($nodes)
-    {
-        if (!$this->parentNode) return;
-        if ($nodes instanceof Node) {
-            $this->parentNode->insertBefore($nodes, $this->nextSibling);
-        } else {
-            $this->parentNode->insertBefore(new Text($nodes), $this->nextSibling);
-        }
-    }
-
-    public function replaceWith($nodes)
-    {
-        if (!$this->parentNode) return;
-        if (!$nodes instanceof Node) {
-            $nodes = new Text($nodes);
-        }
-        $this->parentNode->replaceChild($nodes, $this);
-    }
-
-    public function setAttribute($name, $value)
-    {
-        $this->attributes[$name] = $value;
-    }
-
-    public function getAttribute($name)
-    {
-        return $this->attributes[$name];
-    }
-
-    public function hasAttributes()
-    {
-        return count($this->attributes) > 0;
-    }
-
-    public function hasAttribute($attName)
-    {
-        return isset($this->attributes[$attName]);
-    }
-
-    public function getElementsByTagName($tagName)
-    {
-        $tag = strtolower($tagName);
-        $nodes = [];
         foreach ($this->childNodes as $node) {
-            if (!$node instanceof Element) {
-                continue;
-            }
-            if (strtolower($node->tagName) == $tag) {
-                $nodes[] = $node;
-            }
-            foreach ($node->getElementsByTagName($tagName) as $n) {
-                $nodes[] = $n;
+            if ($node->contains($otherNode)) {
+                return true;
             }
         }
-
-        return $nodes;
+        return false;
     }
-
-    public function getElementsByClassName($names)
-    {
-        $nodes = [];
-        $names_arr = explode(" ", $names);
-        $count = count($names_arr);
-        foreach ($this->childNodes as $node) {
-            if (!$node instanceof Element) {
-                continue;
-            }
-            if (count(array_intersect($names_arr, $node->classList->values())) == $count) {
-                $nodes[] = $node;
-
-                foreach ($node->getElementsByClassName($names) as $n) {
-                    $nodes[] = $n;
-                }
-            }
-        }
-
-        return $nodes;
-    }
-
-    public function __get($name)
-    {
-        switch ($name) {
-            case "children":
-                $collection = new HTMLCollection();
-                foreach ($this->childNodes as $node) {
-                    if ($node instanceof Element) {
-                        $collection[] = $node;
-                    }
-                }
-                return $collection;
-                break;
-            case 'firstElementChild':
-                $children = $this->children;
-                if ($children->length) {
-                    return $children[0];
-                }
-                return null;
-                break;
-            case 'lastElementChild':
-                $children = $this->children;
-                if ($l = $children->length) {
-                    return $children[$l - 1];
-                }
-                return null;
-                break;
-            case 'nextElementSibling':
-                $e = $this->nextSibling;
-                while ($e && $e->nodeType !== 1) {
-                    $e = $e->nextSibling;
-                }
-                return $e;
-                break;
-        }
-
-        if ($name == "id") {
-            return $this->attributes["id"];
-        } elseif ($name == "outerHTML") {
-            return $this->__toString();
-        } elseif ($name == "innerText") {
-            $html = "";
-            foreach ($this->childNodes as $child) {
-                if ($child instanceof Text) {
-                    $html .= $child->wholeText;
-                } else {
-                    $html .= $child->innerText;
-                }
-            }
-            return $html;
-        } elseif ($name == "innerHTML") {
-            $html = "";
-
-            foreach ($this->childNodes as $child) {
-                if ($child instanceof Text) {
-                    if ($tagName == "script" || $tagName == "style") {
-                        $html .= (string )$child->wholeText;
-                    } else {
-                        $html .= htmlspecialchars($child->wholeText, ENT_COMPAT | ENT_HTML401 | ENT_IGNORE);
-                    }
-                } else {
-                    $html .= $child;
-                }
-            }
-            return $html;
-        }
-        return parent::__get($name);
-    }
-
-    public function __set($name, $value)
-    {
-
-        if ($name == "id") {
-            $this->attributes["id"] = $value;
-        } elseif ($name == "innerHTML") {
-            $this->childNodes = [];
-            $p = new DOMParser($value);
-            foreach ($p->nodes as $n) {
-                $this->appendChild($n);
-            }
-        } elseif ($name == "innerText") {
-            $this->childNodes = [];
-            $this->appendChild(new Text($value));
-        } else {
-            parent::__set($name, $value);
-        }
-    }
-
     public function __toString()
     {
-        $tagName = strtolower($this->tagName);
-
-        $attr = "";
-        foreach ($this->attributes as $n => $v) {
-            if ($v === false) {
-                continue;
-            }
-            if ($v === true || $v === null) {
-                $attr .= " $n";
-            } elseif (is_array($v)) {
-                $attr .= " $n=\"" . htmlspecialchars(json_encode($v, JSON_UNESCAPED_UNICODE)) . "\"";
-            } elseif (!is_object($v)) {
-                $attr .= " $n=\"" . htmlspecialchars($v) . "\"";
-            }
-        }
-
-        $css = "";
-        if (sizeof($this->style)) {
-            $css .= " style=\"";
-            foreach ($this->style as $n => $v) {
-                $css .= "$n:" . htmlspecialchars($v) . ";";
-            }
-            $css .= "\"";
-        }
-
-        $class = "";
-        if ($this->classList->length) {
-            $class .= " class=\"";
-            $class .= implode(" ", $this->classList->values());
-            $class .= "\"";
-        }
-
-        $tagName = strtolower($this->tagName);
-        if (in_array($tagName, self::ClosedTag)) {
-            return "<" . $tagName . $attr . $css . $class . "/>";
-        }
-
-        if ($tagName == "!doctype") {
-            return "<" . $tagName . $attr . $css . $class . ">";
-        } else {
-            return "<" . $tagName . $attr . $css . $class . ">" . $this->innerHTML . "</" . $tagName . ">";
-        }
+        return $this->outerHTML;
     }
-
-
     public function append($nodes)
     {
-        if ($nodes instanceof Node) {
+        if ($nodes instanceof DOMNode) {
             $this->appendChild($nodes);
         } else {
             $this->appendChild(new Text($nodes));
         }
     }
-
     public function prepend($nodes)
     {
-        if ($nodes instanceof Node) {
+        if ($nodes instanceof DOMNode) {
             $this->prependChild($nodes);
         } else {
             $this->prependChild(new Text($nodes));
         }
     }
-
-    public function __call($name, $args)
+    public function before($nodes)
     {
-        $result = call_user_func_array([p($this), $name], $args);
-        switch ($name) {
-            case "find":
-                return $result;
+        if (!$this->parentNode) {
+            return;
         }
-
-        return $this;
+        if ($nodes instanceof DOMNode) {
+            $this->parentNode->insertBefore($nodes, $this);
+        } else {
+            $this->parentNode->insertBefore(new Text($nodes), $this);
+        }
+    }
+    public function after($nodes)
+    {
+        if (!$this->parentNode) {
+            return;
+        }
+        if ($nodes instanceof DOMNode) {
+            $this->parentNode->insertBefore($nodes, $this->nextSibling);
+        } else {
+            $this->parentNode->insertBefore(new Text($nodes), $this->nextSibling);
+        }
+    }
+    public function replaceWith($nodes)
+    {
+        if (!$this->parentNode) {
+            return;
+        }
+        if (!$nodes instanceof DOMNode) {
+            $nodes = new Text($nodes);
+        }
+        $this->parentNode->replaceChild($nodes, $this);
+    }
+    public function querySelector($selector)
+    {
+        $nodelist = $this->querySelectorAll($selector);
+        if ($nodelist->length) {
+            return $nodelist->item(0);
+        }
+        return null;
+    }
+    public function querySelectorAll($selector)
+    {
+        $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
+        $expression = $converter->toXPath($selector);
+        $xpath = new \DOMXPath($this->ownerDocument);
+        return $xpath->evaluate($expression, $this);
+    }
+    public function matches($selectorString)
+    {
+        $doc = new Document();
+        $doc->appendChild($doc->importNode($this));
+        $matches = $doc->querySelectorAll($selectorString);
+        return $matches->length == 1;
+    }
+    public function remove()
+    {
+        if ($this->parentNode) {
+            $this->parentNode->removeChild($this);
+        }
+    }
+    public function prependChild(DOMNode $newnode)
+    {
+        $firstChild = $this->firstChild;
+        return $this->insertBefore($newnode, $firstChild);
+    }
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case "innerHTML":
+                while ($this->hasChildNodes()) {
+                    $this->removeChild($this->firstChild);
+                }
+                $p = new DOMParser();
+                foreach ($p->parseFromString($value) as $n) {
+                    parent::appendChild($this->ownerDocument->importNode($n, true));
+                }
+                return;
+                break;
+        }
+        $this->{$name} = $value;
+    }
+    public function __get($name)
+    {
+        switch ($name) {
+            case "innerHTML":
+                $innerHTML = '';
+                foreach ($this->childNodes as $child) {
+                    if ($child instanceof DOMElement) {
+                        $innerHTML .= $child->outerHTML;
+                    } else {
+                        $innerHTML .= $child->ownerDocument->saveHTML($child);
+                    }
+                }
+                return $innerHTML;
+            case "outerHTML":
+                return $this->ownerDocument->saveHTML($this);
+                break;
+            case 'children':
+                $collection = new HTMLCollection();
+                foreach ($this->childNodes as $child) {
+                    if ($child instanceof \DOMElement) {
+                        $collection[] = $child;
+                    }
+                }
+                return $collection;
+                break;
+            case 'style':
+                if (!$this->hasAttribute("style")) {
+                    $this->setAttribute("style", "");
+                }
+                return new CSSStyleDeclaration($this->attributes->getNamedItem("style"));
+                break;
+        }
+    }
+    public function setAttribute($name, $value = null)
+    {
+        if ($value === true || func_num_args() == 1) {
+            $this->removeAttribute($name);
+            $this->appendChild($this->ownerDocument->createAttribute($name));
+        } elseif ($value === false) {
+            $this->removeAttribute($name);
+        } else {
+            parent::setAttribute($name, $value);
+        }
     }
 }

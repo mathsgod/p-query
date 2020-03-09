@@ -1,11 +1,7 @@
 <?php
+
 namespace P;
-class NodeList {
 
-	public function item(){
-
-	}
-
+class NodeList extends \DOMNodeList
+{
 }
-
-?>

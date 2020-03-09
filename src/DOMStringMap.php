@@ -1,4 +1,5 @@
 <?php
+
 namespace P;
 
 class DOMStringMap
@@ -6,24 +7,20 @@ class DOMStringMap
     private $element;
     public function __construct(Element &$e)
     {
-        $this->element=$e;
+        $this->element = $e;
     }
-
     public function __set($name, $value)
     {
-       $name=preg_replace_callback("/[A-Z]+/", function ($a) {
-            return "-"  .strtolower($a[0]);
+        $name = preg_replace_callback("/[A-Z]+/", function ($a) {
+            return "-" . strtolower($a[0]);
         }, $name);
-
-        $this->element->attributes["data-".$name]=$value;
+        $this->element->setAttribute("data-" . $name, $value);
     }
-
     public function __get($name)
     {
-        $name=preg_replace_callback("/[A-Z]+/", function ($a) {
-            return "-"  .strtolower($a[0]);
+        $name = preg_replace_callback("/[A-Z]+/", function ($a) {
+            return "-" . strtolower($a[0]);
         }, $name);
-
-         return $this->element->attributes["data-".$name];
+        return $this->element->getAttribute("data-" . $name);
     }
 }
