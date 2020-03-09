@@ -26,6 +26,6 @@
     ],
     "minimum-stability": "stable",
     "scripts": {
-        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests"
+        "test": "vendor/bin/phpunit tests"
     }
 }
