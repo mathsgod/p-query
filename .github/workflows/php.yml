@@ -25,3 +25,7 @@ jobs:
 
     # - name: Run test suite
     #   run: composer run-script test
+    - name: test
+      run: bin/phpunit
+    
+      
