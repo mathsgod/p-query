@@ -1,3 +1,5 @@
+![LICENSE](https://img.shields.io/github/license/mathsgod/p-query)
+
 ![PHP Composer](https://github.com/mathsgod/p-query/workflows/PHP%20Composer/badge.svg)
 
 ## 2.0.0
