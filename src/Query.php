@@ -9,12 +9,12 @@ class Query extends \ArrayObject
 {
     public static function _($q)
     {
-        return new Query($q);
+        return new self($q);
     }
 
     public static function ParseFile($file)
     {
-        return self::Parse(file_get_contents($file));
+        return p(file_get_contents($file));
     }
 
     public function __construct($tag = null)
@@ -34,7 +34,7 @@ class Query extends \ArrayObject
             }
         } elseif ($tag) {
             if ($tag[0] == "<") {
-                foreach (self::parseHTML($tag) as $node) {
+                foreach (self::ParseHTML($tag) as $node) {
                     $this[] = $node;
                 }
             } else {
@@ -74,7 +74,7 @@ class Query extends \ArrayObject
 
     public function last(): self
     {
-        $q = new Query();
+        $q = new self();
         if (count($this)) {
             $q[] = $this[$this->size() - 1];
         }
@@ -83,7 +83,7 @@ class Query extends \ArrayObject
 
     public function first(): self
     {
-        $q = new Query();
+        $q = new self();
         if (count($this)) {
             $q[] = $this[0];
         }
@@ -169,7 +169,7 @@ class Query extends \ArrayObject
     {
         if (is_string($node)) {
             foreach ($this as $child) {
-                foreach (self::parseHTML($node) as $n) {
+                foreach (self::ParseHTML($node) as $n) {
                     $child->appendChild($n);
                 }
             }
@@ -261,7 +261,7 @@ class Query extends \ArrayObject
 
     public function closest($selector)
     {
-        $q = new Query();
+        $q = new self();
         foreach ($this as $node) {
             while ($node = $node->parentNode) {
                 if ($node->matches($selector)) {
@@ -326,7 +326,7 @@ class Query extends \ArrayObject
 
     public function contents(): self
     {
-        $q = new Query();
+        $q = new self();
         foreach ($this as $node) {
             foreach ($node->childNodes as $child) {
                 $q[] = $child;
@@ -337,14 +337,14 @@ class Query extends \ArrayObject
 
     public function children($selector = null): self
     {
-        $q = new Query();
+        $q = new self();
         $q->selector = $selector;
 
 
         foreach ($this as $node) {
             if ($selector) {
                 foreach ($node->childNodes as $child) {
-                    if ($child instanceof DOMElement) {
+                    if ($child instanceof Element) {
                         if ($child->matches($selector)) {
                             $q[] = $child;
                         }
@@ -387,7 +387,7 @@ class Query extends \ArrayObject
 
     public function find($selector)
     {
-        $q = new Query();
+        $q = new self();
 
         $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
         $expression = $converter->toXPath($selector);
@@ -517,7 +517,7 @@ class Query extends \ArrayObject
 
     public function filter($selector): self
     {
-        $q = new Query();
+        $q = new self();
         foreach ($this as $node) {
             if ($selector instanceof \Closure) {
                 if ($selector($node)) {
@@ -532,7 +532,7 @@ class Query extends \ArrayObject
 
     public function parent(): self
     {
-        $q = new Query();
+        $q = new self();
         foreach ($this as $node) {
             if ($parentNode = $node->parentNode) {
                 $q[] = $parentNode;
@@ -592,7 +592,7 @@ class Query extends \ArrayObject
 
     public function prev(): self
     {
-        $q = new Query();
+        $q = new self();
         foreach ($this as $node) {
             $q[] = $node->previousSibling;
         }
@@ -601,7 +601,7 @@ class Query extends \ArrayObject
 
     public function next(): self
     {
-        $q = new Query();
+        $q = new self();
         foreach ($this as $node) {
             $q[] = $node->nextSibling;
         }
@@ -626,7 +626,7 @@ class Query extends \ArrayObject
         return $index;
     }
 
-    public static function parseHTML($str)
+    protected static function ParseHTML($str)
     {
         $parser = new DOMParser();
         return $parser->parseFromString($str);
