@@ -4,13 +4,10 @@
 
 
 ## Introduction
-___
 PQuery is a PHP library used to control html string by using jQuery liked method.
 
 
 ## Example
-___
-
 ```php
 require_once("vendor/autoload.php");
 
