@@ -1,6 +1,6 @@
 {
     "name": "mathsgod/p-query",
-    "description": "Raymond php html library",
+    "description": "Using jQuery liked method to parse html by using php",
     "autoload": {
         "psr-4": {
             "P\\": "src/"
