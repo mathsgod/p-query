@@ -1,3 +1,8 @@
+![LICENSE](https://img.shields.io/github/license/mathsgod/p-query)
+
+![PHP Composer](https://github.com/mathsgod/p-query/workflows/PHP%20Composer/badge.svg)
+
+
 ## Introduction
 ___
 PQuery is a PHP library used to control html string by using jQuery liked method.
@@ -61,4 +66,5 @@ echo $p; /*output
 
 
 
-
+___
+created by Raymond Chong
