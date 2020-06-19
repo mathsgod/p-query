@@ -1,4 +1,4 @@
-<?
+<?php
 namespace P;
 
 class HTMLDivElement extends HTMLElement

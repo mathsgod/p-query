@@ -1,4 +1,4 @@
-<?
+<?php
 namespace P;
 
 class HTMLOptGroupElement extends HTMLElement

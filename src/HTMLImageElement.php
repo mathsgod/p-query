@@ -1,4 +1,4 @@
-<?
+<?php
 namespace P;
 
 class HTMLImageElement extends HTMLElement
