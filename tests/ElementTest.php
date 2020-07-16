@@ -21,13 +21,13 @@ HTML;
         $this->doc = Document::Current();
     }
 
-    /* public function test_style()
+    public function test_style()
     {
         $doc = new Document();
         $div = $doc->createElement("div", "hello");
-        $div->style->backgroundColor="red";
-
-    } */
+        $div->style->backgroundColor = "red";
+        $this->assertEquals('<div style="background-color: red">hello</div>', (string)$div);
+    }
 
     public function test_setAttribute()
     {
