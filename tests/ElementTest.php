@@ -1,6 +1,8 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 error_reporting(E_ALL && ~E_WARNING);
+
 use PHPUnit\Framework\TestCase;
 use P\Element;
 use P\Document;
@@ -17,6 +19,28 @@ HTML;
     {
         parent::__construct();
         $this->doc = Document::Current();
+    }
+
+    /* public function test_style()
+    {
+        $doc = new Document();
+        $div = $doc->createElement("div", "hello");
+        $div->style->backgroundColor="red";
+
+    } */
+
+    public function test_setAttribute()
+    {
+        $doc = new Document();
+        $div = $doc->createElement("div", "hello");
+        $div->setAttribute("a1", "abc");
+        $this->assertEquals('<div a1="abc">hello</div>', (string)$div);
+
+
+        $doc = new Document();
+        $div = $doc->createElement("div", "hello");
+        $div->setAttribute("a1", "");
+        $this->assertEquals('<div a1>hello</div>', (string)$div);
     }
 
     public function test_element_encoding()
@@ -203,7 +227,7 @@ HTML;
     public function test_classList()
     {
         $div = p("<div class='c1 c2'>abc</div>")[0];
-        
+
         $div->classList->add("abc");
         $this->assertEquals('<div class="c1 c2 abc">abc</div>', (string)$div);
 

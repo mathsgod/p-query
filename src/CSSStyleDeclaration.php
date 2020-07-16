@@ -1,6 +1,10 @@
 <?php
 namespace P;
 use DOMNode;
+
+/**
+ * @property string $backgroundColor
+ */
 class CSSStyleDeclaration
 {
     private $node;

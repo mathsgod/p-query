@@ -6,6 +6,9 @@ use DOMNode;
 use DOMElement;
 use DOMNodeList;
 
+/**
+ * @property CSSStyleDeclaration $style
+ */
 class Element extends \DOMElement
 {
     public $classList = null;
@@ -202,9 +205,9 @@ class Element extends \DOMElement
         }
     }
 
-    public function setAttribute($name, $value = null)
+    public function setAttribute($name, $value)
     {
-        if ($value === true || func_num_args() == 1) {
+        if ($value === true || $value === "" || $value === null) {
             $this->removeAttribute($name);
             $this->appendChild($this->ownerDocument->createAttribute($name));
         } elseif ($value === false) {
