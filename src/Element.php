@@ -216,4 +216,14 @@ class Element extends \DOMElement
             parent::setAttribute($name, $value);
         }
     }
+
+    public function closest(string $selector)
+    {
+        $el = $this;
+        do {
+            if ($el->matches($selector)) return $el;
+            $el = $el->parentNode;
+        } while ($el !== null);
+        return null;
+    }
 }

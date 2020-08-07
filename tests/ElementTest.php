@@ -21,6 +21,17 @@ HTML;
         $this->doc = Document::Current();
     }
 
+    public function test_closest()
+    {
+        $e = p("<div><span id='span1'>abc</span></div>");
+
+        $span = $e->find("#span1")[0];
+
+        $this->assertEquals($e[0], $span->closest("div"));
+
+        $this->assertNull($span->closest('body'));
+    }
+
     public function test_style()
     {
         $doc = new Document();
