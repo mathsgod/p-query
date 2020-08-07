@@ -263,11 +263,9 @@ class Query extends \ArrayObject
     {
         $q = new self();
         foreach ($this as $node) {
-            while ($node = $node->parentNode) {
-                if ($node->matches($selector)) {
-                    $q[] = $node;
-                    break;
-                }
+            $n = $node->closest($selector);
+            if ($n) {
+                $q[] = $n;
             }
         }
         return $q;
