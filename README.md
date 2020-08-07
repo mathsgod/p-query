@@ -37,7 +37,7 @@ echo $p; /*output
 - after
 - before
 - css
-- closet
+- closest
 - data
 - addClass
 - text
