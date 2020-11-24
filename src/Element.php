@@ -223,6 +223,7 @@ class Element extends \DOMElement
         do {
             if ($el->matches($selector)) return $el;
             $el = $el->parentNode;
+            if ($el instanceof Document) return null;
         } while ($el !== null);
         return null;
     }
