@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-error_reporting(E_ALL && ~E_WARNING);
+error_reporting(E_ALL & ~E_WARNING);
 
 use P\CustomEvent;
 use PHPUnit\Framework\TestCase;

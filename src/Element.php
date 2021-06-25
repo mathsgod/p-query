@@ -9,7 +9,7 @@ use DOMNodeList;
 /**
  * @property CSSStyleDeclaration $style
  */
-class Element extends \DOMElement
+class Element extends DOMElement
 {
     public $classList = null;
     public $data = [];
@@ -63,54 +63,6 @@ class Element extends \DOMElement
         return $this->outerHTML;
     }
 
-    public function append($nodes)
-    {
-        if ($nodes instanceof DOMNode) {
-            $this->appendChild($nodes);
-        } else {
-            $this->appendChild(new Text($nodes));
-        }
-    }
-
-    public function prepend($nodes)
-    {
-        if ($nodes instanceof DOMNode) {
-            $this->prependChild($nodes);
-        } else {
-            $this->prependChild(new Text($nodes));
-        }
-    }
-
-    public function before($nodes)
-    {
-        if (!$this->parentNode) return;
-        if ($nodes instanceof DOMNode) {
-            $this->parentNode->insertBefore($nodes, $this);
-        } else {
-            $this->parentNode->insertBefore(new Text($nodes), $this);
-        }
-    }
-
-    public function after($nodes)
-    {
-        if (!$this->parentNode) return;
-        if ($nodes instanceof DOMNode) {
-            $this->parentNode->insertBefore($nodes, $this->nextSibling);
-        } else {
-            $this->parentNode->insertBefore(new Text($nodes), $this->nextSibling);
-        }
-    }
-
-
-    public function replaceWith($nodes)
-    {
-        if (!$this->parentNode) return;
-        if (!$nodes instanceof DOMNode) {
-            $nodes = new Text($nodes);
-        }
-        $this->parentNode->replaceChild($nodes, $this);
-    }
-
     public function querySelector(string $selector)
     {
         $nodelist = $this->querySelectorAll($selector);
@@ -137,12 +89,6 @@ class Element extends \DOMElement
         return  $matches->length == 1;
     }
 
-    public function remove()
-    {
-        if ($this->parentNode) {
-            $this->parentNode->removeChild($this);
-        }
-    }
 
     public function prependChild(DOMNode $newnode): DOMNode
     {

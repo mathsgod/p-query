@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-error_reporting(E_ALL && ~E_WARNING);
+error_reporting(E_ALL & ~E_WARNING);
 
 use PHPUnit\Framework\TestCase;
 use P\Query;
@@ -150,14 +150,14 @@ HTML;
     {
         $p = p('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->after("<p>Test</p>");
-        $this->assertEquals('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div><p>Test</p></div>', str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div><p>Test</p></div>', str_replace("\n", "", (string)$p));
     }
 
     public function test_before()
     {
         $p = p('<div class="container"><h2>Greetings</h2><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->before("<p>Test</p>");
-        $this->assertEquals('<div class="container"><h2>Greetings</h2><p>Test</p><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div></div>', str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><h2>Greetings</h2><p>Test</p><div class="inner">Hello</div><p>Test</p><div class="inner">Goodbye</div></div>', str_replace("\n", "", (string)$p));
     }
 
     public function test_css()
@@ -187,14 +187,14 @@ HTML;
     {
         $p = p('<div class="container"><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->wrap("<div class='new'></div>");
-        $this->assertEquals('<div class="container"><div class="new"><div class="inner">Hello</div></div><div class="new"><div class="inner">Goodbye</div></div></div>', str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><div class="new"><div class="inner">Hello</div></div><div class="new"><div class="inner">Goodbye</div></div></div>', str_replace("\n", "", (string)$p));
     }
 
     public function test_wrapinner()
     {
         $p = p('<div class="container"><div class="inner">Hello</div><div class="inner">Goodbye</div></div>');
         $p->find(".inner")->wrapInner("<div class='new'></div>");
-        $this->assertEquals('<div class="container"><div class="inner"><div class="new">Hello</div></div><div class="inner"><div class="new">Goodbye</div></div></div>', str_replace("\n", "", $p));
+        $this->assertEquals('<div class="container"><div class="inner"><div class="new">Hello</div></div><div class="inner"><div class="new">Goodbye</div></div></div>', str_replace("\n", "", (string)$p));
     }
 
     public function test_prev()
