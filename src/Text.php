@@ -5,6 +5,12 @@ use \DOMNode;
 
 class Text extends \DOMText
 {
+    public function __construct(string $data = "")
+    {
+        parent::__construct($data);
+        Document::Current()->appendChild($this);
+    }
+    
     public function contains(DOMNode $otherNode): bool
     {
         if ($this == $otherNode) {

@@ -63,10 +63,6 @@ class Element extends DOMElement
         return $this->outerHTML;
     }
 
-    public function append(...$nodes):void
-    {
-        
-    }
 
     public function querySelector(string $selector)
     {
