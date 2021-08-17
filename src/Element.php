@@ -8,6 +8,9 @@ use DOMNodeList;
 
 /**
  * @property CSSStyleDeclaration $style
+ * @property string $innerHTML The Element property innerHTML gets or sets the HTML markup contained within the element.
+ * @property string $outerHTML
+ * @property HTMLCollection $children
  */
 class Element extends DOMElement
 {
