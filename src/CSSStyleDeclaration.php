@@ -11,6 +11,7 @@ use IteratorAggregate;
  * @property string $backgroundImage
  * @property string $color
  * @property string $cssText
+ * @property-read string $length
  */
 
 class CSSStyleDeclaration
@@ -20,6 +21,17 @@ class CSSStyleDeclaration
     public function __construct(DOMNode $node)
     {
         $this->node = $node;
+    }
+
+    public function item(int $index): string
+    {
+        $values = [];
+        foreach (explode(";", $this->node->nodeValue) as $v) {
+            if (!$v) continue;
+            list($a, $b) = explode(":", $v);
+            $values[] = trim($a);
+        }
+        return $values[$index] ?? "";
     }
 
     public function removeProperty(string $property)
@@ -69,6 +81,9 @@ class CSSStyleDeclaration
         switch ($name) {
             case "cssText":
                 return $this->node->nodeValue;
+                break;
+            case "length":
+                return count(explode(";", $this->node->nodeValue));
                 break;
         }
 

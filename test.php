@@ -13,6 +13,8 @@ $div = new HTMLDivElement();
 $div->style->backgroundColor = "red";
 $div->style->color = "blue";
 
+echo $div->style->length;
+die();
 $div->style->removeProperty("background-color");
 echo $div->style->getPropertyValue("color");
 
