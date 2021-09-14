@@ -11,17 +11,16 @@ use DOMNodeList;
  * @property string $innerHTML The Element property innerHTML gets or sets the HTML markup contained within the element.
  * @property string $outerHTML
  * @property HTMLCollection $children
+ * @property-read DOMTokenList $classList
  */
 class Element extends DOMElement
 {
-    public $classList = null;
-    public $data = [];
     public $_events = [];
+    public $_data = [];
 
     public function __construct(string $name, string $value = "", string $uri = null)
     {
         parent::__construct($name, $value, $uri);
-        $this->classList = new DOMTokenList($this, "class");
         Document::Current()->appendChild($this);
     }
 
@@ -134,6 +133,9 @@ class Element extends DOMElement
     public function __get($name)
     {
         switch ($name) {
+            case "classList":
+                return new DOMTokenList($this, "class");
+                break;
             case "innerHTML":
                 $innerHTML = '';
                 foreach ($this->childNodes as $child) {

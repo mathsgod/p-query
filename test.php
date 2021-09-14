@@ -10,6 +10,7 @@ error_reporting(E_ALL && ~E_NOTICE);
 require_once("vendor/autoload.php");
 
 $div = new HTMLDivElement();
+//$div->classList
 $div->style->backgroundColor = "red";
 $div->style->color = "blue";
 

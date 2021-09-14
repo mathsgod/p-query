@@ -274,11 +274,11 @@ class Query extends \ArrayObject
     public function data(string $key, $value = null)
     {
         if (func_num_args() == 1) {
-            return $this[0]->data[$key];
+            return $this[0]->_data[$key];
         }
 
         foreach ($this as $node) {
-            $node->data[$key] = $value;
+            $node->_data[$key] = $value;
         }
         return $this;
     }
