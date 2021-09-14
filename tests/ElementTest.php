@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use P\Element;
 use P\Document;
 use P\Event;
+use P\HTMLInputElement;
 
 final class ElementTest extends TestCase
 {
@@ -19,6 +20,15 @@ HTML;
     {
         parent::__construct();
         $this->doc = Document::Current();
+    }
+
+    public function test_toggleAttribute()
+    {
+        $input = new HTMLInputElement();
+        $input->toggleAttribute("disabled");
+        $this->assertTrue($input->hasAttribute("disabled"));
+        $input->toggleAttribute("disabled");
+        $this->assertFalse($input->hasAttribute("disabled"));
     }
 
     public function test_closest()

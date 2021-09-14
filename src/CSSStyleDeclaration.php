@@ -2,7 +2,9 @@
 
 namespace P;
 
+use ArrayIterator;
 use DOMNode;
+use IteratorAggregate;
 
 /**
  * @property string $backgroundColor
@@ -15,9 +17,22 @@ class CSSStyleDeclaration
 {
     private $node;
 
-     public function __construct(DOMNode $node)
+    public function __construct(DOMNode $node)
     {
         $this->node = $node;
+    }
+
+    public function removeProperty(string $property)
+    {
+        $old_value = $this->__get($property);
+        $this->__set($property, null);
+
+        return $old_value;
+    }
+
+    public function getPropertyValue(string $property): string
+    {
+        return $this->__get($property) ?? "";
     }
 
     public function __set($name, $value)
@@ -30,10 +45,15 @@ class CSSStyleDeclaration
         foreach (explode(";", $this->node->nodeValue) as $v) {
             if (!$v) continue;
             list($a, $b) = explode(":", $v);
-            $values[$a] = trim($b);
+            $values[trim($a)] = trim($b);
         }
 
-        $values[$name] = $value;
+
+        if (is_null($value)) {
+            unset($values[$name]);
+        } else {
+            $values[$name] = $value;
+        }
 
         $str = [];
         foreach ($values as $n => $v) {

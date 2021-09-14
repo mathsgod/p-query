@@ -10,7 +10,17 @@ error_reporting(E_ALL && ~E_NOTICE);
 require_once("vendor/autoload.php");
 
 $div = new HTMLDivElement();
-$div->innerHTML = "<div data-a='1' data-b='2' data-x-y='z'></div>";
+$div->style->backgroundColor = "red";
+$div->style->color = "blue";
+
+$div->style->removeProperty("background-color");
+echo $div->style->getPropertyValue("color");
+
+
+
+die();
+
+
 
 
 $child = $div->firstChild;

@@ -1,8 +1,13 @@
 <?php
+
 namespace P;
 
+/**
+ * @property-read DOMStringMap $dataset
+ */
 class HTMLElement extends Element
 {
+
     const ATTRIBUTES = [
         "accessKey" => ["type" => "string", "name" => "accesskey"],
         "contentEditable" => ["type" => "string", "name" => "contenteditable"],
@@ -48,6 +53,10 @@ class HTMLElement extends Element
     public function __get($name)
     {
         switch ($name) {
+            case "dataset":
+                $map = new DOMStringMap($this);
+                return $map;
+                break;
             case 'innerText':
                 return $this->textContent;
                 break;
