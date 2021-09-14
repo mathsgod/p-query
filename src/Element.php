@@ -25,6 +25,17 @@ class Element extends DOMElement
         Document::Current()->appendChild($this);
     }
 
+    public function toggleAttribute(string $name)
+    {
+        if ($this->hasAttribute($name)) {
+            $this->removeAttribute($name);
+            return false;
+        } else {
+            $this->setAttribute($name, true);
+            return true;
+        }
+    }
+
     public function addEventListener(string $type, callable $listener)
     {
         $this->_events[$type][] = $listener;
@@ -116,7 +127,6 @@ class Element extends DOMElement
                 return;
                 break;
         }
-
 
         $this->$name = $value;
     }
