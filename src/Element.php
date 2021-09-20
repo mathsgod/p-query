@@ -16,7 +16,7 @@ use DOMNodeList;
 class Element extends DOMElement
 {
     public $_events = [];
-    public $_data = [];
+    public $__data = [];
 
     public function __construct(string $name, string $value = "", string $uri = null)
     {
