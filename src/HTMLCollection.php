@@ -1,8 +1,14 @@
 <?php
+
 namespace P;
 
 use ArrayObject;
 
+/**
+ * 
+ * @property int $length Returns the number of items in the collection.
+ * 
+ */
 class HTMLCollection extends ArrayObject
 {
     public function __get($name)
@@ -10,8 +16,5 @@ class HTMLCollection extends ArrayObject
         if ($name == "length") {
             return $this->count();
         }
-
-        return parent::__get($name);
     }
-
 }
