@@ -10,7 +10,7 @@ use DOMNodeList;
  * @property CSSStyleDeclaration $style
  * @property string $innerHTML The Element property innerHTML gets or sets the HTML markup contained within the element.
  * @property string $outerHTML
- * @property HTMLCollection $children
+ * @property HTMLCollection<Element> $children
  * @property-read DOMTokenList $classList
  */
 class Element extends DOMElement
