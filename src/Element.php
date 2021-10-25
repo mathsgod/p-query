@@ -19,13 +19,13 @@ class Element extends DOMElement
     public $_events = [];
     public $__data = [];
 
-    public function __construct(string $name, string $value = "", string $uri = null)
+    function __construct(string $name, string $value = "", string $uri = null)
     {
         parent::__construct($name, $value, $uri);
         Document::Current()->appendChild($this);
     }
 
-    public function toggleAttribute(string $name)
+    function toggleAttribute(string $name)
     {
         if ($this->hasAttribute($name)) {
             $this->removeAttribute($name);
@@ -36,12 +36,12 @@ class Element extends DOMElement
         }
     }
 
-    public function addEventListener(string $type, callable $listener)
+    function addEventListener(string $type, callable $listener)
     {
         $this->_events[$type][] = $listener;
     }
 
-    public function removeEventListener(string $type, callable $listener)
+    function removeEventListener(string $type, callable $listener)
     {
         $events = [];
         foreach ($this->_events[$type] as $event) {
@@ -52,14 +52,14 @@ class Element extends DOMElement
         $this->_events[$type] = $events;
     }
 
-    public function dispatchEvent(Event $event)
+    function dispatchEvent(Event $event)
     {
         foreach ($this->_events[$event->type] as $c) {
             $c($event);
         }
     }
 
-    public function contains(DOMNode $otherNode): bool
+    function contains(DOMNode $otherNode): bool
     {
         if ($this == $otherNode) {
             return true;
@@ -72,13 +72,13 @@ class Element extends DOMElement
         return false;
     }
 
-    public function __toString()
+    function __toString()
     {
         return $this->outerHTML;
     }
 
 
-    public function querySelector(string $selector)
+    function querySelector(string $selector)
     {
         $nodelist = $this->querySelectorAll($selector);
         if ($nodelist->length) {
@@ -87,7 +87,7 @@ class Element extends DOMElement
         return null;
     }
 
-    public function querySelectorAll(string $selector): DOMNodeList
+    function querySelectorAll(string $selector): DOMNodeList
     {
         $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
         $expression = $converter->toXPath($selector);
@@ -96,7 +96,7 @@ class Element extends DOMElement
         return $xpath->evaluate($expression, $this);
     }
 
-    public function matches(string $selectorString): bool
+    function matches(string $selectorString): bool
     {
         $doc = new Document();
         $doc->appendChild($doc->importNode($this));
@@ -105,14 +105,14 @@ class Element extends DOMElement
     }
 
 
-    public function prependChild(DOMNode $newnode): DOMNode
+    function prependChild(DOMNode $newnode): DOMNode
     {
         $firstChild = $this->firstChild;
         return $this->insertBefore($newnode, $firstChild);
     }
 
 
-    public function __set($name, $value)
+    function __set($name, $value)
     {
         switch ($name) {
             case "innerHTML":
@@ -131,7 +131,7 @@ class Element extends DOMElement
         $this->$name = $value;
     }
 
-    public function __get($name)
+    function __get($name)
     {
         switch ($name) {
             case "classList":
@@ -168,7 +168,7 @@ class Element extends DOMElement
         }
     }
 
-    public function setAttribute($name, $value)
+    function setAttribute($name, $value)
     {
         if ($value === true || $value === "" || $value === null) {
             $this->removeAttribute($name);
@@ -180,7 +180,7 @@ class Element extends DOMElement
         }
     }
 
-    public function closest(string $selector)
+    function closest(string $selector)
     {
         $el = $this;
         do {
@@ -195,6 +195,8 @@ class Element extends DOMElement
     {
         return Document::Current()->_notifyNodeAdded(parent::appendChild($node));
     }
+
+
 
     function registerMutationObserver(MutationObserver $observer, $options)
     {
