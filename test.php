@@ -4,12 +4,34 @@ use P\Document;
 use P\HTMLDivElement;
 use P\HTMLElement;
 use P\HTMLSpanElement;
+use P\MutationObserver;
 
 error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
 $div = new HTMLDivElement();
+$span = new HTMLSpanElement();
+
+$div->appendChild($span);
+
+
+$mo = new MutationObserver(function ($records) {
+    print_r($records);
+});
+
+$mo->observe($div, [
+    "childList" => true,
+        "subtree" => true
+
+]);
+
+$span1 = new HTMLSpanElement();
+
+$span->appendChild($span1);
+
+die();
+
 //$div->classList
 $div->style->backgroundColor = "red";
 $div->style->color = "blue";

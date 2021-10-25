@@ -9,11 +9,9 @@ class Node extends \DOMNode
         if ($this == $otherNode) {
             return true;
         }
-        foreach ($this->childNodes as $node) {
-            if ($node->contains($otherNode)) {
-                return true;
-            }
-        }
+
+
+
         return false;
     }
 }

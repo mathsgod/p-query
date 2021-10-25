@@ -2,6 +2,7 @@
 
 namespace P;
 
+use DOMAttr;
 use DOMNode;
 use DOMElement;
 use DOMNodeList;
@@ -188,5 +189,21 @@ class Element extends DOMElement
             if ($el instanceof Document) return null;
         } while ($el !== null);
         return null;
+    }
+
+    function appendChild(DOMNode $node)
+    {
+
+        $ret = parent::appendChild($node);
+        $document = Document::Current();
+        $document->_notifyNodeAppend($node);
+        return $ret;
+    }
+
+    
+    function registerMutationObserver(MutationObserver $observer, $options)
+    {
+        $document = Document::Current();
+        $document->_observer_regs[] = new MutationObserverRegistration($observer, $this, $options);
     }
 }

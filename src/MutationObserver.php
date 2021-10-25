@@ -4,16 +4,23 @@ namespace P;
 
 class MutationObserver
 {
-    private $callable;
+    public $callable;
 
-    public function __construct(callable $callable)
+    function __construct(callable $callable)
     {
         $this->callable = $callable;
     }
 
-    public function observe(Node $target, $options)
-    { }
+    function observe(Element $target, $options)
+    {
+        $target->registerMutationObserver($this, $options);
+    }
 
-    public function discount()
-    { }
+    function disconnect()
+    {
+    }
+
+    function takeRecords()
+    {
+    }
 }

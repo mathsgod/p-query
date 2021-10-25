@@ -2,6 +2,7 @@
 
 namespace P;
 
+use DOMAttr;
 use DOMNode;
 use DOMElement;
 use DOMDocument;
@@ -99,5 +100,52 @@ class Document extends DOMDocument
 		}
 
 		return $n;
+	}
+
+
+	/** @var MutationObserverRegistration[] */
+	public $_observer_regs;
+
+	function _notifyNodeAppend(DOMNode $node)
+	{
+		foreach ($this->_observer_regs as $reg) {
+
+			$records = [];
+			if ($reg->options["childList"]) {
+				if ($node instanceof Element) {
+
+					if ($reg->options["subtree"]) {
+						if ($reg->element->contains($node)) {
+							$record = new MutationRecord;
+							$record->target = $reg->element;
+							$record->type = "childList";
+							$record->addedNodes[] = $node;
+							$records[] = $record;
+						}
+					} else {
+						if ($reg->element == $node->parentNode) {
+							$record = new MutationRecord;
+							$record->target = $reg->element;
+							$record->type = "childList";
+							$record->addedNodes[] = $node;
+							$records[] = $record;
+						}
+					}
+				}
+			}
+
+			if ($reg->options["attributes"]) {
+				if ($node instanceof DOMAttr) {
+					$record = new MutationRecord;
+					$record->target = $reg->element;
+					$record->type = "attributes";
+					$records[] = $record;
+				}
+			}
+
+			if (count($records)) {
+				call_user_func_array($reg->observer->callable, [$records]);
+			}
+		}
 	}
 }
