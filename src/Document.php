@@ -106,7 +106,7 @@ class Document extends DOMDocument
 	/** @var MutationObserverRegistration[] */
 	public $_observer_regs;
 
-	function _notifyNodeAppend(DOMNode $node)
+	function _notifyNodeAdded(DOMNode $node)
 	{
 		foreach ($this->_observer_regs as $reg) {
 
@@ -135,11 +135,20 @@ class Document extends DOMDocument
 			}
 
 			if ($reg->options["attributes"]) {
-				if ($node instanceof DOMAttr) {
-					$record = new MutationRecord;
-					$record->target = $reg->element;
-					$record->type = "attributes";
-					$records[] = $record;
+				if ($reg->options["subtree"]) {
+					if ($reg->element->contains($node)) {
+						$record = new MutationRecord;
+						$record->target = $reg->element;
+						$record->type = "attributes";
+						$records[] = $record;
+					}
+				} else {
+					if ($node instanceof DOMAttr) {
+						$record = new MutationRecord;
+						$record->target = $reg->element;
+						$record->type = "attributes";
+						$records[] = $record;
+					}
 				}
 			}
 
@@ -147,5 +156,7 @@ class Document extends DOMDocument
 				call_user_func_array($reg->observer->callable, [$records]);
 			}
 		}
+
+		return $node;
 	}
 }

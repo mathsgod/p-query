@@ -193,14 +193,9 @@ class Element extends DOMElement
 
     function appendChild(DOMNode $node)
     {
-
-        $ret = parent::appendChild($node);
-        $document = Document::Current();
-        $document->_notifyNodeAppend($node);
-        return $ret;
+        return Document::Current()->_notifyNodeAdded(parent::appendChild($node));
     }
 
-    
     function registerMutationObserver(MutationObserver $observer, $options)
     {
         $document = Document::Current();
