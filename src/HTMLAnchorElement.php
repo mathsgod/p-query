@@ -1,6 +1,12 @@
 <?php
+
 namespace P;
 
+/**
+ * @property string $href
+ * @property string $hostname
+ * @property string $pathname
+ */
 class HTMLAnchorElement extends HTMLElement
 {
     const ATTRIBUTES = [
@@ -9,11 +15,22 @@ class HTMLAnchorElement extends HTMLElement
         "media" => "string",
         "rel" => "string",
         "download" => "string",
-        "charset" => "sstring"
+        "charset" => "string"
     ] + parent::ATTRIBUTES;
 
-    public function __construct($value = "", $uri = null)
+    function __construct($value = "", $uri = null)
     {
         parent::__construct("a", $value, $uri);
+    }
+
+    function __get($name)
+    {
+        switch ($name) {
+            case "hostname":
+                return parse_url($this->href, PHP_URL_HOST);
+            case "pathname":
+                return parse_url($this->href, PHP_URL_PATH);
+        }
+        return parent::__get($name);
     }
 }
