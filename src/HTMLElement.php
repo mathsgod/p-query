@@ -5,31 +5,46 @@ namespace P;
 /**
  * @property-read DOMStringMap $dataset
  * @property string $title
+ * @property string $innerText
+ * @property bool $hidden The HTMLElement property hidden is a boolean value which is true if the element is hidden; otherwise the value is false. This is quite different from using the CSS property display to control the visibility of an element.
+ * @property string $lang The HTMLElement.lang property gets or sets the base language of an element's attribute values and text content.
+ * @property string $contentEditable
+ * @property string $dir
+ * @property int $tabIndex
  */
 class HTMLElement extends Element
 {
 
-    const ATTRIBUTES = [
-        "accessKey" => ["type" => "string", "name" => "accesskey"],
-        "contentEditable" => ["type" => "string", "name" => "contenteditable"],
-        "dir" => "string",
-        "draggable" => "bool",
-        "hidden" => "boolean",
-        "lang" => "string",
-        "tabIndex" => "int",
-    ];
+    const ATTRIBUTES = [];
 
     public function __set($name, $value)
     {
         switch ($name) {
+            case "tabIndex":
+                $this->setAttribute("tabindex", $value);
+                return;
+            case "dir":
+                $this->setAttribute("dir", $value);
+                return;
+            case "contentEditable":
+                $this->setAttribute("contenteditable", $value);
+                return;
+            case "lang":
+                $this->setAttribute("lang", $value);
+                return;
+            case "hidden":
+                if ($value) {
+                    $this->setAttribute("hidden", true);
+                } else {
+                    $this->removeAttribute("hidden");
+                }
+                return;
             case "innerText":
                 $this->textContent = $value;
                 return;
-                break;
             case "title":
                 $this->setAttribute("title", $value);
                 return;
-                break;
         }
 
         if (array_key_exists($name, static::ATTRIBUTES)) {
@@ -57,6 +72,18 @@ class HTMLElement extends Element
     public function __get($name)
     {
         switch ($name) {
+            case "tabIndex":
+                if (!$this->hasAttribute("tabindex")) return -1;
+                return intval($this->getAttribute("tabindex"));
+            case "dir":
+                return $this->getAttribute("dir");
+            case "contentEditable":
+                if (!$this->hasAttribute("contenteditable")) return "inherit";
+                return $this->getAttribute("contenteditable");
+            case "lang":
+                return $this->getAttribute("lang");
+            case "hidden":
+                return $this->hasAttribute("hidden");
             case "dataset":
                 $map = new DOMStringMap($this);
                 return $map;
