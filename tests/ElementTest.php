@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use P\Element;
 use P\Document;
 use P\Event;
+use P\HTMLElement;
 use P\HTMLInputElement;
 
 final class ElementTest extends TestCase
@@ -20,6 +21,31 @@ HTML;
     {
         parent::__construct();
         $this->doc = Document::Current();
+    }
+
+    function test_firstElementChild()
+    {
+        $div = new Element("div");
+        $this->assertNull($div->firstElementChild);
+
+        $child = $div->appendChild(new Element("div"));
+        $this->assertEquals($child, $div->firstElementChild);
+    }
+
+    function test_lastElementChild()
+    {
+        $div = new Element("div");
+        $this->assertNull($div->lastElementChild);
+
+        $child = $div->appendChild(new Element("div"));
+        $this->assertEquals($child, $div->lastElementChild);
+    }
+
+    function test_id()
+    {
+        $div = new Element("div");
+        $div->id = "id1";
+        $this->assertEquals("id1", $div->id);
     }
 
     public function test_toggleAttribute()

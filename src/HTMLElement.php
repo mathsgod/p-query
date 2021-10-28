@@ -4,6 +4,7 @@ namespace P;
 
 /**
  * @property-read DOMStringMap $dataset
+ * @property string $title
  */
 class HTMLElement extends Element
 {
@@ -16,7 +17,6 @@ class HTMLElement extends Element
         "hidden" => "boolean",
         "lang" => "string",
         "tabIndex" => "int",
-        "title" => "string",
     ];
 
     public function __set($name, $value)
@@ -24,6 +24,10 @@ class HTMLElement extends Element
         switch ($name) {
             case "innerText":
                 $this->textContent = $value;
+                return;
+                break;
+            case "title":
+                $this->setAttribute("title", $value);
                 return;
                 break;
         }
@@ -60,6 +64,8 @@ class HTMLElement extends Element
             case 'innerText':
                 return $this->textContent;
                 break;
+            case "title":
+                return $this->getAttribute("title");
         }
 
         if (array_key_exists($name, static::ATTRIBUTES)) {

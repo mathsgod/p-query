@@ -2,7 +2,6 @@
 
 namespace P;
 
-use DOMAttr;
 use DOMNode;
 use DOMElement;
 use DOMNodeList;
@@ -10,9 +9,13 @@ use DOMNodeList;
 /**
  * @property CSSStyleDeclaration $style
  * @property string $innerHTML The Element property innerHTML gets or sets the HTML markup contained within the element.
- * @property string $outerHTML
+ * @property string $outerHTML Is a string representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property HTMLCollection<Element> $children
  * @property-read DOMTokenList $classList
+ * @property string $id Is a string representing the id of the element.
+ * @property string $className Is a string representing the class of the element.
+ * @property-read Element|null $firstElementChild Returns the first child element of this element.
+ * @property-read Element|null $lastElementChild Returns the last child element of this element.
  */
 class Element extends DOMElement
 {
@@ -115,6 +118,12 @@ class Element extends DOMElement
     function __set($name, $value)
     {
         switch ($name) {
+            case "id":
+                $this->setAttribute("id", $value);
+                break;
+            case "className":
+                $this->setAttribute("class", $value);
+                break;
             case "innerHTML":
                 while ($this->hasChildNodes()) {
                     $this->removeChild($this->firstChild);
@@ -134,6 +143,10 @@ class Element extends DOMElement
     function __get($name)
     {
         switch ($name) {
+            case "id":
+                return $this->getAttribute("id");
+            case "className":
+                return $this->getAttribute("class");
             case "classList":
                 return new DOMTokenList($this, "class");
                 break;
@@ -165,6 +178,10 @@ class Element extends DOMElement
                 }
                 return new CSSStyleDeclaration($this->attributes->getNamedItem("style"));
                 break;
+            case "lastElementChild":
+                return $this->lastElementChild;
+            case "firstElementChild":
+                return $this->firstChild;
         }
     }
 

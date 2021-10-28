@@ -30,7 +30,8 @@ class Document extends DOMDocument
 		"thead" => HTMLTableSectionElement::class,
 		"tbody" => HTMLTableSectionElement::class,
 		"tfoot" => HTMLTableSectionElement::class,
-		"textarea" => HTMLTextAreaElement::class
+		"textarea" => HTMLTextAreaElement::class,
+		"template" => HTMLTemplateElement::class
 	];
 
 	public static $DOCUMENT;
@@ -40,9 +41,9 @@ class Document extends DOMDocument
 	{
 		parent::__construct($version, $encoding);
 		$this->registerNodeClass("DOMDocument", Document::class);
+		$this->registerNodeClass("DOMNode", Node::class);
 		$this->registerNodeClass("DOMElement", HTMLElement::class);
 		$this->registerNodeClass("DOMText", Text::class);
-		$this->registerNodeClass("DOMNode", Node::class);
 		$this->registerNodeClass("DOMAttr", Attr::class);
 		$this->registerNodeClass("DOMDocumentFragment", DocumentFragment::class);
 		$this->registerNodeClass("DOMComment", Comment::class);
@@ -153,7 +154,7 @@ class Document extends DOMDocument
 			}
 
 			if (count($records)) {
-				call_user_func_array($reg->observer->callable, [$records]);
+				call_user_func_array($reg->observer->callable, [$records, $reg->observer]);
 			}
 		}
 

@@ -10,6 +10,15 @@ error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
+$this->registerNodeClass("DOMNode", Node::class);
+$div = new HTMLDivElement();
+if ($div instanceof P\Node) {
+    echo "yes";
+}
+
+
+die();
+
 $div = new HTMLDivElement();
 $span = new HTMLSpanElement();
 
@@ -22,7 +31,7 @@ $mo = new MutationObserver(function ($records) {
 
 $mo->observe($div, [
     "childList" => true,
-        "subtree" => true
+    "subtree" => true
 
 ]);
 

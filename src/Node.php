@@ -4,11 +4,11 @@ namespace P;
 
 use DOMNode;
 
-class Node extends \DOMNode
+class Node extends DOMNode
 {
     public function contains(Node $otherNode): bool
     {
-        if ($this == $otherNode) {
+        if ($this === $otherNode) {
             return true;
         }
 
