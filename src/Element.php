@@ -61,7 +61,7 @@ class Element extends DOMElement
 
     function contains(DOMNode $otherNode): bool
     {
-        if ($this == $otherNode) {
+        if ($this === $otherNode) {
             return true;
         }
         foreach ($this->childNodes as $node) {
