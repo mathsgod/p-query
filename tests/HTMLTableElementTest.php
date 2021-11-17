@@ -28,70 +28,54 @@ HTML;
 
     public function test_createTHead()
     {
+        $table = new HTMLTableElement();
+        $h = $table->createTHead();
 
-        $doc = new Document();
-        $t = $doc->createElement("table");
-        $h = $t->createTHead();
+        $this->assertEquals("<table><thead></thead></table>", $table->outerHTML);
 
-        $this->assertInstanceOf(P\Element::class, $h);
-        $this->assertEquals("<table><thead></thead></table>", $t->outerHTML);
-
-        $bhody = $t->createTHead();
-        $this->assertInstanceOf(P\Element::class, $h);
-        $this->assertEquals("<table><thead></thead></table>", $t->outerHTML);
+        $bhody = $table->createTBody();
+        $this->assertEquals("<table><thead></thead><tbody></tbody></table>", $table->outerHTML);
     }
 
     public function test_createTBody()
     {
-        $doc = new Document();
-        $t = $doc->createElement("table");
-        $body = $t->createTBody();
+        $table = new HTMLTableElement();
+        $table->createTBody();
 
-        $this->assertInstanceOf(P\Element::class, $body);
-        $this->assertEquals("<table><tbody></tbody></table>", str_replace("\n", "", (string)$t));
+        $this->assertEquals("<table><tbody></tbody></table>", $table->outerHTML);
 
-        $body = $t->createTBody();
-        $this->assertInstanceOf(P\Element::class, $body);
-        $this->assertEquals("<table><tbody></tbody><tbody></tbody></table>", str_replace("\n", "", (string)$t));
+        $table->createTBody();
+        $this->assertEquals("<table><tbody></tbody><tbody></tbody></table>", $table->outerHTML);
     }
 
     public function test_createTFoot()
     {
-        $doc = new Document();
-        $t = $doc->createElement("table");
+        $table = new HTMLTableElement();
+        $table->createTFoot();
 
-        $f = $t->createTFoot();
-
-        $this->assertInstanceOf(P\Element::class, $f);
-        $this->assertEquals("<table><tfoot></tfoot></table>", $t->outerHTML);
+        $this->assertEquals("<table><tfoot></tfoot></table>", $table->outerHTML);
     }
 
     public function test_insertRow()
     {
-        $doc = new Document();
-        $t = $doc->createElement("table");
-
-        $r = $t->insertRow();
-
-        $this->assertInstanceOf(P\Element::class, $r);
-
-        $this->assertEquals("<table><tbody><tr></tr></tbody></table>", $t->outerHTML);
+        $table = new HTMLTableElement();
+        $r = $table->insertRow();
+        $this->assertEquals("<table><tbody><tr></tr></tbody></table>", $table->outerHTML);
     }
 
     public function test_insertCell()
     {
-        $doc = new Document();
-        $t = $doc->createElement("table");
-        $r = $t->insertRow();
+        $table = new HTMLTableElement();
+        $r = $table->insertRow();
         $cell = $r->insertCell();
         $cell = $r->insertCell();
         $cell->textContent = "hello";
 
-        $r = $t->insertRow();
+        $r = $table->insertRow();
         $cell = $r->insertCell();
         $cell = $r->insertCell();
         $cell->textContent = "hello";
 
-        $this->assertEquals("<table><tbody><tr><td></td><td>hello</td></tr><tr><td></td><td>hello</td></tr></tbody></table>", str_replace("\n", "", (string)$t));
+        $this->assertEquals("<table><tbody><tr><td></td><td>hello</td></tr><tr><td></td><td>hello</td></tr></tbody></table>", $table->outerHTML);
     }
 }

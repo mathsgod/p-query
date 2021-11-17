@@ -54,6 +54,7 @@ class HTMLTableElement extends HTMLElement
                 }
                 return $collection;
                 break;
+            
         }
 
         return parent::__get($name);
