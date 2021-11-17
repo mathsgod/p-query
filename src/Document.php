@@ -20,6 +20,7 @@ class Document extends DOMDocument
 		"img" => HTMLImageElement::class,
 		"span" => HTMLSpanElement::class,
 		"input" => HTMLInputElement::class,
+		"label" => HTMLLabelElement::class,
 		"optgroup" => HTMLOptGroupElement::class,
 		"option" => HTMLOptionElement::class,
 		"select" => HTMLSelectElement::class,
