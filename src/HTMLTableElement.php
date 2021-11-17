@@ -1,11 +1,19 @@
 <?php
+
 namespace P;
 
+use DOMException;
+
+/**
+ * @property string $align
+ * @property HTMLTableCaptionElement $caption
+ * @property HTMLTableSectionElement $tHead
+ * @property HTMLTableSectionElement $tFoot
+ * @property-read HTMLCollection $rows
+ * @property-read HTMLCollection $tBodies
+ */
 class HTMLTableElement extends HTMLElement
 {
-
-    const ATTRIBUTES = ["align" => "string"] + parent::ATTRIBUTES;
-
     public function __construct($value = "", $uri = null)
     {
         parent::__construct("table", $value, $uri);
@@ -14,9 +22,25 @@ class HTMLTableElement extends HTMLElement
     public function __get($name)
     {
         switch ($name) {
+            case "align":
+                return $this->getAttribute("align");
             case "caption":
                 foreach ($this->childNodes as $node) {
-                    if ($node->tagName == "caption") {
+                    if ($node->tagName === "caption") {
+                        return $node;
+                    }
+                }
+                break;
+            case 'tHead':
+                foreach ($this->childNodes as $node) {
+                    if ($node->tagName === "thead") {
+                        return $node;
+                    }
+                }
+                break;
+            case "tFoot":
+                foreach ($this->childNodes as $node) {
+                    if ($node->tagName === "tfoot") {
                         return $node;
                     }
                 }
@@ -24,25 +48,11 @@ class HTMLTableElement extends HTMLElement
             case 'tBodies':
                 $collection = new HTMLCollection();
                 foreach ($this->childNodes as $node) {
-                    if ($node->tagName == "tbody") {
+                    if ($node->tagName === "tbody") {
                         $collection[] = $node;
                     }
                 }
                 return $collection;
-                break;
-            case 'tHead':
-                foreach ($this->childNodes as $node) {
-                    if ($node->tagName == "thead") {
-                        return $node;
-                    }
-                }
-                break;
-            case "tFoot":
-                foreach ($this->childNodes as $child) {
-                    if ($node->tagName == "tfoot") {
-                        return $node;
-                    }
-                }
                 break;
         }
 
@@ -52,6 +62,22 @@ class HTMLTableElement extends HTMLElement
     public function __set($name, $value)
     {
         switch ($name) {
+            case "align":
+                $this->setAttribute("align", $value);
+                break;
+            case "caption":
+                if ($value instanceof HTMLTableCaptionElement) {
+                    //remove old caption
+                    foreach ($this->childNodes as $node) {
+                        if ($node instanceof HTMLTableCaptionElement) {
+                            $this->removeChild($node);
+                        }
+                    }
+                    $this->appendChild($value);
+                } else {
+                    throw new DOMException("HierarchyRequestError");
+                }
+                break;
             case "tHead":
                 if (!$value instanceof Element) {
                     throw new TypeError("The provided value is not of type 'Element'.");
@@ -93,7 +119,10 @@ class HTMLTableElement extends HTMLElement
     }
 
 
-    public function createTBody()
+    /**
+     * Returns a HTMLTableSectionElement representing a new <tbody> that is a child of the element. It is inserted in the tree after the last element that is a <tbody>, or as the last child if there is no such element.
+     */
+    function createTBody(): HTMLTableSectionElement
     {
         $tbody = $this->ownerDocument->createElement("tbody");
 
@@ -107,7 +136,7 @@ class HTMLTableElement extends HTMLElement
         return $tbody;
     }
 
-    public function createTHead()
+    public function createTHead(): HTMLTableSectionElement
     {
         if ($this->tHead) {
             return $this->tHead;
@@ -117,7 +146,7 @@ class HTMLTableElement extends HTMLElement
         return $thead;
     }
 
-    public function createTFoot()
+    public function createTFoot(): HTMLTableSectionElement
     {
         if ($this->tFoot) {
             return $this->tFoot;

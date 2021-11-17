@@ -5,12 +5,26 @@ error_reporting(E_ALL & ~E_WARNING);
 
 use PHPUnit\Framework\TestCase;
 use P\Document;
+use P\HTMLTableCaptionElement;
+use P\HTMLTableElement;
 
 final class HTMLTableElementTest extends TestCase
 {
     const HTML = <<<HTML
 <table></table>
 HTML;
+
+
+    function test_caption()
+    {
+        $table = new HTMLTableElement();
+        $table->caption = new HTMLTableCaptionElement("test");
+
+        $this->assertEquals(
+            "<table><caption>test</caption></table>",
+            $table->outerHTML
+        );
+    }
 
     public function test_createTHead()
     {

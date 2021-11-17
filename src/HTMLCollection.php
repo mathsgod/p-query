@@ -5,9 +5,7 @@ namespace P;
 use ArrayObject;
 
 /**
- * 
  * @property-read int $length Returns the number of items in the collection.
- * 
  */
 class HTMLCollection extends ArrayObject
 {
@@ -17,5 +15,10 @@ class HTMLCollection extends ArrayObject
             case "length":
                 return $this->count();
         }
+    }
+
+    function item($index)
+    {
+        return $this[$index];
     }
 }
