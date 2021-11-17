@@ -76,7 +76,6 @@ class Document extends DOMDocument
 		}
 
 		$element = parent::createElement($tagName, $value);
-		//$element->classList = new DOMTokenList($element, "class");
 		$this->nodes[] = $element;
 		return $element;
 	}

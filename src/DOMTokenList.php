@@ -3,6 +3,10 @@
 namespace P;
 
 
+/**
+ * @property-read int $length Is an integer representing the number of objects stored in the object.
+ * @property string $value A stringifier property that returns the value of the list as a string.
+ */
 class DOMTokenList implements \ArrayAccess
 {
 	private $element;
@@ -44,14 +48,16 @@ class DOMTokenList implements \ArrayAccess
 		return isset($values[$offset]) ? $values[$offset] : null;
 	}
 
-	public function values()
+	/**
+	 * Returns an iterator, allowing you to go through all values of the key/value pairs contained in this object.
+	 */
+	function values()
 	{
-		$attribute = $this->element->getAttribute($this->attribute_name);
-		if ($attribute) {
-			return explode(" ", $attribute);
-		} else {
-			return  [];
-		}
+		$values = explode(" ", $this->element->getAttribute($this->attribute_name));
+
+		return array_filter($values, function ($value) {
+			return $value !== "";
+		});
 	}
 
 	public function __get($name)
@@ -59,7 +65,7 @@ class DOMTokenList implements \ArrayAccess
 		if ($name == "length")
 			return count($this->values());
 		if ($name == "value") {
-			return  (string) $this->element->getAttribute($this->attribute_name);
+			return  $this->element->getAttribute($this->attribute_name);
 		}
 	}
 
@@ -70,32 +76,72 @@ class DOMTokenList implements \ArrayAccess
 		}
 	}
 
-	public function add(...$values)
+	/**
+	 * Adds the specified tokens to the list.
+	 */
+	function add(...$values)
 	{
 		foreach ($values as $value) {
 			$this[] = $value;
 		}
 	}
 
-	public function remove(...$values)
+	/**
+	 * Removes the specified tokens from the list.
+	 */
+	function remove(...$values)
 	{
 		$values = array_diff($this->values(), $values);
 		$this->value = implode(" ", $values);
 	}
 
-	public function contains(string $token): bool
+	/**
+	 * Returns true if the list contains the given token, otherwise false.
+	 */
+	function contains(string $token): bool
 	{
 		return in_array($token, $this->values());
 	}
 
-	public function toggle(string $token)
+	/**
+	 * Removes the token from the list if it exists, or adds it to the list if it doesn't. Returns a boolean indicating whether the token is in the list after the operation.
+	 */
+	function toggle(string $token, bool $force = null)
 	{
-		if ($this->contains($token)) {
-			$this->remove($token);
-			return false;
-		} else {
+		if ($force === null) {
+			$force = !$this->contains($token);
+		}
+		if ($force) {
 			$this->add($token);
-			return true;
+		} else {
+			$this->remove($token);
+		}
+		return $force;
+	}
+
+	/**
+	 * Replaces the token with another one.
+	 */
+	function replace(string $oldToken, string $newToken)
+	{
+		if (!$this->contains($oldToken)) {
+			return false;
+		}
+		$values = $this->values();
+		$values = array_map(function ($value) use ($oldToken, $newToken) {
+			return $value == $oldToken ? $newToken : $value;
+		}, $values);
+		$this->value = implode(" ", $values);
+		return true;
+	}
+
+	/**
+	 * Executes a provided callback function once for each DOMTokenList element.
+	 */
+	function forEach(callable $callback, $thisArg = null)
+	{
+		foreach ($this->values() as $value) {
+			$callback($value, $thisArg);
 		}
 	}
 }
