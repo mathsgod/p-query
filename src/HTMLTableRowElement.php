@@ -1,5 +1,8 @@
 <?php
+
 namespace P;
+
+use DOMException;
 
 class HTMLTableRowElement extends HTMLElement
 {
