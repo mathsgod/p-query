@@ -37,4 +37,19 @@ final class CSSStyleDeclarationTest extends TestCase
 
         $this->assertEquals('background-color: red; color: green', $div->style->cssText);
     }
+
+    function test_setProperty()
+    {
+        $div = new HTMLDivElement();
+        $div->style->setProperty("background-color", "red");
+        $this->assertEquals("red", $div->style->backgroundColor);
+    }
+
+    function test_removeProperty()
+    {
+        $div = new HTMLDivElement();
+        $div->style->backgroundColor = "red";
+        $div->style->removeProperty("background-color");
+        $this->assertEquals("", $div->style->backgroundColor);
+    }
 }
