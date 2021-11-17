@@ -1,4 +1,5 @@
 <?php
+
 namespace P;
 
 use \DOMNode;
@@ -10,13 +11,10 @@ class Text extends \DOMText
         parent::__construct($data);
         Document::Current()->appendChild($this);
     }
-    
+
     public function contains(DOMNode $otherNode): bool
     {
-        if ($this == $otherNode) {
-            return true;
-        }
-        return false;
+        return $this === $otherNode;
     }
 
     public function __toString(): string
