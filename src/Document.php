@@ -76,7 +76,7 @@ class Document extends DOMDocument
 		}
 
 		$element = parent::createElement($tagName, $value);
-		$element->classList = new DOMTokenList($element, "class");
+		//$element->classList = new DOMTokenList($element, "class");
 		$this->nodes[] = $element;
 		return $element;
 	}
@@ -124,7 +124,7 @@ class Document extends DOMDocument
 							$records[] = $record;
 						}
 					} else {
-						if ($reg->element == $node->parentNode) {
+						if ($reg->element === $node->parentNode) {
 							$record = new MutationRecord;
 							$record->target = $reg->element;
 							$record->type = "childList";

@@ -10,6 +10,11 @@ error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
+$p = p("<div id='1'><span>abc</span></div>");
+print_r($p->find("span")->closest("div")->attr("id"));
+
+exit;
+
 $this->registerNodeClass("DOMNode", Node::class);
 $div = new HTMLDivElement();
 if ($div instanceof P\Node) {
