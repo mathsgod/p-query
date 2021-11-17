@@ -5,6 +5,7 @@ namespace P;
 /**
  * @property bool $disabled
  * @property string $name
+ * @property string $value
  */
 
 class HTMLButtonElement extends HTMLElement
@@ -23,6 +24,9 @@ class HTMLButtonElement extends HTMLElement
             case "name":
                 $this->setAttribute("name", $value);
                 return;
+            case "value":
+                $this->setAttribute("value", $value);
+                return;
         }
         parent::__set($name, $value);
     }
@@ -34,6 +38,8 @@ class HTMLButtonElement extends HTMLElement
                 return $this->getAttribute("disabled");
             case "name":
                 return $this->getAttribute("name");
+            case "value":
+                return $this->getAttribute("value");
         }
         return parent::__get($name);
     }
