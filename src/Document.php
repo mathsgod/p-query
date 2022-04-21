@@ -77,7 +77,7 @@ class Document extends DOMDocument
 			$this->registerNodeClass("DOMElement", HTMLElement::class);
 		}
 
-		$element = parent::createElement($tagName, $value);
+		$element = parent::createElement($tagName, $value ?? "");
 		$this->nodes[] = $element;
 		return $element;
 	}
