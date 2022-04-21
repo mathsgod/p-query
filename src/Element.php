@@ -22,7 +22,7 @@ class Element extends DOMElement
     public $_events = [];
     public $__data = [];
 
-    function __construct(string $name, string $value = "", string|null $uri = null)
+    function __construct(string $name, string $value = "", string $uri = "")
     {
         parent::__construct($name, $value, $uri);
         Document::Current()->appendChild($this);
