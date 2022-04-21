@@ -6,6 +6,7 @@ use ArrayObject;
 
 /**
  * @property-read int $length Returns the number of items in the collection.
+ 
  */
 class HTMLCollection extends ArrayObject
 {

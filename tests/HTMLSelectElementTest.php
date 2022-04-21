@@ -1,13 +1,49 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 error_reporting(E_ALL & ~E_WARNING);
 
 use PHPUnit\Framework\TestCase;
-use P\Document;
+use P\HTMLFormElement;
+use P\HTMLOptionElement;
+use P\HTMLOptionsCollection;
+use P\HTMLSelectElement;
 use P\OptionCollection;
 
 final class HTMLSelectElementTest extends TestCase
 {
+
+    public function test_multiple()
+    {
+        $select = new HTMLSelectElement();
+        $select->multiple = true;
+        $this->assertTrue($select->multiple);
+        $select->multiple = false;
+        $this->assertFalse($select->multiple);
+    }
+
+    public function test_length()
+    {
+        $select = new HTMLSelectElement();
+        $this->assertEquals(0, $select->length);
+
+        $select->append(new HTMLOptionElement("foo"));
+        $this->assertEquals(1, $select->length);
+
+        $select->append(new HTMLOptionElement("bar"));
+        $this->assertEquals(2, $select->length);
+    }
+
+    public function test_form()
+    {
+
+        $form = new HTMLFormElement();
+        $select = new HTMLSelectElement();
+        $form->append($select);
+        $this->assertEquals($select->form, $form);
+    }
+
+
     public function test_value()
     {
 
@@ -15,7 +51,7 @@ final class HTMLSelectElementTest extends TestCase
 
         $s->value = 2;
 
-        $this->assertEquals('<select><option value="1">1</option><option value="2" selected>2</option></select>', str_replace("\n","",(string)$s));
+        $this->assertEquals('<select><option value="1">1</option><option value="2" selected>2</option></select>', str_replace("\n", "", (string)$s));
 
         $this->assertEquals("2", $s->value);
     }
@@ -33,15 +69,14 @@ final class HTMLSelectElementTest extends TestCase
 
     public function test_options()
     {
-        $s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
-        $this->assertEquals(2, $s->options->length);
-        $this->assertInstanceOf(OptionCollection::class, $s->options);
-    }
+        $select = new HTMLSelectElement();
+        $this->assertInstanceOf(HTMLOptionsCollection::class, $select->options);
+        $this->assertEquals(0, $select->options->length);
 
-    public function test_length()
-    {
-        $s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
+        $select->append(new HTMLOptionElement("foo"));
+        $this->assertEquals(1, $select->options->length);
 
-        $this->assertEquals("2", $s->length);
+        $select->append(new HTMLOptionElement("bar"));
+        $this->assertEquals(2, $select->options->length);
     }
 }

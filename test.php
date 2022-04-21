@@ -11,9 +11,14 @@ error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
-$div=new HTMLDivElement();
-$p=new HTMLParagraphElement();
-$div->append("Some text",$p);
+
+$s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
+$this->assertEquals(2, $s->options->length);
+
+die();
+$div = new HTMLDivElement();
+$p = new HTMLParagraphElement();
+$div->append("Some text", $p);
 
 echo $div;
 die();

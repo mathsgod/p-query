@@ -197,7 +197,7 @@ class Element extends DOMElement
         }
     }
 
-    function closest(string $selector)
+    function closest(string $selector): ?Element
     {
         $el = $this;
         do {

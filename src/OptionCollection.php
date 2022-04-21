@@ -2,5 +2,10 @@
 
 namespace P;
 
-class OptionCollection extends HTMLCollection
-{ }
+
+/**
+ * @deprecated
+ */
+class OptionCollection extends HTMLOptionsCollection
+{
+}
