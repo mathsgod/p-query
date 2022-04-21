@@ -76,7 +76,10 @@ final class HTMLSelectElementTest extends TestCase
         $select->append(new HTMLOptionElement("foo"));
         $this->assertEquals(1, $select->options->length);
 
-        $select->append(new HTMLOptionElement("bar"));
+        $select->append( new HTMLOptionElement("bar"));
         $this->assertEquals(2, $select->options->length);
+
+        $select->options[0]->selected = true;
+        $this->assertEquals(0, $select->selectedIndex);
     }
 }

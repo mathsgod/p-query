@@ -11,7 +11,7 @@ namespace P;
  * @property ?string $name
  * @property-read HTMLOptionsCollection $options
  * @property bool $required
- * 
+ * @property int $selectedIndex A long reflecting the index of the first selected <option> element. The value -1 indicates no element is selected.
  */
 class HTMLSelectElement extends HTMLElement
 {
@@ -31,6 +31,18 @@ class HTMLSelectElement extends HTMLElement
 
     public function __set($name, $value)
     {
+
+        if ($name === "selectedIndex") {
+            if ($value === -1) {
+                foreach ($this->options as $option) {
+                    $option->selected = false;
+                }
+            } else {
+                $this->options[$value]->selected = true;
+            }
+            return;
+        }
+
         switch ($name) {
             case "value":
                 foreach (p($this)->find("option") as  $option) {
@@ -63,11 +75,23 @@ class HTMLSelectElement extends HTMLElement
         }
 
         if ($name == "options") {
+
             $options = new HTMLOptionsCollection();
-            foreach ($this->querySelectorAll("option") as $option) {
-                $options->append($option);
+            foreach ($this->querySelectorAll("option") as $child) {
+                $options->append($child);
             }
             return $options;
+        }
+
+        if ($name == "selectedIndex") {
+            $index = 0;
+            foreach ($this->options as $option) {
+                if ($option->selected) {
+                    return $index;
+                }
+                $index++;
+            }
+            return -1;
         }
 
 

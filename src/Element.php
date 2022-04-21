@@ -24,6 +24,10 @@ class Element extends DOMElement
 
     function __construct(string $name, string $value = "", string|null $uri = "")
     {
+        if (Document::ELEMENT_CLASS[$name]) {
+            Document::Current()->registerNodeClass("DOMElement", Document::ELEMENT_CLASS[$name]);
+        }
+
         parent::__construct($name, $value, $uri ?? "");
         Document::Current()->appendChild($this);
     }

@@ -3,13 +3,32 @@
 use P\Document;
 use P\HTMLDivElement;
 use P\HTMLElement;
+use P\HTMLOptionElement;
 use P\HTMLParagraphElement;
+use P\HTMLSelectElement;
 use P\HTMLSpanElement;
 use P\MutationObserver;
 
 error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
+
+$select = new HTMLSelectElement();
+$select->append(new HTMLOptionElement("foo"));
+$select->append(new HTMLOptionElement("bar"));
+
+foreach (p($select)->find("option") as $option) {
+    print_r($option);
+}
+
+die();
+
+//$select->options[0]->selected = true;
+
+echo $select;
+die();
+
+
 
 
 $s = p("<select><option value='1'>1</option><option value='2'>2</option></select>")[0];
