@@ -661,7 +661,7 @@ class CSSStyleDeclaration
         foreach (explode(";", $this->node->nodeValue) as $v) {
             if (!$v) continue;
             list($a, $b) = explode(":", $v);
-            $values[trim($a)] = trim($b);
+            $values[trim($a)] = trim($b ?? "");
         }
 
 
@@ -697,7 +697,7 @@ class CSSStyleDeclaration
         $values = [];
         foreach (explode(";", $this->node->nodeValue) as $v) {
             list($a, $b) = explode(":", $v);
-            $values[$a] = trim($b);
+            $values[$a] = trim($b ?? "");
         }
 
         $name = preg_replace_callback("/[A-Z]+/", function ($a) {
