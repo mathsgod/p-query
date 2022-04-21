@@ -8,22 +8,17 @@ namespace P;
  * @property-read ?HTMLFormElement $form
  * @property int $length
  * @property bool $multiple
- * @property ?string $name
+ * @property string $name
  * @property-read HTMLOptionsCollection $options
  * @property bool $required
  * @property int $selectedIndex A long reflecting the index of the first selected <option> element. The value -1 indicates no element is selected.
+ * @property-read HTMLCollection<HTMLElement> $selectedOptions
+ * @property int $size
+ * @property-read ?string $type
+ * @property-read string $value
  */
 class HTMLSelectElement extends HTMLElement
 {
-    const ATTRIBUTES = [
-        "autofocus" => "bool",
-        "disabled" => "bool",
-        "multiple" => "bool",
-        "name" => "string",
-        "required" => "bool",
-        "size" => "int"
-    ] + parent::ATTRIBUTES;
-
     public function __construct()
     {
         parent::__construct("select");
@@ -31,6 +26,42 @@ class HTMLSelectElement extends HTMLElement
 
     public function __set($name, $value)
     {
+
+        if ($name == "autofocus") {
+            if ($value) {
+                $this->setAttribute("autofocus", "");
+            } else {
+                $this->removeAttribute("requiautofocusred");
+            }
+        }
+
+        if ($name == "disabled") {
+            if ($value) {
+                $this->setAttribute("disabled", "");
+            } else {
+                $this->removeAttribute("disabled");
+            }
+        }
+
+        if ($name == "multiple") {
+            if ($value) {
+                $this->setAttribute("multiple", "");
+            } else {
+                $this->removeAttribute("multiple");
+            }
+        }
+
+        if ($name == "name") {
+            $this->setAttribute("name", $value);
+        }
+
+        if ($name == "required") {
+            if ($value) {
+                $this->setAttribute("required", "");
+            } else {
+                $this->removeAttribute("required");
+            }
+        }
 
         if ($name === "selectedIndex") {
             if ($value === -1) {
@@ -43,18 +74,15 @@ class HTMLSelectElement extends HTMLElement
             return;
         }
 
-        switch ($name) {
-            case "value":
-                foreach (p($this)->find("option") as  $option) {
-                    if ($option->value == $value) {
-                        $option->selected = true;
-                    } else {
-                        if (!$this->hasAttribute("multiple")) {
-                            $option->select = false;
-                        }
-                    }
+
+        if ($name == "value") {
+            foreach ($this->options as $option) {
+                if ($option->value == $value) {
+                    $option->selected = true;
+                } else {
+                    $option->selected = false;
                 }
-                return;
+            }
         }
 
         parent::__set($name, $value);
@@ -62,12 +90,25 @@ class HTMLSelectElement extends HTMLElement
 
     public function __get($name)
     {
+
+        if ($name == "autofocus") {
+            return $this->hasAttribute("autofocus");
+        }
+
+        if ($name == "disabled") {
+            return $this->hasAttribute("disabled");
+        }
+
         if ($name == "form") {
             return $this->closest("form");
         }
 
         if ($name == "length") {
             return $this->querySelectorAll("option")->count();
+        }
+
+        if ($name == "name") {
+            return $this->getAttribute("name");
         }
 
         if ($name == "multiple") {
@@ -77,10 +118,14 @@ class HTMLSelectElement extends HTMLElement
         if ($name == "options") {
 
             $options = new HTMLOptionsCollection();
-            foreach ($this->querySelectorAll("option") as $child) {
+            foreach ($this->getElementsByTagName("option") as $child) {
                 $options->append($child);
             }
             return $options;
+        }
+
+        if ($name == "required") {
+            return $this->hasAttribute("required");
         }
 
         if ($name == "selectedIndex") {
@@ -94,17 +139,33 @@ class HTMLSelectElement extends HTMLElement
             return -1;
         }
 
-
-        switch ($name) {
-            case "value":
-                $option = p($this)->find("option[selected]");
-                if ($option->count()) {
-                    return p($option[0])->val();
+        if ($name == "selectedOptions") {
+            $options = new HTMLCollection();
+            foreach ($this->options as $option) {
+                if ($option->selected) {
+                    $options->append($option);
                 }
-                return;
-            case "name":
-                return $this->getAttribute("name");
+            }
+            return $options;
         }
+
+        if ($name == "type") {
+            if ($this->multiple) {
+                return "select-multiple";
+            } else {
+                return "select-one";
+            }
+        }
+
+        if ($name == "value") {
+            foreach ($this->options as $option) {
+                if ($option->selected) {
+                    return $option->value;
+                }
+            }
+            return "";
+        }
+
 
 
         return parent::__get($name);

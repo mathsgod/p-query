@@ -12,6 +12,23 @@ use P\OptionCollection;
 
 final class HTMLSelectElementTest extends TestCase
 {
+    public function test_selectedOptions()
+    {
+
+        $select = new HTMLSelectElement();
+        $select->multiple = true;
+        $select->append(new HTMLOptionElement("1"));
+        $select->append(new HTMLOptionElement("2"));
+        $select->append(new HTMLOptionElement("3"));
+        $select->append(new HTMLOptionElement("4"));
+
+        $select->options[1]->selected = true;
+        $select->options[3]->selected = true;
+
+        $this->assertEquals("2", $select->selectedOptions->item(0)->textContent);
+        $this->assertEquals("4", $select->selectedOptions->item(1)->textContent);
+    }
+
 
     public function test_multiple()
     {
@@ -76,7 +93,7 @@ final class HTMLSelectElementTest extends TestCase
         $select->append(new HTMLOptionElement("foo"));
         $this->assertEquals(1, $select->options->length);
 
-        $select->append( new HTMLOptionElement("bar"));
+        $select->append(new HTMLOptionElement("bar"));
         $this->assertEquals(2, $select->options->length);
 
         $select->options[0]->selected = true;

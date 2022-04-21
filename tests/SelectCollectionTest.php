@@ -6,6 +6,7 @@ use P\SelectCollection;
 
 final class SelectCollectionTest extends TestCase
 {
+
     public function test_options()
     {
         $select = p("<select data-value='2'></select>")[0];

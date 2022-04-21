@@ -14,6 +14,22 @@ error_reporting(E_ALL && ~E_NOTICE);
 require_once("vendor/autoload.php");
 
 $select = new HTMLSelectElement();
+$select->multiple = true;
+$select->append(new HTMLOptionElement("1"));
+$select->append(new HTMLOptionElement("2"));
+$select->append(new HTMLOptionElement("3"));
+$select->append(new HTMLOptionElement("4"));
+
+
+$select->options[1]->selected = true;
+$select->options[3]->selected = true;
+
+print_R($select->selectedOptions->item(1)->textContent);
+die();
+
+
+
+$select = new HTMLSelectElement();
 $select->append(new HTMLOptionElement("foo"));
 $select->append(new HTMLOptionElement("bar"));
 
