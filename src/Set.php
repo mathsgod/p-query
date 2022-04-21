@@ -3,6 +3,7 @@
 namespace P;
 
 use IteratorAggregate;
+use Traversable;
 
 /**
  * @property-read int $size
@@ -15,7 +16,7 @@ class Set implements IteratorAggregate
         $this->items = $items;
     }
 
-    function getIterator()
+    public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->items);
     }
