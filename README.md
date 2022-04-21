@@ -98,5 +98,6 @@ $p=new HTMLParagraphElement();
 $div->append("Some text",$p);
 
 echo $div; // <div>Some text<p></p></div>
+```
 ___
 created by Raymond Chong
