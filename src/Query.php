@@ -2,14 +2,57 @@
 
 namespace P;
 
+use ArrayAccess;
+use ArrayObject;
+use Countable;
 use DOMNode;
 use DOMElement;
+use IteratorAggregate;
+use Traversable;
 
-class Query extends \ArrayObject
+class Query implements IteratorAggregate, ArrayAccess, Countable
 {
+    private $container;
+
     public static function _($q)
     {
         return new self($q);
+    }
+
+    //--- Countable ---//
+    public function count(): int
+    {
+        return count($this->container);
+    }
+
+    //--- Array Access ---//
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if (is_null($offset)) {
+            $this->container[] = $value;
+        } else {
+            $this->container[$offset] = $value;
+        }
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->container[$offset]);
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->container[$offset]);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+    }
+
+    public function getIterator(): Traversable
+    {
+        return $this->container;
     }
 
     public static function ParseFile($file)
@@ -19,6 +62,8 @@ class Query extends \ArrayObject
 
     public function __construct($tag = null)
     {
+        $this->container = new ArrayObject();
+
         if (is_object($tag)) {
             if ($tag instanceof DOMNode) {
                 $this[] = $tag;
@@ -165,7 +210,8 @@ class Query extends \ArrayObject
         return $this;
     }
 
-    public function append($node): self
+
+    public function append(mixed $node): self
     {
         if (is_string($node)) {
             foreach ($this as $child) {
@@ -379,8 +425,6 @@ class Query extends \ArrayObject
         if ($this->$method instanceof \Closure) {
             return call_user_func_array($this->$method, $args);
         }
-
-        return parent::$method($args);
     }
 
     public function find($selector)
