@@ -64,23 +64,30 @@ class SelectCollection extends Query
 
 			foreach ($datasource as $key => $o) {
 				$option = p("option");
-				if (is_object($o)) {
 
-					if ($display_member instanceof Closure) {
-						$option->text($display_member($o));
-					} else {
-						$option->text($o->{$display_member});
-					}
-
-					if ($value_member instanceof Closure) {
-						$option->val($value_member($o));
-					} else {
-						$option->val($o->{$value_member});
-					}
+				if ($display_member instanceof Closure) {
+					$text = $display_member($o);
 				} else {
-					$option->text($o);
-					$option->val($key);
+					if (is_object($o)) {
+						$text = $o->{$display_member};
+					} elseif (is_array($o)) {
+						$text = $o[$display_member];
+					}
 				}
+
+				$option->text($text);
+
+				if ($value_member instanceof Closure) {
+					$value = $value_member($o);
+				} else {
+					if (is_object($o)) {
+						$value = $o->{$value_member};
+					} elseif (is_array($o)) {
+						$value = $o[$value_member];
+					}
+				}
+				$option->val($value);
+
 
 				if (is_array($data_value)) {
 					if (in_array($option->val(), $data_value)) {
@@ -100,7 +107,12 @@ class SelectCollection extends Query
 
 				//check optgroup
 				if ($optgroup_getter = p($select)->attr("optgroup")) {
-					$optgroup_value = \My\Func::_($optgroup_getter)->call($o);
+					if ($optgroup_getter instanceof Closure) {
+						$optgroup_value = $optgroup_getter($o);
+					} else {
+						$optgroup_value = $o->{$optgroup_getter};
+					}
+
 					foreach (p($select)->find("optgroup") as $optgroup) {
 						if ($optgroup->getAttribute("index") == $optgroup_value) {
 							$optgroup->appendChild($option[0]);
