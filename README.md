@@ -62,6 +62,41 @@ echo $p; /*output
 - index
 
 
+## HTML element style and class
+```php
+$div = new HTMLDivElement();
+$div->classList->add("container");
+$div->innerText = "Hello world!";
+$div->style->color = "red";
 
+echo $div; //<div class="container" style="color: red">Hello world!</div>
+```
+
+## Element.append
+
+### Append an element
+```php
+$div=new HTMLDivElement();
+$p=new HTMLParagraphElement();
+$div->append($p);
+
+echo $div; // <div><p></p></div>
+```
+
+### Appending text
+```php
+$div=new HTMLDivElement();
+$div->append("Some text");
+
+echo $div; // <div>Some text</div>
+```
+
+### Appending an element and text
+```php
+$div=new HTMLDivElement();
+$p=new HTMLParagraphElement();
+$div->append("Some text",$p);
+
+echo $div; // <div>Some text<p></p></div>
 ___
 created by Raymond Chong

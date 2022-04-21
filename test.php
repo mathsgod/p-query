@@ -3,6 +3,7 @@
 use P\Document;
 use P\HTMLDivElement;
 use P\HTMLElement;
+use P\HTMLParagraphElement;
 use P\HTMLSpanElement;
 use P\MutationObserver;
 
@@ -10,10 +11,31 @@ error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
+$div=new HTMLDivElement();
+$p=new HTMLParagraphElement();
+$div->append("Some text",$p);
+
+echo $div;
+die();
+
+$div = new HTMLDivElement();
+$div->classList->add("container");
+$div->innerText = "Hello world!";
+$div->style->color = "red";
+
+
+
+echo $div;
+
+
+exit;
+
 $p = p("<div id='1'><span>abc</span></div>");
 print_r($p->find("span")->closest("div")->attr("id"));
 
 exit;
+
+
 
 $this->registerNodeClass("DOMNode", Node::class);
 $div = new HTMLDivElement();
