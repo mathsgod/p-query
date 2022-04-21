@@ -18,7 +18,8 @@ class DOMTokenList implements \ArrayAccess
 		$this->attribute_name = $attribute_name;
 	}
 
-	public function offsetSet($offset, $value)
+
+	public function offsetSet(mixed $offset, mixed $value): void
 	{
 		if (is_null($offset)) {
 			$values = array_merge($this->values(), [$value]);
@@ -30,19 +31,19 @@ class DOMTokenList implements \ArrayAccess
 		}
 	}
 
-	public function offsetExists($offset)
+	public function offsetExists(mixed $offset): bool
 	{
 		return isset($this->values()[$offset]);
 	}
 
-	public function offsetUnset($offset)
+	public function offsetUnset(mixed $offset): void
 	{
 		$values = $this->values();
 		unset($values[$offset]);
 		$this->value = implode(" ", $values);
 	}
 
-	public function offsetGet($offset)
+	public function offsetGet(mixed $offset): mixed
 	{
 		$values = $this->values();
 		return isset($values[$offset]) ? $values[$offset] : null;
