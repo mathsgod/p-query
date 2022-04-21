@@ -13,6 +13,7 @@ class Document extends DOMDocument
 
 	const ELEMENT_CLASS = [
 		"a" => HTMLAnchorElement::class,
+		"br" => HTMLBRElement::class,
 		"p" => HTMLParagraphElement::class,
 		"button" => HTMLButtonElement::class,
 		"caption" => HTMLTableCaptionElement::class,
