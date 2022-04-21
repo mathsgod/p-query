@@ -1,5 +1,8 @@
 <?php
+
 namespace P;
+
+use Closure;
 
 class SelectCollection extends Query
 {
@@ -62,8 +65,18 @@ class SelectCollection extends Query
 			foreach ($datasource as $key => $o) {
 				$option = p("option");
 				if (is_object($o)) {
-					$option->text(\My\Func::_($display_member)->call($o));
-					$option->val((string )\My\Func::_($value_member)->call($o));
+
+					if ($display_member instanceof Closure) {
+						$option->text($display_member($o));
+					} else {
+						$option->text($o->{$display_member});
+					}
+
+					if ($value_member instanceof Closure) {
+						$option->val($value_member($o));
+					} else {
+						$option->val($o->{$value_member});
+					}
 				} else {
 					$option->text($o);
 					$option->val($key);
