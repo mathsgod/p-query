@@ -13,6 +13,7 @@ class Document extends DOMDocument
 
 	const ELEMENT_CLASS = [
 		"a" => HTMLAnchorElement::class,
+		"audio" => HTMLAudioElement::class,
 		"br" => HTMLBRElement::class,
 		"p" => HTMLParagraphElement::class,
 		"button" => HTMLButtonElement::class,
@@ -35,7 +36,9 @@ class Document extends DOMDocument
 		"tbody" => HTMLTableSectionElement::class,
 		"tfoot" => HTMLTableSectionElement::class,
 		"textarea" => HTMLTextAreaElement::class,
-		"template" => HTMLTemplateElement::class
+		"template" => HTMLTemplateElement::class,
+		"video" => HTMLVideoElement::class,
+
 	];
 
 	public static $DOCUMENT;
