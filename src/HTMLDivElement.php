@@ -4,8 +4,8 @@ namespace P;
 
 class HTMLDivElement extends HTMLElement
 {
-    function __construct($value = "", $uri = null)
+    public function __construct(string|null $value = null, string $namespace = null)
     {
-        parent::__construct("div", $value, $uri);
+        parent::__construct("div", $value, $namespace);
     }
 }

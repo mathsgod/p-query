@@ -190,6 +190,8 @@ class Element extends DOMElement
 
     function setAttribute($name, $value)
     {
+
+
         if ($value === true || $value === "" || $value === null) {
             $this->removeAttribute($name);
             $this->appendChild($this->ownerDocument->createAttribute($name));
@@ -197,6 +199,10 @@ class Element extends DOMElement
             $this->removeAttribute($name);
         } else {
             parent::setAttribute($name, $value);
+        }
+
+        if ($name == "id") {
+            $this->setIdAttribute("id", true);
         }
     }
 

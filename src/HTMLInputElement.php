@@ -9,6 +9,7 @@ namespace P;
  * @property bool $autofocus
  * @property bool $required 
  * @property string $value
+ * @property-read ?HTMLFormElement $form
  */
 class  HTMLInputElement extends HTMLElement
 {
@@ -40,6 +41,10 @@ class  HTMLInputElement extends HTMLElement
 
     function __get($name)
     {
+        if ($name == "form") {
+            return $this->closest("form");
+        }
+
         switch ($name) {
             case "name":
                 return $this->getAttribute("name");

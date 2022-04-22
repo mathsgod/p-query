@@ -4,6 +4,9 @@ use P\Document;
 use P\HTMLButtonElement;
 use P\HTMLDivElement;
 use P\HTMLElement;
+use P\HTMLFormElement;
+use P\HTMLInputElement;
+use P\HTMLLabelElement;
 use P\HTMLOptionElement;
 use P\HTMLParagraphElement;
 use P\HTMLSelectElement;
@@ -13,6 +16,42 @@ use P\MutationObserver;
 error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
+
+$form = new HTMLFormElement();
+
+$input = new HTMLInputElement();
+$input->id = "test";
+$form->appendChild($input);
+
+$label = new HTMLLabelElement();
+$label->htmlFor = "test";
+
+$form->appendChild($label);
+
+
+print_R($label->control->form === $form);
+
+
+
+die();
+
+$div = new HTMLDivElement();
+
+$input = new HTMLInputElement();
+$input->id = "test";
+$input->setIdAttribute("id", true);
+
+$div->appendChild($input);
+
+
+
+$label = new HTMLLabelElement();
+$label->htmlFor = "test";
+
+$div->appendChild($label);
+
+print_r($label->control);
+die();
 
 $e = new HTMLButtonElement();
 $e->value = "foo";
