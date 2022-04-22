@@ -118,7 +118,7 @@ class HTMLAreaElement extends HTMLElement
             $this->setAttribute("href", http_build_url($href));
             return;
         }
-        
-        return parent::__set($name, $value);
+
+        parent::__set($name, $value);
     }
 }

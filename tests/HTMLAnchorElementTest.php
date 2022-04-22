@@ -9,6 +9,20 @@ use PHPUnit\Framework\TestCase;
 
 final class HTMLAnchorElementTest extends TestCase
 {
+
+    function test_host()
+    {
+        $e = new HTMLAnchorElement();
+        $e->href = "http://example.com/a/b.php";
+        $this->assertEquals("example.com", $e->host);
+
+        $e->host = "google.com";
+        $this->assertEquals("http://google.com/a/b.php", $e->href);
+
+        $e->host = "google.com:8080";
+        $this->assertEquals("http://google.com:8080/a/b.php", $e->href);
+    }
+
     function test_pathname()
     {
         $a = new HTMLAnchorElement();

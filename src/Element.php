@@ -7,7 +7,6 @@ use DOMElement;
 use DOMNodeList;
 
 /**
- * @property CSSStyleDeclaration $style
  * @property string $innerHTML The Element property innerHTML gets or sets the HTML markup contained within the element.
  * @property string $outerHTML Is a string representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property HTMLCollection<Element> $children
