@@ -46,22 +46,31 @@ class HTMLButtonElement extends HTMLElement
             } else {
                 $this->removeAttribute("autofocus");
             }
+            return;
         }
+
         if ($name == "disabled") {
             if ($value) {
                 $this->setAttribute("disabled", "");
             } else {
                 $this->removeAttribute("disabled");
             }
+            return;
         }
+
         if ($name == "name") {
             $this->setAttribute("name", $value);
+            return;
         }
+
         if ($name == "type") {
             $this->setAttribute("type", $value);
+            return;
         }
+        
         if ($name == "value") {
             $this->setAttribute("value", $value);
+            return;
         }
 
         parent::__set($name, $value);

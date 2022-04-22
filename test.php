@@ -1,6 +1,7 @@
 <?php
 
 use P\Document;
+use P\HTMLButtonElement;
 use P\HTMLDivElement;
 use P\HTMLElement;
 use P\HTMLOptionElement;
@@ -13,6 +14,14 @@ error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
+$e = new HTMLButtonElement();
+$e->value = "foo";
+$e->value = "";
+echo $e->getAttribute("value");
+die();
+$this->assertEquals("", $e->getAttribute("value"));
+
+die();
 $select = new HTMLSelectElement();
 $select->multiple = true;
 $select->append(new HTMLOptionElement("1"));
