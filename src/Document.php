@@ -4,9 +4,7 @@ namespace P;
 
 use DOMAttr;
 use DOMNode;
-use DOMElement;
 use DOMDocument;
-use DOMNodeList;
 
 class Document extends DOMDocument
 {

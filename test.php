@@ -16,6 +16,22 @@ use P\MutationObserver;
 error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
+
+
+$form = new HTMLFormElement();
+$input = new HTMLInputElement();
+$input->id = "test_input";
+$form->appendChild($input);
+$label = new HTMLLabelElement();
+$label->htmlFor = "test_input";
+$form->appendChild($label);
+
+print_r($input->labels[0] == $label);
+
+die();
+
+
+
 $t = p("<input value='2020-01-01' >")[0];
 
 var_dump($t->valueAsDate);

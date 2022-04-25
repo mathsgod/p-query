@@ -3,6 +3,7 @@
 namespace P;
 
 use DateTime;
+use DOMNodeList;
 
 /**
  * @property bool $autofocus
@@ -64,7 +65,17 @@ class  HTMLInputElement extends HTMLElement
             case "dirName":
                 return $this->getAttribute("dirname");
             case "labels":
-                return $this->getElementsByTagName("label");
+                $id = $this->id;
+                if ($id) {
+                    $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
+
+                    $expression = $converter->toXPath("label[for='$id']");
+
+                    $xpath = new \DOMXPath($this->ownerDocument);
+
+                    return $xpath->query($expression, $this->ownerDocument);
+                }
+                return new DOMNodeList;
             case "list":
                 return $this->getElementsByTagName("datalist")->item(0);
             case "multiple":
