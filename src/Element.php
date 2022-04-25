@@ -21,13 +21,12 @@ class Element extends DOMElement
     public $_events = [];
     public $__data = [];
 
-    function __construct(string $name, string|null $value = "", string|null $uri = "")
+    function __construct(string $name, string|null $value = "", string|null $namespace = "")
     {
         if (Document::ELEMENT_CLASS[$name]) {
             Document::Current()->registerNodeClass("DOMElement", Document::ELEMENT_CLASS[$name]);
         }
-
-        parent::__construct($name, $value, $uri ?? "");
+        parent::__construct($name, $value, $namespace ?? "");
         Document::Current()->appendChild($this);
     }
 
