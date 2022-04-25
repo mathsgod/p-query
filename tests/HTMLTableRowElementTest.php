@@ -1,23 +1,22 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 error_reporting(E_ALL & ~E_WARNING);
+
+use P\HTMLTableElement;
 use PHPUnit\Framework\TestCase;
-use P\HTMLTableRowElement;
-use P\Document;
 
 final class HTMLTableRowElementTest extends TestCase
 {
     public function test_insertCell()
     {
-        $doc = new Document();
-        $t = $doc->createElement("table");
+        $t = new HTMLTableElement();
         $row = $t->insertRow();
         $cell = $row->insertCell();
         $this->assertEquals((string)$row, "<tr><td></td></tr>");
 
 
-        $doc = new Document();
-        $t = $doc->createElement("table");
+        $t = new HTMLTableElement();
         $row = $t->insertRow();
         $cell = $row->insertCell();
         $cell->textContent = "cell content";

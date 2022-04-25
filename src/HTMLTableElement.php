@@ -5,7 +5,8 @@ namespace P;
 use DOMException;
 
 /**
- * @property string $align
+ * @property HTMLTableCaptionElement $caption
+ * @property string $align //deprecated
  * @property HTMLTableCaptionElement $caption
  * @property HTMLTableSectionElement $tHead
  * @property HTMLTableSectionElement $tFoot
@@ -21,40 +22,36 @@ class HTMLTableElement extends HTMLElement
 
     public function __get($name)
     {
-        switch ($name) {
-            case "align":
-                return $this->getAttribute("align");
-            case "caption":
-                foreach ($this->childNodes as $node) {
-                    if ($node->tagName === "caption") {
-                        return $node;
-                    }
-                }
-                break;
-            case 'tHead':
-                foreach ($this->childNodes as $node) {
-                    if ($node->tagName === "thead") {
-                        return $node;
-                    }
-                }
-                break;
-            case "tFoot":
-                foreach ($this->childNodes as $node) {
-                    if ($node->tagName === "tfoot") {
-                        return $node;
-                    }
-                }
-                break;
-            case 'tBodies':
-                $collection = new HTMLCollection();
-                foreach ($this->childNodes as $node) {
-                    if ($node->tagName === "tbody") {
-                        $collection[] = $node;
-                    }
-                }
-                return $collection;
-                break;
-            
+        if ($name === "caption") {
+            return $this->getElementsByTagName("caption")->item(0);
+        }
+
+        if ($name === "align") {
+            return $this->getAttribute("align");
+        }
+
+        if ($name === "tHead") {
+            return $this->getElementsByTagName("thead")->item(0);
+        }
+
+        if ($name === "tFoot") {
+            return $this->getElementsByTagName("tfoot")->item(0);
+        }
+
+        if ($name === "rows") {
+            $collection = new HTMLCollection();
+            foreach ($this->getElementsByTagName("tr") as $element) {
+                $collection->append($element);
+            }
+            return $collection;
+        }
+
+        if ($name === "tBodies") {
+            $collection = new HTMLCollection();
+            foreach ($this->getElementsByTagName("tbody") as $element) {
+                $collection->append($element);
+            }
+            return $collection;
         }
 
         return parent::__get($name);
@@ -186,5 +183,18 @@ class HTMLTableElement extends HTMLElement
         if ($tfoot = $this->tfoot) {
             $tfoot->remove();
         }
+    }
+
+    public function deleteRow(int $index)
+    {
+        /**
+         * Removes the row corresponding to the index given in parameter. If the index value is -1 the last row is removed; if it is smaller than -1 or greater than the amount of rows in the collection, a DOMException with the value IndexSizeError is raised.
+         */
+        if ($this->tBodies->length == 0) {
+            $tbody = $this->createTBody();
+        } else {
+            $tbody = $this->tBodies[$this->tBodies->length - 1];
+        }
+        return $tbody->deleteRow($index);
     }
 }

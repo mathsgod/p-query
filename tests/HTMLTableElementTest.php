@@ -17,13 +17,17 @@ HTML;
 
     function test_caption()
     {
+        $caption = new HTMLTableCaptionElement("test");
         $table = new HTMLTableElement();
-        $table->caption = new HTMLTableCaptionElement("test");
+        $table->caption = $caption;
 
         $this->assertEquals(
             "<table><caption>test</caption></table>",
             $table->outerHTML
         );
+
+
+        $this->assertEquals($caption, $table->caption);
     }
 
     public function test_createTHead()
