@@ -16,7 +16,10 @@ use P\MutationObserver;
 error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
+$t = p("<textarea name='input1'>1234</textarea>")[0];
 
+print_R($t);
+die();
 $form = new HTMLFormElement();
 
 $input = new HTMLInputElement();

@@ -19,8 +19,6 @@ namespace P;
 class HTMLElement extends Element
 {
 
-    const ATTRIBUTES = [];
-
     public function __get($name)
     {
         if ($name == "accessKey") {
@@ -82,23 +80,6 @@ class HTMLElement extends Element
             return $this->getAttribute("title");
         }
 
-        if (array_key_exists($name, static::ATTRIBUTES)) {
-            $attr = static::ATTRIBUTES[$name];
-            if (is_array($attr)) {
-                $name = $attr["name"];
-                $type = $attr["type"];
-            } else {
-                $name = strtolower($name);
-                $type = "string";
-            }
-
-            $value = $this->getAttribute($name);
-
-            if ($type == "json") {
-                $value = json_decode($value, true);
-            }
-            return $value;
-        }
 
         return parent::__get($name);
     }
@@ -159,22 +140,6 @@ class HTMLElement extends Element
 
         if ($name == "title") {
             $this->setAttribute("title", $value);
-        }
-
-        if (array_key_exists($name, static::ATTRIBUTES)) {
-            $attr = static::ATTRIBUTES[$name];
-            if (is_array($attr)) {
-                $name = $attr["name"];
-                $type = $attr["type"];
-            } else {
-                $name = strtolower($name);
-                $type = "string";
-            }
-
-            if ($type == "json") {
-                $value = json_encode($value);
-            }
-            $this->setAttribute($name, $value);
         }
 
         parent::__set($name, $value);
