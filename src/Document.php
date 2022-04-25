@@ -61,7 +61,7 @@ class Document extends DOMDocument
 		$expression = $converter->toXPath($selector);
 
 		$xpath = new \DOMXPath($this);
-		return $xpath->evaluate($expression);
+		return $xpath->query($expression, $this);
 	}
 
 	public static function Current(): self

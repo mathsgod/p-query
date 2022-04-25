@@ -67,13 +67,7 @@ class  HTMLInputElement extends HTMLElement
             case "labels":
                 $id = $this->id;
                 if ($id) {
-                    $converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
-
-                    $expression = $converter->toXPath("label[for='$id']");
-
-                    $xpath = new \DOMXPath($this->ownerDocument);
-
-                    return $xpath->query($expression, $this->ownerDocument);
+                    return $this->ownerDocument->querySelectorAll("label[for=\"$id\"]");
                 }
                 return new DOMNodeList;
             case "list":
