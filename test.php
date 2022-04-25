@@ -16,9 +16,9 @@ use P\MutationObserver;
 error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
-$t = p("<textarea name='input1'>1234</textarea>")[0];
+$t = p("<input value='2020-01-01' >")[0];
 
-print_R($t);
+var_dump($t->valueAsDate);
 die();
 $form = new HTMLFormElement();
 

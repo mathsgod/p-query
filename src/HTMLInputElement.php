@@ -2,6 +2,8 @@
 
 namespace P;
 
+use DateTime;
+
 /**
  * @property bool $autofocus
  * @property string $defaultValue
@@ -76,15 +78,15 @@ class  HTMLInputElement extends HTMLElement
             case "value":
                 return $this->getAttribute("value");
             case "valueAsDate":
-                return $this->getAttribute("valueAsDate");
+                return new DateTime($this->getAttribute("value"));
             case "valueAsNumber":
-                return $this->getAttribute("valueAsNumber");
+                return (int) $this->getAttribute("value");
             case "form":
                 return $this->closest("form");
             case "checked":
-                return $this->getAttribute("checked");
+                return $this->hasAttribute("checked");
             case "defaultChecked":
-                return $this->getAttribute("defaultChecked");
+                return $this->hasAttribute("checked");
             case "indeterminate":
                 return $this->getAttribute("indeterminate");
             case "alt":
@@ -102,17 +104,17 @@ class  HTMLInputElement extends HTMLElement
             case "max":
                 return $this->getAttribute("max");
             case "maxLength":
-                return $this->getAttribute("maxLength");
+                return (int)$this->getAttribute("maxLength");
             case "min":
                 return $this->getAttribute("min");
             case "minLength":
-                return $this->getAttribute("minLength");
+                return (int)$this->getAttribute("minLength");
             case "pattern":
                 return $this->getAttribute("pattern");
             case "placeholder":
                 return $this->getAttribute("placeholder");
             case "readOnly":
-                return $this->hasAttribute("readOnly");
+                return $this->hasAttribute("readonly");
             case "size":
                 return $this->getAttribute("size");
         }
@@ -157,10 +159,10 @@ class  HTMLInputElement extends HTMLElement
                 $this->setAttribute("value", $value);
                 break;
             case "valueAsDate":
-                $this->setAttribute("valueAsDate", $value);
+                $this->setAttribute("value", $value->format("Y-m-d"));
                 break;
             case "valueAsNumber":
-                $this->setAttribute("valueAsNumber", $value);
+                $this->setAttribute("value", $value);
                 break;
             case "checked":
                 if ($value) {
