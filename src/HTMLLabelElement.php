@@ -18,6 +18,7 @@ class HTMLLabelElement extends HTMLElement
     function __get($name)
     {
         if ($name === "control") {
+
             $for = $this->getAttribute("for");
             if ($for === "") {
                 return null;

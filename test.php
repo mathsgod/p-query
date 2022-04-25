@@ -29,6 +29,8 @@ $label->htmlFor = "test";
 $form->appendChild($label);
 
 
+echo $form;
+die();
 print_R($label->control->form === $form);
 
 

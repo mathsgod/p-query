@@ -3,6 +3,7 @@
 declare(strict_types=1);
 error_reporting(E_ALL & ~E_WARNING);
 
+use P\Document;
 use P\HTMLDivElement;
 use P\HTMLFormElement;
 use P\HTMLInputElement;
@@ -33,13 +34,14 @@ final class HTMLLabelTest extends TestCase
         $form = new HTMLFormElement();
 
         $input = new HTMLInputElement();
-        $input->id = "test";
-        $form->append($input);
+        $input->id = "test_label";
+        $form->appendChild($input);
 
         $label = new HTMLLabelElement();
-        $label->htmlFor = "test";
+        $label->htmlFor = "test_label";
 
-        $form->append($label);
+        $form->appendChild($label);
+
 
         $this->assertEquals($form, $label->form);
     }
