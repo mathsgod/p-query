@@ -64,6 +64,18 @@ class Document extends DOMDocument
 		return $xpath->query($expression, $this);
 	}
 
+	/**
+	 * The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
+	 */
+	public function querySelector(string $selectors)
+	{
+		$converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
+		$expression = $converter->toXPath($selectors);
+
+		$xpath = new \DOMXPath($this);
+		return $xpath->query($expression, $this)->item(0);
+	}
+
 	public static function Current(): self
 	{
 		if (!self::$DOCUMENT) {

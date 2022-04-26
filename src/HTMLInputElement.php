@@ -10,7 +10,7 @@ use DOMNodeList;
  * @property string $defaultValue
  * @property string $dirName
  * @property-read NodeList $labels
- * @property-read ?HTMLElement $list
+ * @property-read ?HTMLDataListElement $list
  * @property bool $multiple
  * @property string $name
  * @property string $step
@@ -18,13 +18,19 @@ use DOMNodeList;
  * @property string $value
  * @property Date $valueAsDate
  * @property int $valueAsNumber
+ * 
+ * Properties related to the parent form
  * @property-read ?HTMLFormElement $form
+ * @property string $formAction
+ * @property string $formEnctype
+ * @property string $formMethod
+ * @property string $formNoValidate
+ * @property string $formTarget
  * 
  * Properties that apply only to elements of type checkbox or radio
  * @property bool $checked
  * @property bool $defaultChecked
  * @property bool $indeterminate
- * 
  * 
  * Properties that apply only to elements of type image
  * @property string $alt
@@ -46,7 +52,7 @@ use DOMNodeList;
  * @property bool $readOnly
  * @property int $size
  */
-class  HTMLInputElement extends HTMLElement
+class HTMLInputElement extends HTMLElement
 {
 
     public function __construct($value = "", $uri = null)
@@ -71,7 +77,11 @@ class  HTMLInputElement extends HTMLElement
                 }
                 return new DOMNodeList;
             case "list":
-                return $this->getElementsByTagName("datalist")->item(0);
+                $list = $this->getAttribute("list");
+                if ($list) {
+                    return $this->ownerDocument->querySelector("datalist#$list");
+                }
+                return null;
             case "multiple":
                 return $this->hasAttribute("multiple");
             case "name":
@@ -88,6 +98,14 @@ class  HTMLInputElement extends HTMLElement
                 return (int) $this->getAttribute("value");
             case "form":
                 return $this->closest("form");
+            case "formAction":
+                return $this->form->getAttribute("formaction");
+            case "formMethod":
+                return $this->form->getAttribute("formmethod");
+            case "formNoValidate":
+                return $this->form->hasAttribute("formnovalidate");
+            case "formTarget":
+                return $this->form->getAttribute("formtarget");
             case "checked":
                 return $this->hasAttribute("checked");
             case "defaultChecked":
@@ -129,7 +147,6 @@ class  HTMLInputElement extends HTMLElement
 
     function __set($name, $value)
     {
-
         switch ($name) {
             case "autofocus":
                 if ($value) {
@@ -195,6 +212,46 @@ class  HTMLInputElement extends HTMLElement
                 break;
             case "height":
                 $this->setAttribute("height", $value);
+                break;
+            case "src":
+                $this->setAttribute("src", $value);
+                break;
+            case "width":
+                $this->setAttribute("width", $value);
+                break;
+            case "accept":
+                $this->setAttribute("accept", $value);
+                break;
+            case "autocomplete":
+                $this->setAttribute("autocomplete", $value);
+                break;
+            case "max":
+                $this->setAttribute("max", $value);
+                break;
+            case "maxLength":
+                $this->setAttribute("maxLength", $value);
+                break;
+            case "min":
+                $this->setAttribute("min", $value);
+                break;
+            case "minLength":
+                $this->setAttribute("minLength", $value);
+                break;
+            case "pattern":
+                $this->setAttribute("pattern", $value);
+                break;
+            case "placeholder":
+                $this->setAttribute("placeholder", $value);
+                break;
+            case "readOnly":
+                if ($value) {
+                    $this->setAttribute("readonly", "");
+                } else {
+                    $this->removeAttribute("readonly");
+                }
+                break;
+            case "size":
+                $this->setAttribute("size", $value);
                 break;
         }
 

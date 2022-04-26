@@ -24,7 +24,7 @@ class HTMLTableRowElement extends HTMLElement
         $children = $this->cells;
         $num_cells = $children->length;
         if ($index < -1 || $index >= $num_cells) {
-            throw new DOMException(" The value provided ($index) is outside the range [0, $num_cells).");
+            throw new DOMException("The value provided ($index) is outside the range [0, $num_cells).");
         }
 
         if ($index == -1) {
