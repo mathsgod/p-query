@@ -86,7 +86,8 @@ class Document extends DOMDocument
 
 	public function createElement($tagName, $value = null): Element
 	{
-		if ($class = self::ELEMENT_CLASS[$tagName]) {
+
+	if (in_array($tagName, array_keys(self::ELEMENT_CLASS)) && $class = self::ELEMENT_CLASS[$tagName]) {
 			$this->registerNodeClass("DOMElement", $class);
 		} else {
 			$this->registerNodeClass("DOMElement", HTMLElement::class);

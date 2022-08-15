@@ -427,6 +427,9 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         }
     }
 
+    /**
+     * @return Query<Element>
+     */
     public function find($selector)
     {
         $q = new self();
