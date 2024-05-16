@@ -1,4 +1,5 @@
 <?php
+
 namespace P;
 
 class DOMParser
@@ -21,7 +22,9 @@ class DOMParser
 
 
         $doc = new Document();
-        $doc->loadHTML(mb_convert_encoding("<div>" . $str . "</div>", 'HTML-ENTITIES', 'UTF-8'), $option);
+        //$doc->loadHTML(mb_convert_encoding("<div>" . $str . "</div>", 'HTML-ENTITIES', 'UTF-8'), $option);
+        $doc->loadHTML(mb_encode_numericentity("<div>" . $str . "</div>", [0x80, 0x10FFFF, 0, ~0], 'UTF-8'), $option);
+
         $d = Document::Current();
 
         $nodes = [];

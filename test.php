@@ -17,6 +17,19 @@ error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 
+$div = p("<div></div>")[0];
+
+print_R($div);
+die();
+
+$div = p("<div></div>")[0];
+
+$div->innerHTML = "abc";
+
+echo $div->outerHTML;
+
+return;
+
 
 $form = new HTMLFormElement();
 $input = new HTMLInputElement();
