@@ -196,6 +196,7 @@ class Element extends DOMElement
             case "firstElementChild":
                 return $this->firstChild;
         }
+        return null;
     }
 
     function setAttribute($name, $value)

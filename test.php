@@ -17,6 +17,13 @@ error_reporting(E_ALL);
 
 require_once("vendor/autoload.php");
 
+$btn=new HTMLButtonElement();
+$btn->autofocus=true;
+var_dump($btn->getAttribute('autofocus'));
+
+echo $btn;
+die();
+
 
 $div = new HTMLDivElement();
 $div->style->backgroundColor = "red";
