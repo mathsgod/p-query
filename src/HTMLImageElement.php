@@ -22,58 +22,42 @@ class HTMLImageElement extends HTMLElement
 
     function __get($name)
     {
-        switch ($name) {
-            case "alt":
-                return $this->getAttribute("alt");
-            case "src":
-                return $this->getAttribute("src");
-            case "srcset":
-                return $this->getAttribute("srcset");
-            case "crossOrigin":
-                return $this->getAttribute("crossorigin");
-            case "useMap":
-                return $this->getAttribute("usemap");
-            case "width":
-                return intval($this->getAttribute("width")) ?: 0;
-            case "height":
-                return intval($this->getAttribute("height")) ?: 0;
-            case "referrerPolicy":
-                return $this->getAttribute("referrerpolicy");
-            default:
-                return parent::__get($name);
+        $attributes = [
+            "alt" => "alt",
+            "src" => "src",
+            "srcset" => "srcset",
+            "crossOrigin" => "crossorigin",
+            "useMap" => "usemap",
+            "width" => "width",
+            "height" => "height",
+            "referrerPolicy" => "referrerpolicy"
+        ];
+
+        if (array_key_exists($name, $attributes)) {
+            $value = $this->getAttribute($attributes[$name]);
+            return in_array($name, ["width", "height"]) ? intval($value) : $value;
         }
+
+        return parent::__get($name);
     }
 
     function __set($name, $value)
     {
-        switch ($name) {
-            case "alt":
-                $this->setAttribute("alt", $value);
-                break;
-            case "src":
-                $this->setAttribute("src", $value);
-                break;
-            case "srcset":
-                $this->setAttribute("srcset", $value);
-                break;
-            case "crossOrigin":
-                $this->setAttribute("crossorigin", $value);
-                break;
-            case "useMap":
-                $this->setAttribute("usemap", $value);
-                break;
-            case "width":
-                $this->setAttribute("width", $value);
-                break;
-            case "height":
-                $this->setAttribute("height", $value);
-                break;
-            case "referrerPolicy":
-                $this->setAttribute("referrerpolicy", $value);
-                break;
-            default:
-                parent::__set($name, $value);
-                break;
+        $attributes = [
+            "alt" => "alt",
+            "src" => "src",
+            "srcset" => "srcset",
+            "crossOrigin" => "crossorigin",
+            "useMap" => "usemap",
+            "width" => "width",
+            "height" => "height",
+            "referrerPolicy" => "referrerpolicy"
+        ];
+
+        if (array_key_exists($name, $attributes)) {
+            $this->setAttribute($attributes[$name], $value);
+        } else {
+            parent::__set($name, $value);
         }
     }
 }
