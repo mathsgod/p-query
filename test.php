@@ -17,6 +17,13 @@ error_reporting(E_ALL);
 
 require_once("vendor/autoload.php");
 
+
+$div = new HTMLDivElement();
+$div->style->backgroundColor = "red";
+$div->style->removeProperty("background-color");
+echo $div->style->backgroundColor;
+
+die();
 $div = new HTMLDivElement();
 $div->contentEditable = "true";
 die();

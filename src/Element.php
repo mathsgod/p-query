@@ -51,7 +51,7 @@ class Element extends DOMElement
     function removeEventListener(string $type, callable $listener)
     {
         $events = [];
-        foreach ($this->_events[$type] as $event) {
+        foreach ($this->_events[$type] ?? [] as $event) {
             if ($event !== $listener) {
                 $events[] = $event;
             }
@@ -61,7 +61,7 @@ class Element extends DOMElement
 
     function dispatchEvent(Event $event)
     {
-        foreach ($this->_events[$event->type] as $c) {
+        foreach ($this->_events[$event->type] ?? [] as $c) {
             $c($event);
         }
     }

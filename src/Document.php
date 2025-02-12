@@ -11,6 +11,7 @@ class Document extends DOMDocument
 
 	const ELEMENT_CLASS = [
 		"a" => HTMLAnchorElement::class,
+		"area" => HTMLAreaElement::class,
 		"audio" => HTMLAudioElement::class,
 		"br" => HTMLBRElement::class,
 		"p" => HTMLParagraphElement::class,
@@ -132,7 +133,7 @@ class Document extends DOMDocument
 			if ($reg->options["childList"]) {
 				if ($node instanceof Element) {
 
-					if ($reg->options["subtree"]) {
+					if (isset($reg->options["subtree"])) {
 						if ($reg->element->contains($node)) {
 							$record = new MutationRecord;
 							$record->target = $reg->element;
@@ -152,7 +153,7 @@ class Document extends DOMDocument
 				}
 			}
 
-			if ($reg->options["attributes"]) {
+			if (isset($reg->options["attributes"])) {
 				if ($reg->options["subtree"]) {
 					if ($reg->element->contains($node)) {
 						$record = new MutationRecord;

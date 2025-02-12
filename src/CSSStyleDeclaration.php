@@ -696,6 +696,7 @@ class CSSStyleDeclaration
 
         $values = [];
         foreach (explode(";", $this->node->nodeValue) as $v) {
+            if (!$v) continue;
             list($a, $b) = explode(":", $v);
             $values[$a] = trim($b ?? "");
         }
@@ -703,6 +704,10 @@ class CSSStyleDeclaration
         $name = preg_replace_callback("/[A-Z]+/", function ($a) {
             return "-"  . strtolower($a[0]);
         }, $name);
+
+        if (!isset($values[$name])) {
+            return "";
+        }
 
 
         return $values[$name];
