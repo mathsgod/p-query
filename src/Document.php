@@ -10,8 +10,8 @@ class Document extends DOMDocument
 {
 
 	const ELEMENT_CLASS = [
+		"area"=>HTMLAreaElement::class,
 		"a" => HTMLAnchorElement::class,
-		"area" => HTMLAreaElement::class,
 		"audio" => HTMLAudioElement::class,
 		"br" => HTMLBRElement::class,
 		"p" => HTMLParagraphElement::class,
@@ -81,6 +81,7 @@ class Document extends DOMDocument
 	{
 		if (!self::$DOCUMENT) {
 			self::$DOCUMENT = new Document();
+			self::$DOCUMENT->loadHTML("<div></div>");
 		}
 		return self::$DOCUMENT;
 	}
@@ -88,7 +89,7 @@ class Document extends DOMDocument
 	public function createElement($tagName, $value = null): Element
 	{
 
-		if (in_array($tagName, array_keys(self::ELEMENT_CLASS)) && $class = self::ELEMENT_CLASS[$tagName]) {
+	if (in_array($tagName, array_keys(self::ELEMENT_CLASS)) && $class = self::ELEMENT_CLASS[$tagName]) {
 			$this->registerNodeClass("DOMElement", $class);
 		} else {
 			$this->registerNodeClass("DOMElement", HTMLElement::class);
@@ -127,7 +128,7 @@ class Document extends DOMDocument
 
 	function _notifyNodeAdded(DOMNode $node)
 	{
-		foreach ($this->_observer_regs ?? [] as $reg) {
+		foreach ($this->_observer_regs??[] as $reg) {
 
 			$records = [];
 			if ($reg->options["childList"]) {

@@ -12,16 +12,21 @@ use P\HTMLParagraphElement;
 use P\HTMLSelectElement;
 use P\HTMLSpanElement;
 use P\MutationObserver;
+use P\Text;
 
 error_reporting(E_ALL);
 
 require_once("vendor/autoload.php");
 
-$btn=new HTMLButtonElement();
-$btn->autofocus=true;
-var_dump($btn->getAttribute('autofocus'));
+$p = p('<div class="container">
+    <div class="hello">Hello</div>
+</div>');
 
-echo $btn;
+
+
+//$p->find(".hello")->text("abc");
+
+echo $p;
 die();
 
 
@@ -35,9 +40,10 @@ $div = new HTMLDivElement();
 $div->contentEditable = "true";
 die();
 
-$d=Document::Current();
-$div=$d->createElement("div");;
-print_r($div);die;
+$d = Document::Current();
+$div = $d->createElement("div");;
+print_r($div);
+die;
 
 $div->innerText = "<span>abc</span>";
 
