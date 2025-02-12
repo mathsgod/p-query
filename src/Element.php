@@ -125,10 +125,10 @@ class Element extends DOMElement
         switch ($name) {
             case "id":
                 $this->setAttribute("id", $value);
-                break;
+                return;
             case "className":
                 $this->setAttribute("class", $value);
-                break;
+                return;
             case "innerHTML":
                 while ($this->hasChildNodes()) {
                     $this->removeChild($this->firstChild);
@@ -139,15 +139,12 @@ class Element extends DOMElement
                     parent::appendChild($this->ownerDocument->importNode($n, true));
                 }
                 return;
-                break;
             case "innerText":
                 $this->textContent = $value;
                 return;
-                break;
             case "name":
                 $this->setAttribute("name", $value);
                 return;
-                break;
         }
 
         $this->$name = $value;
