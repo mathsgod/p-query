@@ -31,7 +31,7 @@ class Element extends DOMElement
         Document::Current()->appendChild($this);
     }
 
-    function toggleAttribute(string $name)
+/*     function toggleAttribute(string $name)
     {
         if ($this->hasAttribute($name)) {
             $this->removeAttribute($name);
@@ -40,7 +40,7 @@ class Element extends DOMElement
             $this->setAttribute($name, true);
             return true;
         }
-    }
+    } */
 
     function addEventListener(string $type, callable $listener)
     {
@@ -65,7 +65,7 @@ class Element extends DOMElement
         }
     }
 
-    function contains(DOMNode $otherNode): bool
+  /*   function contains(DOMNode $otherNode): bool
     {
         if ($this === $otherNode) {
             return true;
@@ -76,7 +76,7 @@ class Element extends DOMElement
             }
         }
         return false;
-    }
+    } */
 
     function __toString()
     {

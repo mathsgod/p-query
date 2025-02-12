@@ -12,10 +12,10 @@ class Text extends \DOMText
         Document::Current()->appendChild($this);
     }
 
-    public function contains(DOMNode $otherNode): bool
+/*     public function contains(DOMNode $otherNode): bool
     {
         return $this === $otherNode;
-    }
+    } */
 
     public function __toString(): string
     {

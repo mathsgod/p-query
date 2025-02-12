@@ -13,7 +13,7 @@ use P\HTMLSelectElement;
 use P\HTMLSpanElement;
 use P\MutationObserver;
 
-error_reporting(E_ALL && ~E_NOTICE);
+//error_reporting(E_ALL && ~E_NOTICE);
 
 require_once("vendor/autoload.php");
 

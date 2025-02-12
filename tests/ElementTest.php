@@ -17,9 +17,9 @@ final class ElementTest extends TestCase
 <div class="container"><div class="hello">Hello</div><div class="goodbye">Goodbye</div></div>
 HTML;
     public $doc;
-    public function __construct()
+    public function __construct(string $name)
     {
-        parent::__construct();
+        parent::__construct($name);
         $this->doc = Document::Current();
     }
 
