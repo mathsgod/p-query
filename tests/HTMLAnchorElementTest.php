@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 final class HTMLAnchorElementTest extends TestCase
 {
-
     function test_host()
     {
         $e = new HTMLAnchorElement();
@@ -42,5 +41,15 @@ final class HTMLAnchorElementTest extends TestCase
         $a = new HTMLAnchorElement();
         $a->href = "https://www.google.com/a/b.php";
         $this->assertEquals("www.google.com", $a->hostname);
+    }
+
+    function test_protocol()
+    {
+        $a = new HTMLAnchorElement();
+        $a->href = "https://www.google.com/a/b.php";
+        $this->assertEquals("https", $a->protocol);
+
+        $a->protocol = "http";
+        $this->assertEquals("http://www.google.com/a/b.php", $a->href);
     }
 }
