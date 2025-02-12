@@ -87,7 +87,7 @@ class Document extends DOMDocument
 	public function createElement($tagName, $value = null): Element
 	{
 
-	if (in_array($tagName, array_keys(self::ELEMENT_CLASS)) && $class = self::ELEMENT_CLASS[$tagName]) {
+		if (in_array($tagName, array_keys(self::ELEMENT_CLASS)) && $class = self::ELEMENT_CLASS[$tagName]) {
 			$this->registerNodeClass("DOMElement", $class);
 		} else {
 			$this->registerNodeClass("DOMElement", HTMLElement::class);
@@ -126,7 +126,7 @@ class Document extends DOMDocument
 
 	function _notifyNodeAdded(DOMNode $node)
 	{
-		foreach ($this->_observer_regs as $reg) {
+		foreach ($this->_observer_regs ?? [] as $reg) {
 
 			$records = [];
 			if ($reg->options["childList"]) {

@@ -173,10 +173,13 @@ HTML;
     public function testInnerText()
     {
         $e =  $this->doc->createElement("div");
+
         $e->innerHTML = "<span>abc</span>";
         $this->assertEquals("abc", $e->innerText);
 
         $e =  $this->doc->createElement("div");
+
+
         $e->innerText = "<p>abc</p>";
         $this->assertEquals("<div>&lt;p&gt;abc&lt;/p&gt;</div>", (string)$e);
     }

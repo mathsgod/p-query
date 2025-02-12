@@ -1,4 +1,5 @@
 <?php
+
 namespace P;
 
 class Event
@@ -7,7 +8,6 @@ class Event
 
     public function __construct(string $type)
     {
-        $this->type=$type;
-        
+        $this->type = $type;
     }
 }

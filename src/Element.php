@@ -16,6 +16,7 @@ use DOMNodeList;
  * @property string $className Is a string representing the class of the element.
  * @property-read Element|null $firstElementChild Returns the first child element of this element.
  * @property-read Element|null $lastElementChild Returns the last child element of this element.
+ * @property string $innerText Represents the rendered text content of a node and its descendants. As a getter, it approximates the text the user would get if they highlighted the contents of the element with the cursor and then copied it to the clipboard. As a setter, it replaces the content inside the selected element, converting any line breaks into <br> elements.
  */
 class Element extends DOMElement
 {
@@ -31,7 +32,7 @@ class Element extends DOMElement
         Document::Current()->appendChild($this);
     }
 
-/*     function toggleAttribute(string $name)
+    /*     function toggleAttribute(string $name)
     {
         if ($this->hasAttribute($name)) {
             $this->removeAttribute($name);
@@ -65,7 +66,7 @@ class Element extends DOMElement
         }
     }
 
-  /*   function contains(DOMNode $otherNode): bool
+    /*   function contains(DOMNode $otherNode): bool
     {
         if ($this === $otherNode) {
             return true;
@@ -118,6 +119,7 @@ class Element extends DOMElement
     }
 
 
+
     function __set($name, $value)
     {
         switch ($name) {
@@ -138,6 +140,14 @@ class Element extends DOMElement
                 }
                 return;
                 break;
+            case "innerText":
+                $this->textContent = $value;
+                return;
+                break;
+            case "name":
+                $this->setAttribute("name", $value);
+                return;
+                break;
         }
 
         $this->$name = $value;
@@ -156,7 +166,7 @@ class Element extends DOMElement
             case "innerHTML":
                 $innerHTML = '';
                 foreach ($this->childNodes as $child) {
-                    if ($child instanceof DOMElement) {
+                    if ($child instanceof Element) {
                         $innerHTML .= $child->outerHTML;
                     } else {
                         $innerHTML .= $child->ownerDocument->saveHTML($child);

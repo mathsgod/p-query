@@ -88,14 +88,17 @@ class HTMLElement extends Element
     {
         if ($name == "accessKey") {
             $this->setAttribute("accesskey", $value);
+            return;
         }
 
         if ($name == "contentEditable") {
             $this->setAttribute("contenteditable", $value);
+            return;
         }
 
         if ($name == "dir") {
             $this->setAttribute("dir", $value);
+            return;
         }
 
         if ($name == "draggable") {
@@ -104,6 +107,7 @@ class HTMLElement extends Element
             } else {
                 $this->removeAttribute("draggable");
             }
+            return;
         }
 
         if ($name == "hidden") {
@@ -112,6 +116,7 @@ class HTMLElement extends Element
             } else {
                 $this->removeAttribute("hidden");
             }
+            return;
         }
 
         if ($name == "inert") {
@@ -120,26 +125,32 @@ class HTMLElement extends Element
             } else {
                 $this->removeAttribute("inert");
             }
+            return;
         }
 
         if ($name == "innerText") {
             $this->textContent = $value;
+            return;
         }
 
         if ($name == "lang") {
             $this->setAttribute("lang", $value);
+            return;
         }
 
         if ($name == "style") {
             $this->style->cssText = $value;
+            return;
         }
 
         if ($name == "tabIndex") {
             $this->setAttribute("tabindex", $value);
+            return;
         }
 
         if ($name == "title") {
             $this->setAttribute("title", $value);
+            return;
         }
 
         parent::__set($name, $value);

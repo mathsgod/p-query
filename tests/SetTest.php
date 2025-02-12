@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SetTest extends TestCase
 {
+    
     function test_size()
     {
         $set = new Set([1, 2, 3]);

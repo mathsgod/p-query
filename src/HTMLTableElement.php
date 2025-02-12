@@ -62,6 +62,7 @@ class HTMLTableElement extends HTMLElement
         switch ($name) {
             case "align":
                 $this->setAttribute("align", $value);
+                return;
                 break;
             case "caption":
                 if ($value instanceof HTMLTableCaptionElement) {
@@ -75,6 +76,7 @@ class HTMLTableElement extends HTMLElement
                 } else {
                     throw new DOMException("HierarchyRequestError");
                 }
+                return;
                 break;
             case "tHead":
                 if (!$value instanceof Element) {

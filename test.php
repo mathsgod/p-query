@@ -13,13 +13,21 @@ use P\HTMLSelectElement;
 use P\HTMLSpanElement;
 use P\MutationObserver;
 
-//error_reporting(E_ALL && ~E_NOTICE);
+error_reporting(E_ALL);
 
 require_once("vendor/autoload.php");
 
-$div = p("<div></div>")[0];
+$div = new HTMLDivElement();
+$div->contentEditable = "true";
+die();
 
-print_R($div);
+$d=Document::Current();
+$div=$d->createElement("div");;
+print_r($div);die;
+
+$div->innerText = "<span>abc</span>";
+
+echo $div;
 die();
 
 $div = p("<div></div>")[0];

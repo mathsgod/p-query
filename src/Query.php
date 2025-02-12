@@ -10,9 +10,24 @@ use DOMElement;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @template T of Element
+ * @implements IteratorAggregate<T>
+ * @implements ArrayAccess<int, T>
+ * @implements Countable<T>
+ * @psalm-consistent-constructor
+ * @psalm-consistent-implementation
+ * @psalm-consistent
+ * @psalm-type QueryArray = ArrayObject<int, T>
+ * @psalm-type QueryIterator = Traversable<T>
+ * @psalm-type QueryCountable = Countable<T>
+ * @psalm-type QueryArrayAccess = ArrayAccess<int, T>
+ * @psalm-type QueryIteratorAggregate = IteratorAggregate<T>
+ */
 class Query implements IteratorAggregate, ArrayAccess, Countable
 {
     private $container;
+    private $selector;
 
     public static function _($q)
     {

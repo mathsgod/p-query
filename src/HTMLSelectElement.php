@@ -33,6 +33,7 @@ class HTMLSelectElement extends HTMLElement
             } else {
                 $this->removeAttribute("requiautofocusred");
             }
+            return;
         }
 
         if ($name == "disabled") {
@@ -41,6 +42,7 @@ class HTMLSelectElement extends HTMLElement
             } else {
                 $this->removeAttribute("disabled");
             }
+            return;
         }
 
         if ($name == "multiple") {
@@ -49,10 +51,12 @@ class HTMLSelectElement extends HTMLElement
             } else {
                 $this->removeAttribute("multiple");
             }
+            return;
         }
 
         if ($name == "name") {
             $this->setAttribute("name", $value);
+            return;
         }
 
         if ($name == "required") {
@@ -61,6 +65,7 @@ class HTMLSelectElement extends HTMLElement
             } else {
                 $this->removeAttribute("required");
             }
+            return;
         }
 
         if ($name === "selectedIndex") {
@@ -83,6 +88,7 @@ class HTMLSelectElement extends HTMLElement
                     $option->selected = false;
                 }
             }
+            return;
         }
 
         parent::__set($name, $value);
