@@ -26,10 +26,10 @@ use Traversable;
  */
 class Query implements IteratorAggregate, ArrayAccess, Countable
 {
-    private $container;
-    private $selector;
+    private ArrayObject $container;
+    private ?string $selector = null;
 
-    public static function _($q)
+    public static function _(mixed $q): self
     {
         return new self($q);
     }
@@ -70,12 +70,12 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this->container;
     }
 
-    public static function ParseFile($file)
+    public static function ParseFile(string $file): self
     {
         return p(file_get_contents($file));
     }
 
-    public function __construct($tag = null)
+    public function __construct(string|Element|Query|DOMNode|null $tag = null)
     {
         $this->container = new ArrayObject();
 
@@ -104,7 +104,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         }
     }
 
-    public function on($event, $handler)
+    public function on(string $event, callable $handler): self
     {
         foreach ($this as $node) {
             if ($node instanceof Element) {
@@ -114,7 +114,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function trigger($event)
+    public function trigger(string|Event $event): self
     {
         if (is_string($event)) {
             $event = new Event($event);
@@ -150,7 +150,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $q;
     }
 
-    public function html($html = null)
+    public function html(string|\Closure|null $html = null): string|self
     {
         if (!func_num_args()) {
             $html = "";
@@ -174,7 +174,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function prepend($node): self
+    public function prepend(string|DOMNode|Query $node): self
     {
         if (is_string($node)) {
             foreach ($this as $child) {
@@ -204,7 +204,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function prependTo($target): self
+    public function prependTo(Element|Query $target): self
     {
         if ($target instanceof Element) {
             p($target)->prepend($this);
@@ -214,7 +214,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function appendTo($target): self
+    public function appendTo(DOMElement|Query $target): self
     {
         if ($target instanceof DOMElement) {
             p($target)->append($this);
@@ -226,7 +226,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
     }
 
 
-    public function append(mixed $node): self
+    public function append(string|DOMNode|Query $node): self
     {
         if (is_string($node)) {
             foreach ($this as $child) {
@@ -254,7 +254,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function attr($name, $value = null)
+    public function attr(string|array|object $name, mixed $value = null): string|self|null
     {
         if (func_num_args() == 1) {
             if (is_array($name) || is_object($name)) {
@@ -279,7 +279,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function after($content)
+    public function after(string|Element|Query|DOMNode $content): ?self
     {
         foreach ($this as $node) {
             $after = p($content);
@@ -289,9 +289,10 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
                 }
             }
         }
+        return null;
     }
 
-    public function before($content)
+    public function before(string|Element|Query|DOMNode $content): self
     {
         foreach ($this as $node) {
             $before = p($content);
@@ -302,7 +303,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function css($name, $value = null)
+    public function css(string $name, mixed $value = null): string|self|null
     {
 
         $name = str_replace(' ', '', ucwords(str_replace('-', ' ', $name)));
@@ -320,7 +321,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function closest($selector)
+    public function closest(string $selector): self
     {
         $q = new self();
         foreach ($this as $node) {
@@ -332,7 +333,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $q;
     }
 
-    public function data(string $key, $value = null)
+    public function data(string $key, mixed $value = null): mixed
     {
         if (func_num_args() == 1) {
             return $this[0]->__data[$key];
@@ -358,7 +359,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function text($text = "")
+    public function text(string $text = ""): string|self
     {
         if (func_num_args() == 0) {
             $text = "";
@@ -374,7 +375,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $str = "";
         foreach ($this as $node) {
@@ -394,7 +395,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $q;
     }
 
-    public function children($selector = null): self
+    public function children(?string $selector = null): self
     {
         $q = new self();
         $q->selector = $selector;
@@ -425,7 +426,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
     }
 
 
-    public function __call($method, $args)
+    public function __call(string $method, array $args): mixed
     {
         //for php5.6, empty is reserved word
         if ($method == "empty") {
@@ -440,12 +441,14 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         if ($this->$method instanceof \Closure) {
             return call_user_func_array($this->$method, $args);
         }
+
+        return null;
     }
 
     /**
      * @return Query<Element>
      */
-    public function find($selector)
+    public function find(string $selector): self
     {
         $q = new self();
 
@@ -462,7 +465,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $q;
     }
 
-    public function remove($selector = null)
+    public function remove(?string $selector = null): ?self
     {
         if (isset($selector)) {
             $this->find($selector)->remove();
@@ -474,9 +477,10 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
                 }
             }
         }
+        return null;
     }
 
-    public function removeAttr($attributeName): self
+    public function removeAttr(string $attributeName): self
     {
         foreach ($this as $node) {
             $node->removeAttribute($attributeName);
@@ -484,7 +488,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function removeClass($className = null): self
+    public function removeClass(?string $className = null): self
     {
         if (func_num_args() == 0) {
             foreach ($this as $node) {
@@ -504,7 +508,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function replaceWith($newContent)
+    public function replaceWith(string|Element|Query|DOMNode $newContent): ?self
     {
         foreach ($this as $node) {
             foreach (p($newContent) as $n) {
@@ -512,9 +516,10 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
             }
             $node->parentNode->removeChild($node);
         }
+        return null;
     }
 
-    public function required()
+    public function required(): self
     {
         foreach ($this as $node) {
             $node->setAttribute("required", true);
@@ -522,7 +527,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function each($callback)
+    public function each(\Closure $callback): self
     {
         $i = 0;
         foreach ($this as $node) {
@@ -533,7 +538,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function val($value = null)
+    public function val(string|array|null $value = null): string|array|self|null
     {
         if (!func_num_args()) {
             $node = $this[0]; //first node
@@ -575,7 +580,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function filter($selector): self
+    public function filter(\Closure|string $selector): self
     {
         $q = new self();
         foreach ($this as $node) {
@@ -601,7 +606,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $q;
     }
 
-    public function wrap($wrappingElement): self
+    public function wrap(string|Element|Query|DOMNode $wrappingElement): self
     {
         foreach ($this as $node) {
             $we = p($wrappingElement)[0];
@@ -612,7 +617,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $this;
     }
 
-    public function wrapInner($wrappingElement): self
+    public function wrapInner(string|Element|Query|DOMNode $wrappingElement): self
     {
         foreach ($this as $node) {
             $we = p($wrappingElement)[0];
@@ -686,7 +691,7 @@ class Query implements IteratorAggregate, ArrayAccess, Countable
         return $index;
     }
 
-    protected static function ParseHTML($str)
+    protected static function ParseHTML(string $str): array
     {
         $parser = new DOMParser();
         return $parser->parseFromString($str);

@@ -4,8 +4,7 @@ namespace P;
 
 class CustomEvent extends Event
 {
-
-    public $detail;
+    public mixed $detail;
 
     public function __construct(string $typeArg, array $customEventInit = ["detail" => null])
     {

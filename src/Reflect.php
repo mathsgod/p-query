@@ -2,18 +2,17 @@
 
 namespace P;
 
-use Closure;
 use ReflectionFunction;
 
 class Reflect
 {
-    static function apply(callable $target, $thisArgument, array $argumentsList = [])
+    public static function apply(callable $target, mixed $thisArgument, array $argumentsList = []): mixed
     {
         $function = new ReflectionFunction($target);
         return $function->getClosure()->bindTo($thisArgument)->__invoke(...$argumentsList);
     }
 
-    static function has($target, $propertyKey)
+    public static function has(mixed $target, string $propertyKey): bool
     {
         return property_exists($target, $propertyKey);
     }

@@ -4,9 +4,9 @@ namespace P;
 
 /**
  * The HTMLProgressElement interface provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <progress> elements.
- * @property double $max This attribute indicates the maximum value of the <progress> element.
- * @property-read double $position This attribute indicates the current value of the <progress> element.
- * @property double $value This attribute indicates the current value of the <progress> element.
+ * @property float $max This attribute indicates the maximum value of the <progress> element.
+ * @property-read float $position This attribute indicates the current value of the <progress> element.
+ * @property float $value This attribute indicates the current value of the <progress> element.
  */
 class HTMLProgressElement extends HTMLElement
 {
@@ -15,7 +15,11 @@ class HTMLProgressElement extends HTMLElement
         parent::__construct('progress');
     }
 
-    function __get($name)
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
     {
         switch ($name) {
             case 'max':
@@ -29,7 +33,12 @@ class HTMLProgressElement extends HTMLElement
         }
     }
 
-    function __set($name, $value)
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set($name, $value)
     {
         switch ($name) {
             case 'max':

@@ -12,21 +12,28 @@ namespace P;
  * @property-read HTMLOptionsCollection $options
  * @property bool $required
  * @property int $selectedIndex A long reflecting the index of the first selected <option> element. The value -1 indicates no element is selected.
- * @property-read HTMLCollection<HTMLElement> $selectedOptions
+ * @property-read HTMLCollection $selectedOptions
  * @property int $size
  * @property-read ?string $type
  * @property-read string $value
  */
 class HTMLSelectElement extends HTMLElement
 {
+    private const array BOOLEAN_ATTRIBUTES = ["disabled", "multiple", "required"];
+    private const array STRING_ATTRIBUTES = ["name"];
+
     public function __construct()
     {
         parent::__construct("select");
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
-
         if ($name == "autofocus") {
             if ($value) {
                 $this->setAttribute("autofocus", "");
@@ -36,35 +43,17 @@ class HTMLSelectElement extends HTMLElement
             return;
         }
 
-        if ($name == "disabled") {
+        if (in_array($name, self::BOOLEAN_ATTRIBUTES, true)) {
             if ($value) {
-                $this->setAttribute("disabled", "");
+                $this->setAttribute($name, "");
             } else {
-                $this->removeAttribute("disabled");
+                $this->removeAttribute($name);
             }
             return;
         }
 
-        if ($name == "multiple") {
-            if ($value) {
-                $this->setAttribute("multiple", "");
-            } else {
-                $this->removeAttribute("multiple");
-            }
-            return;
-        }
-
-        if ($name == "name") {
-            $this->setAttribute("name", $value);
-            return;
-        }
-
-        if ($name == "required") {
-            if ($value) {
-                $this->setAttribute("required", "");
-            } else {
-                $this->removeAttribute("required");
-            }
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
+            $this->setAttribute($name, $value);
             return;
         }
 
@@ -78,7 +67,6 @@ class HTMLSelectElement extends HTMLElement
             }
             return;
         }
-
 
         if ($name == "value") {
             foreach ($this->options as $option) {
@@ -94,15 +82,22 @@ class HTMLSelectElement extends HTMLElement
         parent::__set($name, $value);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
-
         if ($name == "autofocus") {
             return $this->hasAttribute("autofocus");
         }
 
-        if ($name == "disabled") {
-            return $this->hasAttribute("disabled");
+        if (in_array($name, self::BOOLEAN_ATTRIBUTES, true)) {
+            return $this->hasAttribute($name);
+        }
+
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
+            return $this->getAttribute($name);
         }
 
         if ($name == "form") {
@@ -113,25 +108,12 @@ class HTMLSelectElement extends HTMLElement
             return $this->querySelectorAll("option")->count();
         }
 
-        if ($name == "name") {
-            return $this->getAttribute("name");
-        }
-
-        if ($name == "multiple") {
-            return $this->hasAttribute("multiple");
-        }
-
         if ($name == "options") {
-
             $options = new HTMLOptionsCollection();
             foreach ($this->getElementsByTagName("option") as $child) {
                 $options->append($child);
             }
             return $options;
-        }
-
-        if ($name == "required") {
-            return $this->hasAttribute("required");
         }
 
         if ($name == "selectedIndex") {
@@ -156,11 +138,7 @@ class HTMLSelectElement extends HTMLElement
         }
 
         if ($name == "type") {
-            if ($this->multiple) {
-                return "select-multiple";
-            } else {
-                return "select-one";
-            }
+            return $this->multiple ? "select-multiple" : "select-one";
         }
 
         if ($name == "value") {
@@ -172,18 +150,24 @@ class HTMLSelectElement extends HTMLElement
             return "";
         }
 
-
-
         return parent::__get($name);
     }
 
-    public function add(HTMLOptionElement $item)
+    /**
+     * @param HTMLOptionElement $item
+     * @return void
+     */
+    public function add(HTMLOptionElement $item): void
     {
         $this->appendChild($item);
     }
 
-    public function item($index)
+    /**
+     * @param int $index
+     * @return Element|null
+     */
+    public function item(int $index): ?Element
     {
-        return $this->getElementsByTagName("option")[$index];
+        return $this->getElementsByTagName("option")[$index] ?? null;
     }
 }

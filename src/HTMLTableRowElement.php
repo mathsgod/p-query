@@ -11,15 +11,15 @@ use DOMException;
  */
 class HTMLTableRowElement extends HTMLElement
 {
-    public function __construct(string $value = "", string $uri = null)
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("tr", $value, $uri);
+        parent::__construct("tr", $value, $namespace);
     }
 
     /**
      * Removes the cell corresponding to index. If index is -1, the last cell of the row is removed. If index is less than -1 or greater than the amount of cells in the collection, a DOMException with the value IndexSizeError is raised.
      */
-    public function deleteCell($index)
+    public function deleteCell(int $index): void
     {
         $children = $this->cells;
         $num_cells = $children->length;
@@ -39,7 +39,7 @@ class HTMLTableRowElement extends HTMLElement
     /**
      * Returns an HTMLTableCellElement representing a new cell of the row. The cell is inserted in the collection of cells immediately before the given index position in the row. If index is -1, the new cell is appended to the collection. If index is less than -1 or greater than the number of cells in the collection, a DOMException with the value IndexSizeError is raised.
      */
-    public function insertCell($index = -1): HTMLTableCellElement
+    public function insertCell(int $index = -1): HTMLTableCellElement
     {
         $children = $this->cells;
         $num_cell = $children->length;
@@ -58,7 +58,10 @@ class HTMLTableRowElement extends HTMLElement
         return $cell;
     }
 
-
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name === "cells") {

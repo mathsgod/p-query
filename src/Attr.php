@@ -2,11 +2,9 @@
 
 namespace P;
 
-use DOMAttr;
-
-class Attr extends DOMAttr
+class Attr extends \DOMAttr
 {
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value;
     }

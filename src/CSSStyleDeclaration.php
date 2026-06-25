@@ -2,8 +2,6 @@
 
 namespace P;
 
-use DOMNode;
-
 /**
  * @property string $accentColor
  * @property string $additiveSymbols
@@ -591,9 +589,9 @@ use DOMNode;
 
 class CSSStyleDeclaration
 {
-    private $node;
+    private \DOMNode $node;
 
-    public function __construct(DOMNode $node)
+    public function __construct(\DOMNode $node)
     {
         $this->node = $node;
     }
@@ -615,7 +613,7 @@ class CSSStyleDeclaration
     /**
      * Removes a property from the CSS declaration block
      */
-    public function removeProperty(string $property)
+    public function removeProperty(string $property): string
     {
         $old_value = $this->__get($property);
         $this->__set($property, null);
@@ -633,7 +631,7 @@ class CSSStyleDeclaration
     /**
      * Modifies an existing CSS property or creates a new CSS property in the declaration block.
      */
-    function setProperty(string $property, string $value, string $priority = null)
+    function setProperty(string $property, string $value, ?string $priority = null): void
     {
         $this->__set($property, $value);
     }

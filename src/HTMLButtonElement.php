@@ -9,67 +9,51 @@ namespace P;
  * @property string $type Is a DOMString representing the type of button. Possible values are: submit , reset , button , and menu .
  * @property string $value Is a DOMString representing the current form control value of the button.
  */
-
 class HTMLButtonElement extends HTMLElement
 {
-    public function __construct(string|null $value = null, string $namespace = null)
+    private const array BOOLEAN_ATTRIBUTES = ["autofocus", "disabled"];
+    private const array STRING_ATTRIBUTES = ["name", "type", "value"];
+
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
         parent::__construct("button", $value, $namespace);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
-        if ($name == "autofocus") {
-            return $this->hasAttribute("autofocus");
+        if (in_array($name, self::BOOLEAN_ATTRIBUTES, true)) {
+            return $this->hasAttribute($name);
         }
-        if ($name == "disabled") {
-            return $this->hasAttribute("disabled");
-        }
-        if ($name == "name") {
-            return $this->getAttribute("name");
-        }
-        if ($name == "type") {
-            return $this->getAttribute("type");
-        }
-        if ($name == "value") {
-            return $this->getAttribute("value");
+
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
+            return $this->getAttribute($name);
         }
 
         return parent::__get($name);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
-        if ($name == "autofocus") {
+        if (in_array($name, self::BOOLEAN_ATTRIBUTES, true)) {
             if ($value) {
-                $this->setAttribute("autofocus", "");
+                $this->setAttribute($name, "");
             } else {
-                $this->removeAttribute("autofocus");
+                $this->removeAttribute($name);
             }
             return;
         }
 
-        if ($name == "disabled") {
-            if ($value) {
-                $this->setAttribute("disabled", "");
-            } else {
-                $this->removeAttribute("disabled");
-            }
-            return;
-        }
-
-        if ($name == "name") {
-            $this->setAttribute("name", $value);
-            return;
-        }
-
-        if ($name == "type") {
-            $this->setAttribute("type", $value);
-            return;
-        }
-        
-        if ($name == "value") {
-            $this->setAttribute("value", $value);
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
+            $this->setAttribute($name, $value);
             return;
         }
 

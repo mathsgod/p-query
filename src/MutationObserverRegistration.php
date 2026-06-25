@@ -4,16 +4,13 @@ namespace P;
 
 class MutationObserverRegistration
 {
-
     public array $options = [];
-    public $observer;
 
-    /**
-     * @var Element $element
-     */
-    public $element;
+    public MutationObserver $observer;
 
-    function __construct(MutationObserver $observer, Element $element, $options)
+    public Element $element;
+
+    public function __construct(MutationObserver $observer, Element $element, array $options)
     {
         $this->observer = $observer;
         $this->element = $element;

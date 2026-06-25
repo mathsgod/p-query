@@ -4,7 +4,7 @@ namespace P;
 
 class Event
 {
-    public $type;
+    public string $type;
 
     public function __construct(string $type)
     {

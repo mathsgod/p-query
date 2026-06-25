@@ -7,11 +7,15 @@ namespace P;
  */
 class HTMLDataListElement extends HTMLElement
 {
-    public function __construct(string $value = "", string $uri = null)
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("datalist", $value, $uri);
+        parent::__construct("datalist", $value, $namespace);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name === "options") {

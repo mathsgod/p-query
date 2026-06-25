@@ -20,35 +20,24 @@ use DOMNodeList;
  */
 class Element extends DOMElement
 {
-    public $_events = [];
-    public $__data = [];
+    public array $_events = [];
+    public array $__data = [];
 
     function __construct(string $name, string|null $value = "", string|null $namespace = "")
     {
-        if (Document::ELEMENT_CLASS[$name]) {
+        if (isset(Document::ELEMENT_CLASS[$name])) {
             Document::Current()->registerNodeClass("DOMElement", Document::ELEMENT_CLASS[$name]);
         }
         parent::__construct($name, $value, $namespace ?? "");
         Document::Current()->appendChild($this);
     }
 
-    /*     function toggleAttribute(string $name)
-    {
-        if ($this->hasAttribute($name)) {
-            $this->removeAttribute($name);
-            return false;
-        } else {
-            $this->setAttribute($name, true);
-            return true;
-        }
-    } */
-
-    function addEventListener(string $type, callable $listener)
+    function addEventListener(string $type, callable $listener): void
     {
         $this->_events[$type][] = $listener;
     }
 
-    function removeEventListener(string $type, callable $listener)
+    function removeEventListener(string $type, callable $listener): void
     {
         $events = [];
         foreach ($this->_events[$type] ?? [] as $event) {
@@ -59,37 +48,24 @@ class Element extends DOMElement
         $this->_events[$type] = $events;
     }
 
-    function dispatchEvent(Event $event)
+    function dispatchEvent(Event $event): void
     {
         foreach ($this->_events[$event->type] ?? [] as $c) {
             $c($event);
         }
     }
 
-    /*   function contains(DOMNode $otherNode): bool
-    {
-        if ($this === $otherNode) {
-            return true;
-        }
-        foreach ($this->childNodes as $node) {
-            if ($node->contains($otherNode)) {
-                return true;
-            }
-        }
-        return false;
-    } */
-
-    function __toString()
+    function __toString(): string
     {
         return $this->outerHTML;
     }
 
-
-    function querySelector(string $selector)
+    function querySelector(string $selector): ?Element
     {
         $nodelist = $this->querySelectorAll($selector);
         if ($nodelist->length) {
-            return $nodelist->item(0);
+            $item = $nodelist->item(0);
+            return $item instanceof Element ? $item : null;
         }
         return null;
     }
@@ -108,9 +84,8 @@ class Element extends DOMElement
         $doc = new Document();
         $doc->appendChild($doc->importNode($this));
         $matches = $doc->querySelectorAll($selectorString);
-        return  $matches->length == 1;
+        return $matches->length == 1;
     }
-
 
     function prependChild(DOMNode $newnode): DOMNode
     {
@@ -118,8 +93,10 @@ class Element extends DOMElement
         return $this->insertBefore($newnode, $firstChild);
     }
 
-
-
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
     function __set($name, $value)
     {
         switch ($name) {
@@ -150,6 +127,10 @@ class Element extends DOMElement
         $this->$name = $value;
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     function __get($name)
     {
         switch ($name) {
@@ -159,7 +140,6 @@ class Element extends DOMElement
                 return $this->getAttribute("class");
             case "classList":
                 return new DOMTokenList($this, "class");
-                break;
             case "innerHTML":
                 $innerHTML = '';
                 foreach ($this->childNodes as $child) {
@@ -172,7 +152,6 @@ class Element extends DOMElement
                 return $innerHTML;
             case "outerHTML":
                 return $this->ownerDocument->saveHTML($this);
-                break;
             case 'children':
                 $collection = new HTMLCollection();
                 foreach ($this->childNodes as $child) {
@@ -181,13 +160,11 @@ class Element extends DOMElement
                     }
                 }
                 return $collection;
-                break;
             case 'style':
                 if (!$this->hasAttribute("style")) {
                     $this->setAttribute("style", "");
                 }
                 return new CSSStyleDeclaration($this->attributes->getNamedItem("style"));
-                break;
             case "lastElementChild":
                 return $this->lastElementChild;
             case "firstElementChild":
@@ -196,17 +173,15 @@ class Element extends DOMElement
         return null;
     }
 
-    function setAttribute($name, $value)
+    function setAttribute(string $name, mixed $value): void
     {
-
-
         if ($value === true || $value === "" || $value === null) {
             $this->removeAttribute($name);
             $this->appendChild($this->ownerDocument->createAttribute($name));
         } elseif ($value === false) {
             $this->removeAttribute($name);
         } else {
-            parent::setAttribute($name, $value);
+            parent::setAttribute($name, (string) $value);
         }
 
         if ($name == "id") {
@@ -225,14 +200,12 @@ class Element extends DOMElement
         return null;
     }
 
-    function appendChild(DOMNode $node)
+    function appendChild(DOMNode $node): DOMNode
     {
         return Document::Current()->_notifyNodeAdded(parent::appendChild($node));
     }
 
-
-
-    function registerMutationObserver(MutationObserver $observer, $options)
+    function registerMutationObserver(MutationObserver $observer, array $options): void
     {
         $document = Document::Current();
         $document->_observer_regs[] = new MutationObserverRegistration($observer, $this, $options);

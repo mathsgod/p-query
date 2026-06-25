@@ -12,10 +12,13 @@ class HTMLTemplateElement extends HTMLElement
         parent::__construct("template", $value, $namespace);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name === "content") {
-
             $fragment = $this->ownerDocument->createDocumentFragment();
 
             foreach ($this->childNodes as $node) {

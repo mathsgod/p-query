@@ -15,24 +15,29 @@ namespace P;
  */
 class HTMLFormElement extends HTMLElement
 {
-    public function __construct($value = "", $uri = null)
+    private const array STRING_ATTRIBUTES = [
+        "name",
+        "method",
+        "target",
+        "action",
+        "autocomplete",
+        "encoding",
+        "enctype",
+    ];
+
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("form", $value, $uri);
+        parent::__construct("form", $value, $namespace);
     }
 
-    function __set($name, $value)
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set($name, $value)
     {
-        $attributes = [
-            "name",
-            "method",
-            "target",
-            "action",
-            "autocomplete",
-            "encoding",
-            "enctype"
-        ];
-
-        if (in_array($name, $attributes)) {
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
             $this->setAttribute($name, $value);
         } elseif ($name === "acceptCharset") {
             $this->setAttribute("accept-charset", $value);
@@ -47,26 +52,24 @@ class HTMLFormElement extends HTMLElement
         }
     }
 
-    function __get($name)
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
     {
-        $attributes = [
-            "name",
-            "method",
-            "target",
-            "action",
-            "autocomplete",
-            "encoding",
-            "enctype"
-        ];
-
-        if (in_array($name, $attributes)) {
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
             return $this->getAttribute($name);
-        } elseif ($name === "acceptCharset") {
-            return $this->getAttribute("accept-charset");
-        } elseif ($name === "noValidate") {
-            return $this->hasAttribute("novalidate");
-        } else {
-            return parent::__get($name);
         }
+
+        if ($name === "acceptCharset") {
+            return $this->getAttribute("accept-charset");
+        }
+
+        if ($name === "noValidate") {
+            return $this->hasAttribute("novalidate");
+        }
+
+        return parent::__get($name);
     }
 }

@@ -11,51 +11,50 @@ namespace P;
  * @property int $width
  * @property int $height
  * @property string $referrerPolicy
- * 
  */
 class HTMLImageElement extends HTMLElement
 {
-    public function __construct(string $value = "", string $uri = null)
+    private const array ATTRIBUTES = [
+        "alt" => "alt",
+        "src" => "src",
+        "srcset" => "srcset",
+        "crossOrigin" => "crossorigin",
+        "useMap" => "usemap",
+        "width" => "width",
+        "height" => "height",
+        "referrerPolicy" => "referrerpolicy",
+    ];
+
+    private const array INTEGER_ATTRIBUTES = ["width", "height"];
+
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("img", $value, $uri);
+        parent::__construct("img", $value, $namespace);
     }
 
-    function __get($name)
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
     {
-        $attributes = [
-            "alt" => "alt",
-            "src" => "src",
-            "srcset" => "srcset",
-            "crossOrigin" => "crossorigin",
-            "useMap" => "usemap",
-            "width" => "width",
-            "height" => "height",
-            "referrerPolicy" => "referrerpolicy"
-        ];
-
-        if (array_key_exists($name, $attributes)) {
-            $value = $this->getAttribute($attributes[$name]);
-            return in_array($name, ["width", "height"]) ? intval($value) : $value;
+        if (array_key_exists($name, self::ATTRIBUTES)) {
+            $value = $this->getAttribute(self::ATTRIBUTES[$name]);
+            return in_array($name, self::INTEGER_ATTRIBUTES, true) ? intval($value) : $value;
         }
 
         return parent::__get($name);
     }
 
-    function __set($name, $value)
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set($name, $value)
     {
-        $attributes = [
-            "alt" => "alt",
-            "src" => "src",
-            "srcset" => "srcset",
-            "crossOrigin" => "crossorigin",
-            "useMap" => "usemap",
-            "width" => "width",
-            "height" => "height",
-            "referrerPolicy" => "referrerpolicy"
-        ];
-
-        if (array_key_exists($name, $attributes)) {
-            $this->setAttribute($attributes[$name], $value);
+        if (array_key_exists($name, self::ATTRIBUTES)) {
+            $this->setAttribute(self::ATTRIBUTES[$name], $value);
         } else {
             parent::__set($name, $value);
         }

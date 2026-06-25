@@ -22,79 +22,89 @@ namespace P;
  */
 class HTMLAreaElement extends HTMLElement
 {
+    private const array STRING_ATTRIBUTES = [
+        "alt",
+        "coords",
+        "href",
+        "rel",
+        "search",
+        "shape",
+        "tabIndex",
+        "target",
+    ];
+
+    private const array URL_PARTS = [
+        "hash",
+        "host",
+        "hostname",
+        "password",
+        "pathname",
+        "port",
+        "protocol",
+        "username",
+    ];
+
     public function __construct()
     {
         parent::__construct("area");
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
-        if (in_array($name, [
-            "alt",
-            "coords",
-            "href",
-            "rel",
-            "search",
-            "shape",
-            "tabIndex",
-            "target",
-        ])) {
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
             return $this->getAttribute($name);
         }
 
-        if ($name == "hash") {
-            return parse_url($this->getAttribute("href"), PHP_URL_FRAGMENT);
-        }
+        if (in_array($name, self::URL_PARTS, true)) {
+            if ($name == "hash") {
+                return parse_url($this->getAttribute("href"), PHP_URL_FRAGMENT);
+            }
 
-        if ($name == "host") {
-            return parse_url($this->getAttribute("href"), PHP_URL_HOST);
-        }
+            if ($name == "host" || $name == "hostname") {
+                return parse_url($this->getAttribute("href"), PHP_URL_HOST);
+            }
 
-        if ($name == "hostname") {
-            return parse_url($this->getAttribute("href"), PHP_URL_HOST);
-        }
+            if ($name == "password") {
+                return parse_url($this->getAttribute("href"), PHP_URL_PASS);
+            }
 
-        if ($name == "password") {
-            return parse_url($this->getAttribute("href"), PHP_URL_PASS);
-        }
+            if ($name == "pathname") {
+                return parse_url($this->getAttribute("href"), PHP_URL_PATH);
+            }
 
-        if ($name == "pathname") {
-            return parse_url($this->getAttribute("href"), PHP_URL_PATH);
-        }
+            if ($name == "port") {
+                return parse_url($this->getAttribute("href"), PHP_URL_PORT);
+            }
 
-        if ($name == "port") {
-            return parse_url($this->getAttribute("href"), PHP_URL_PORT);
-        }
+            if ($name == "protocol") {
+                return parse_url($this->getAttribute("href"), PHP_URL_SCHEME);
+            }
 
-        if ($name == "protocol") {
-            return parse_url($this->getAttribute("href"), PHP_URL_SCHEME);
-        }
-
-        if ($name == "username") {
-            return parse_url($this->getAttribute("href"), PHP_URL_USER);
+            if ($name == "username") {
+                return parse_url($this->getAttribute("href"), PHP_URL_USER);
+            }
         }
 
         return parent::__get($name);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
-        if (in_array($name, [
-            "alt",
-            "coords",
-            "href",
-            "rel",
-            "search",
-            "shape",
-            "tabIndex",
-            "target",
-        ])) {
+        if (in_array($name, self::STRING_ATTRIBUTES, true)) {
             $this->setAttribute($name, $value);
             return;
         }
 
-        if (in_array($name, ["hash", "host", "hostname", "password", "pathname", "port", "protocol", "username"])) {
-            //rebuild href
+        if (in_array($name, self::URL_PARTS, true)) {
             $href = $this->getAttribute("href");
             $href = parse_url($href);
 
@@ -115,6 +125,7 @@ class HTMLAreaElement extends HTMLElement
             } elseif ($name == "username") {
                 $href["user"] = $value;
             }
+
             $this->setAttribute("href", http_build_url($href));
             return;
         }

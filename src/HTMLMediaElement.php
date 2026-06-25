@@ -8,22 +8,20 @@ namespace P;
  */
 class HTMLMediaElement extends HTMLElement
 {
+    private const array BOOLEAN_ATTRIBUTES = ["autoplay", "controls"];
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
-        if ($name == "autoplay") {
+        if (in_array($name, self::BOOLEAN_ATTRIBUTES, true)) {
             if ($value) {
-                $this->setAttribute("autoplay", "");
+                $this->setAttribute($name, "");
             } else {
-                $this->removeAttribute("autoplay");
-            }
-            return;
-        }
-
-        if ($name == "controls") {
-            if ($value) {
-                $this->setAttribute("controls", "");
-            } else {
-                $this->removeAttribute("controls");
+                $this->removeAttribute($name);
             }
             return;
         }
@@ -31,14 +29,14 @@ class HTMLMediaElement extends HTMLElement
         parent::__set($name, $value);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
-        if ($name == "autoplay") {
-            return $this->hasAttribute("autoplay");
-        }
-
-        if ($name == "controls") {
-            return $this->hasAttribute("controls");
+        if (in_array($name, self::BOOLEAN_ATTRIBUTES, true)) {
+            return $this->hasAttribute($name);
         }
 
         return parent::__get($name);

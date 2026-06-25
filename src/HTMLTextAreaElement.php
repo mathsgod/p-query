@@ -7,7 +7,7 @@ namespace P;
  * @property int $cols
  * @property string $defaultValue
  * @property bool $disabled
- * @property-read HTMLFormElement $form
+ * @property-read ?HTMLFormElement $form
  * @property int $maxLength
  * @property int $minLength
  * @property string $name
@@ -20,18 +20,20 @@ namespace P;
  * @property-read int $textLength
  * @property-read string $type
  * @property-read string $validationMessage
- * @property string $value;
+ * @property string $value
  * @property string $wrap
- *
- **/
-
+ */
 class HTMLTextAreaElement extends HTMLElement
 {
-    public function __construct($value = "", $uri = null)
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("textarea", $value, $uri);
+        parent::__construct("textarea", $value, $namespace);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name == "autofocus") {
@@ -41,9 +43,8 @@ class HTMLTextAreaElement extends HTMLElement
         if ($name == "cols") {
             if ($this->hasAttribute("cols")) {
                 return (int) $this->getAttribute("cols");
-            } else {
-                return 20;
             }
+            return 20;
         }
 
         if ($name == "defaultValue") {
@@ -61,17 +62,15 @@ class HTMLTextAreaElement extends HTMLElement
         if ($name == "maxLength") {
             if ($this->hasAttribute("maxlength")) {
                 return (int) $this->getAttribute("maxlength");
-            } else {
-                return -1;
             }
+            return -1;
         }
 
         if ($name == "minLength") {
             if ($this->hasAttribute("minlength")) {
                 return (int) $this->getAttribute("minlength");
-            } else {
-                return -1;
             }
+            return -1;
         }
 
         if ($name == "name") {
@@ -101,6 +100,11 @@ class HTMLTextAreaElement extends HTMLElement
         return parent::__get($name);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
         if ($name == "autofocus") {
@@ -174,7 +178,6 @@ class HTMLTextAreaElement extends HTMLElement
         if ($name == "value") {
             $this->nodeValue = $value;
         }
-
 
         parent::__set($name, $value);
     }

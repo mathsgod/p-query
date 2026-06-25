@@ -10,8 +10,10 @@ use Traversable;
  */
 class Set implements IteratorAggregate
 {
-    private $items = [];
-    function __construct(array $items = [])
+    /** @var array<int, mixed> */
+    private array $items = [];
+
+    public function __construct(array $items = [])
     {
         $this->items = $items;
     }
@@ -21,19 +23,19 @@ class Set implements IteratorAggregate
         return new \ArrayIterator($this->items);
     }
 
-    function add($item)
+    public function add(mixed $item): void
     {
         if (!in_array($item, $this->items)) {
             $this->items[] = $item;
         }
     }
 
-    function has($item)
+    public function has(mixed $item): bool
     {
         return in_array($item, $this->items);
     }
 
-    function delete($item)
+    public function delete(mixed $item): void
     {
         $index = array_search($item, $this->items);
         if ($index !== false) {
@@ -41,28 +43,32 @@ class Set implements IteratorAggregate
         }
     }
 
-    function clear()
+    public function clear(): void
     {
         $this->items = [];
     }
 
-    function values()
+    public function values(): Traversable
     {
         return $this->getIterator();
     }
 
-    function forEach(callable $callback, $thisArg = null)
+    public function forEach(callable $callback, mixed $thisArg = null): void
     {
         foreach ($this->items as $key => $value) {
-
             Reflect::apply($callback, $thisArg, [$value, $key, $this]);
         }
     }
 
-    function __get($name)
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
     {
         if ($name === 'size') {
             return count($this->items);
         }
+        return null;
     }
 }

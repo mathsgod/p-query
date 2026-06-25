@@ -11,12 +11,16 @@ namespace P;
  */
 class HTMLOptionElement extends HTMLElement
 {
-    public function __construct($value = "", $uri = null)
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("option", $value, $uri);
+        parent::__construct("option", $value, $namespace);
     }
 
-    function __get($name)
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
     {
         switch ($name) {
             case "defaultSelected":
@@ -36,7 +40,12 @@ class HTMLOptionElement extends HTMLElement
         return parent::__get($name);
     }
 
-    function __set($name, $value)
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set($name, $value)
     {
         switch ($name) {
             case "defaultSelected":

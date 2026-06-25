@@ -2,10 +2,10 @@
 
 namespace P;
 
-class HTMLParagraphElement  extends HTMLElement
+class HTMLParagraphElement extends HTMLElement
 {
-    public function __construct(string $value = "", ?string $uri = "")
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("p", $value, $uri);
+        parent::__construct("p", $value, $namespace);
     }
 }

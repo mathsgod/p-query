@@ -6,8 +6,11 @@ class MutationRecord
 {
     public string $type;
 
-    
-    public $target;
-    public $addedNodes;
-    public $removeNodes;
+    public Element $target;
+
+    /** @var array<int, \DOMNode> */
+    public array $addedNodes = [];
+
+    /** @var array<int, \DOMNode> */
+    public array $removeNodes = [];
 }

@@ -4,8 +4,8 @@ namespace P;
 
 class HTMLTableCaptionElement extends HTMLElement
 {
-    public function __construct($value = "", $uri = null)
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("caption", $value, $uri);
+        parent::__construct("caption", $value, $namespace);
     }
 }

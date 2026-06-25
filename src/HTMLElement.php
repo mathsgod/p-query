@@ -18,7 +18,10 @@ namespace P;
  */
 class HTMLElement extends Element
 {
-
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name == "accessKey") {
@@ -80,10 +83,13 @@ class HTMLElement extends Element
             return $this->getAttribute("title");
         }
 
-
         return parent::__get($name);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
     public function __set($name, $value)
     {
         if ($name == "accessKey") {

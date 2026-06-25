@@ -18,16 +18,32 @@ namespace P;
  */
 class HTMLAnchorElement extends HTMLElement
 {
-    public function __construct(string|null $value = null, string $namespace = null)
+    private const array URL_PARTS = [
+        "hash",
+        "host",
+        "hostname",
+        "password",
+        "pathname",
+        "port",
+        "protocol",
+        "username",
+    ];
+
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
         parent::__construct("a", $value, $namespace);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name == "hash") {
             return parse_url($this->getAttribute("href"), PHP_URL_FRAGMENT);
         }
+
         if ($name == "host") {
             $host = parse_url($this->getAttribute("href"), PHP_URL_HOST);
             $port = parse_url($this->getAttribute("href"), PHP_URL_PORT);
@@ -44,27 +60,35 @@ class HTMLAnchorElement extends HTMLElement
         if ($name == "href") {
             return $this->getAttribute("href");
         }
+
         if ($name == "password") {
             return parse_url($this->getAttribute("href"), PHP_URL_PASS);
         }
+
         if ($name == "pathname") {
             return parse_url($this->getAttribute("href"), PHP_URL_PATH);
         }
+
         if ($name == "port") {
             return parse_url($this->getAttribute("href"), PHP_URL_PORT);
         }
+
         if ($name == "protocol") {
             return parse_url($this->getAttribute("href"), PHP_URL_SCHEME);
         }
+
         if ($name == "rel") {
             return $this->getAttribute("rel");
         }
+
         if ($name == "relList") {
             return new DOMTokenList($this, "rel");
         }
+
         if ($name == "search") {
             return parse_url($this->getAttribute("href"), PHP_URL_QUERY);
         }
+
         if ($name == "username") {
             return parse_url($this->getAttribute("href"), PHP_URL_USER);
         }
@@ -72,6 +96,11 @@ class HTMLAnchorElement extends HTMLElement
         return parent::__get($name);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
         if ($name == "href") {
@@ -79,15 +108,13 @@ class HTMLAnchorElement extends HTMLElement
             return;
         }
 
-        if (in_array($name, ["hash", "host", "hostname", "password", "pathname", "port", "protocol", "username"])) {
-            //rebuild href
+        if (in_array($name, self::URL_PARTS, true)) {
             $href = $this->getAttribute("href");
             $href = parse_url($href);
 
             if ($name == "hash") {
                 $href["fragment"] = $value;
             } elseif ($name == "host") {
-                //split host and port
                 $host = explode(":", $value);
                 $href["host"] = $host[0];
                 if (isset($host[1])) {
@@ -106,6 +133,7 @@ class HTMLAnchorElement extends HTMLElement
             } elseif ($name == "username") {
                 $href["user"] = $value;
             }
+
             $this->setAttribute("href", http_build_url($href));
             return;
         }

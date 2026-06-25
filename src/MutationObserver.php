@@ -4,23 +4,25 @@ namespace P;
 
 class MutationObserver
 {
+    /** @var callable */
     public $callable;
 
-    function __construct(callable $callable)
+    public function __construct(callable $callable)
     {
         $this->callable = $callable;
     }
 
-    function observe(Element $target, $options)
+    public function observe(Element $target, array $options): void
     {
         $target->registerMutationObserver($this, $options);
     }
 
-    function disconnect()
+    public function disconnect(): void
     {
     }
 
-    function takeRecords()
+    public function takeRecords(): array
     {
+        return [];
     }
 }

@@ -5,21 +5,24 @@ namespace P;
 use DOMException;
 
 /**
- * @property HTMLTableCaptionElement $caption
- * @property string $align //deprecated
- * @property HTMLTableCaptionElement $caption
- * @property HTMLTableSectionElement $tHead
- * @property HTMLTableSectionElement $tFoot
+ * @property HTMLTableCaptionElement|null $caption
+ * @property string $align
+ * @property HTMLTableSectionElement|null $tHead
+ * @property HTMLTableSectionElement|null $tFoot
  * @property-read HTMLCollection $rows
  * @property-read HTMLCollection $tBodies
  */
 class HTMLTableElement extends HTMLElement
 {
-    public function __construct($value = "", $uri = null)
+    public function __construct(string|null $value = "", string|null $namespace = null)
     {
-        parent::__construct("table", $value, $uri);
+        parent::__construct("table", $value, $namespace);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if ($name === "caption") {
@@ -57,16 +60,19 @@ class HTMLTableElement extends HTMLElement
         return parent::__get($name);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
         switch ($name) {
             case "align":
                 $this->setAttribute("align", $value);
                 return;
-                break;
             case "caption":
                 if ($value instanceof HTMLTableCaptionElement) {
-                    //remove old caption
                     foreach ($this->childNodes as $node) {
                         if ($node instanceof HTMLTableCaptionElement) {
                             $this->removeChild($node);
@@ -77,7 +83,6 @@ class HTMLTableElement extends HTMLElement
                     throw new DOMException("HierarchyRequestError");
                 }
                 return;
-                break;
             case "tHead":
                 if (!$value instanceof Element) {
                     throw new TypeError("The provided value is not of type 'Element'.");
@@ -89,8 +94,9 @@ class HTMLTableElement extends HTMLElement
 
                 $this->deleteTHead();
 
-                if (!$value)
+                if (!$value) {
                     return;
+                }
 
                 for ($child = $this->firstChildElement; $child; $child = $child->nextElementSibling) {
                     if (!$child->tagName != "caption" && !$child->tagName != "colgroup") {
@@ -109,16 +115,14 @@ class HTMLTableElement extends HTMLElement
                 }
 
                 $this->deleteTFoot();
-                if ($value)
+                if ($value) {
                     $this->appendChild($value);
-
+                }
                 return;
         }
 
         parent::__set($name, $value);
     }
-
-
 
     /**
      * Returns an HTMLTableSectionElement representing the first <thead> that is a child of the element. If none is found, a new one is created and inserted in the tree immediately before the first element that is neither a <caption>, nor a <colgroup>, or as the last child if there is no such element.
@@ -136,7 +140,7 @@ class HTMLTableElement extends HTMLElement
     /**
      * Removes the first <thead> that is a child of the element.
      */
-    public function deleteTHead()
+    public function deleteTHead(): void
     {
         if ($this->tHead) {
             $this->removeChild($this->tHead);
@@ -159,7 +163,7 @@ class HTMLTableElement extends HTMLElement
     /**
      * Removes the first <tfoot> that is a child of the element.
      */
-    public function deleteTFoot()
+    public function deleteTFoot(): void
     {
         if ($tFoot = $this->tFoot) {
             $this->removeChild($tFoot);
@@ -169,14 +173,13 @@ class HTMLTableElement extends HTMLElement
     /**
      * Returns a HTMLTableSectionElement representing a new <tbody> that is a child of the element. It is inserted in the tree after the last element that is a <tbody>, or as the last child if there is no such element.
      */
-    function createTBody(): HTMLTableSectionElement
+    public function createTBody(): HTMLTableSectionElement
     {
         $tbody = $this->ownerDocument->createElement("tbody");
 
         if ($this->tBodies->length == 0) {
             $this->appendChild($tbody);
         } else {
-            //find last body
             $this->tBodies[$this->tBodies->length - 1]->after($tbody);
         }
 
@@ -199,18 +202,17 @@ class HTMLTableElement extends HTMLElement
     /**
      * Removes the first <caption> that is a child of the element.
      */
-    public function deleteCaption()
+    public function deleteCaption(): void
     {
         if ($caption = $this->caption) {
             $caption->remove();
         }
     }
 
-
     /**
      * Returns an HTMLTableRowElement representing a new row of the table. It inserts it in the rows collection immediately before the <tr> element at the given index position. If necessary a <tbody> is created. If the index is -1, the new row is appended to the collection. If the index is smaller than -1 or greater than the number of rows in the collection, a DOMException with the value IndexSizeError is raised.
      */
-    public function insertRow($index = -1): HTMLTableRowElement
+    public function insertRow(int $index = -1): HTMLTableRowElement
     {
         if ($this->tBodies->length == 0) {
             $tbody = $this->createTBody();
@@ -223,14 +225,13 @@ class HTMLTableElement extends HTMLElement
     /**
      * Removes the row corresponding to the index given in parameter. If the index value is -1 the last row is removed; if it is smaller than -1 or greater than the amount of rows in the collection, a DOMException with the value IndexSizeError is raised.
      */
-    public function deleteRow(int $index)
+    public function deleteRow(int $index): void
     {
-
         if ($this->tBodies->length == 0) {
             $tbody = $this->createTBody();
         } else {
             $tbody = $this->tBodies[$this->tBodies->length - 1];
         }
-        return $tbody->deleteRow($index);
+        $tbody->deleteRow($index);
     }
 }

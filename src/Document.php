@@ -5,6 +5,7 @@ namespace P;
 use DOMAttr;
 use DOMNode;
 use DOMDocument;
+use DOMNodeList;
 
 class Document extends DOMDocument
 {
@@ -41,8 +42,8 @@ class Document extends DOMDocument
 
 	];
 
-	public static $DOCUMENT;
-	private $nodes = [];
+	public static ?Document $DOCUMENT = null;
+	private array $nodes = [];
 
 	public function __construct(string $version = '', string $encoding = 'UTF-8')
 	{
@@ -57,7 +58,7 @@ class Document extends DOMDocument
 		$this->formatOutput = false;
 	}
 
-	public function querySelectorAll(string $selector)
+	public function querySelectorAll(string $selector): DOMNodeList
 	{
 		$converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
 		$expression = $converter->toXPath($selector);
@@ -69,28 +70,28 @@ class Document extends DOMDocument
 	/**
 	 * The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. If no matches are found, null is returned.
 	 */
-	public function querySelector(string $selectors)
+	public function querySelector(string $selectors): ?Element
 	{
 		$converter = new \Symfony\Component\CssSelector\CssSelectorConverter();
 		$expression = $converter->toXPath($selectors);
 
 		$xpath = new \DOMXPath($this);
-		return $xpath->query($expression, $this)->item(0);
+		$item = $xpath->query($expression, $this)->item(0);
+		return $item instanceof Element ? $item : null;
 	}
 
 	public static function Current(): self
 	{
-		if (!self::$DOCUMENT) {
+		if (self::$DOCUMENT === null) {
 			self::$DOCUMENT = new Document();
 			self::$DOCUMENT->loadHTML("<div></div>");
 		}
 		return self::$DOCUMENT;
 	}
 
-	public function createElement($tagName, $value = null): Element
+	public function createElement(string $tagName, ?string $value = null): Element
 	{
-
-		if (in_array($tagName, array_keys(self::ELEMENT_CLASS)) && $class = self::ELEMENT_CLASS[$tagName]) {
+		if (isset(self::ELEMENT_CLASS[$tagName]) && $class = self::ELEMENT_CLASS[$tagName]) {
 			$this->registerNodeClass("DOMElement", $class);
 		} else {
 			$this->registerNodeClass("DOMElement", HTMLElement::class);
@@ -101,9 +102,8 @@ class Document extends DOMDocument
 		return $element;
 	}
 
-	public function importNode(DOMNode $node, $deep = false): DOMNode
+	public function importNode(DOMNode $node, bool $deep = false): DOMNode
 	{
-
 		if ($node instanceof \DOMElement) {
 			$n = $this->createElement($node->tagName);
 
@@ -123,13 +123,12 @@ class Document extends DOMDocument
 		return $n;
 	}
 
-
 	/** @var MutationObserverRegistration[] */
-	public $_observer_regs;
+	public array $_observer_regs = [];
 
-	function _notifyNodeAdded(DOMNode $node)
+	function _notifyNodeAdded(DOMNode $node): DOMNode
 	{
-		foreach ($this->_observer_regs ?? [] as $reg) {
+		foreach ($this->_observer_regs as $reg) {
 
 			$records = [];
 			if ($reg->options["childList"]) {
