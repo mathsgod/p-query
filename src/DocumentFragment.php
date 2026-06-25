@@ -13,7 +13,7 @@ class DocumentFragment extends DOMDocumentFragment
     function __construct()
     {
         parent::__construct();
-        Document::Current()->appendChild($this);
+        @Document::Current()->appendChild($this);
     }
 
     function __get($name)

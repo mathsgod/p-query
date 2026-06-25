@@ -18,6 +18,7 @@ class Document extends DOMDocument
 		"button" => HTMLButtonElement::class,
 		"caption" => HTMLTableCaptionElement::class,
 		"div" => HTMLDivElement::class,
+		"datalist" => HTMLDataListElement::class,
 		"form" => HTMLFormElement::class,
 		"img" => HTMLImageElement::class,
 		"span" => HTMLSpanElement::class,
@@ -26,7 +27,6 @@ class Document extends DOMDocument
 		"optgroup" => HTMLOptGroupElement::class,
 		"option" => HTMLOptionElement::class,
 		"select" => HTMLSelectElement::class,
-		"span" => HTMLSpanElement::class,
 		"td" => HTMLTableCellElement::class,
 		"th" => HTMLTableCellElement::class,
 		"table" => HTMLTableElement::class,
@@ -36,6 +36,7 @@ class Document extends DOMDocument
 		"tfoot" => HTMLTableSectionElement::class,
 		"textarea" => HTMLTextAreaElement::class,
 		"template" => HTMLTemplateElement::class,
+		"progress" => HTMLProgressElement::class,
 		"video" => HTMLVideoElement::class,
 
 	];

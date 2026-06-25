@@ -16,6 +16,7 @@ class HTMLMediaElement extends HTMLElement
             } else {
                 $this->removeAttribute("autoplay");
             }
+            return;
         }
 
         if ($name == "controls") {
@@ -24,6 +25,7 @@ class HTMLMediaElement extends HTMLElement
             } else {
                 $this->removeAttribute("controls");
             }
+            return;
         }
 
         parent::__set($name, $value);

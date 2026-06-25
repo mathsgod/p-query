@@ -20,6 +20,9 @@ class HTMLCollection extends ArrayObject
 
     function item($index)
     {
+        if (!$this->offsetExists($index)) {
+            return null;
+        }
         return $this[$index];
     }
 }

@@ -8,7 +8,7 @@ namespace P;
  * @property-read double $position This attribute indicates the current value of the <progress> element.
  * @property double $value This attribute indicates the current value of the <progress> element.
  */
-class ProgressElement extends HTMLElement
+class HTMLProgressElement extends HTMLElement
 {
     public function __construct()
     {
@@ -42,4 +42,8 @@ class ProgressElement extends HTMLElement
                 parent::__set($name, $value);
         }
     }
+}
+
+if (!class_exists(ProgressElement::class)) {
+    class_alias(HTMLProgressElement::class, ProgressElement::class);
 }
